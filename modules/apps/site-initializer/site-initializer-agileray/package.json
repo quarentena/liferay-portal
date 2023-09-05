@@ -1,8 +1,0 @@
-{
-	"name": "@liferay/site-initializer-agileray",
-	"scripts": {
-		"checkFormat": "liferay-npm-scripts check",
-		"format": "liferay-npm-scripts fix"
-	},
-	"version": "1.0.182"
-}
