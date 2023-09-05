@@ -1,0 +1,1 @@
+apply from: rootProject.file("build-site-initializer.gradle")

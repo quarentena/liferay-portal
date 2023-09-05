@@ -1,0 +1,212 @@
+{
+  "enableComments": false,
+  "enableCategorization": true,
+  "accountEntryRestrictedObjectFieldName": "",
+  "objectActions": [],
+  "accountEntryRestricted": false,
+  "externalReferenceCode": "9ceea969-bcef-dd07-827f-b638a13fb0f5",
+  "objectFields": [
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Create Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "8c34c2cd-997d-017e-b96d-2b684a092429",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "createDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "String",
+      "label": {
+        "en_US": "Author"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "4b3322fd-8b72-8ece-723b-8cd1e97f9681",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "creator",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "External Reference Code"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "ac0ca569-56d4-94c7-42c2-ed912c702d3b",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "externalReferenceCode",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Long",
+      "label": {
+        "en_US": "ID"
+      },
+      "type": "Long",
+      "required": false,
+      "externalReferenceCode": "ce1c985a-de64-b6f5-1f31-9afb471d44d0",
+      "indexedAsKeyword": true,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "id",
+      "state": false,
+      "businessType": "LongInteger",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Modified Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "4302a850-c02d-6698-22c9-a2f15f1e2788",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "modifiedDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "listTypeDefinitionExternalReferenceCode": "ddb1373e-56bf-72fb-d3c4-0024535549bb",
+      "indexed": true,
+      "defaultValue": "pending",
+      "objectFieldSettings": [
+        {
+          "name": "stateFlow",
+          "value": {
+            "objectStates": [
+              {
+                "objectStateTransitions": [
+                  {
+                    "key": "running"
+                  }
+                ],
+                "key": "pending"
+              },
+              {
+                "objectStateTransitions": [
+                  {
+                    "key": "done"
+                  }
+                ],
+                "key": "running"
+              },
+              {
+                "objectStateTransitions": [],
+                "key": "done"
+              }
+            ]
+          }
+        },
+        {
+          "name": "defaultValueType",
+          "value": "inputAsValue"
+        },
+        {
+          "name": "defaultValue",
+          "value": "pending"
+        }
+      ],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Request State"
+      },
+      "type": "String",
+      "required": true,
+      "externalReferenceCode": "2df01d73-e204-0860-8082-50b1f015676e",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "requestState",
+      "state": true,
+      "businessType": "Picklist",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "String",
+      "label": {
+        "en_US": "Status"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "ec649a90-9038-facc-9f94-ae4beabcd7fa",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "status",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    }
+  ],
+  "restContextPath": "/o/c/jiraintegrationrequests",
+  "scope": "company",
+  "portlet": true,
+  "parameterRequired": false,
+  "enableObjectEntryHistory": false,
+  "titleObjectFieldName": "id",
+  "objectValidationRules": [],
+  "active": true,
+  "defaultLanguageId": "en_US",
+  "label": {
+    "en_US": "Jira Integration Request"
+  },
+  "panelCategoryKey": "control_panel.object",
+  "pluralLabel": {
+    "en_US": "Jira Integration Requests"
+  },
+  "objectLayouts": [],
+  "system": false,
+  "objectViews": [],
+  "name": "JiraIntegrationRequest",
+  "actions": {
+    "permissions": {},
+    "get": {},
+    "update": {},
+    "delete": {}
+  },
+  "status": {
+    "label_i18n": "Approved",
+    "code": 0,
+    "label": "approved"
+  }
+}

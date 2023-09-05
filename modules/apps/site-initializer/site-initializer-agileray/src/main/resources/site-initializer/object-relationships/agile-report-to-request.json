@@ -1,0 +1,14 @@
+{
+  "parameterObjectFieldName": "",
+  "parameterObjectFieldId": 0,
+  "label": {
+    "en_US": "AgileReportToJiraIntegrationRequest"
+  },
+  "reverse": false,
+  "type": "oneToMany",
+  "name": "agileReportToJiraIntegrationRequest",
+  "deletionType": "prevent",
+  "objectDefinitionExternalReferenceCode1": "41436cae-66da-eedd-8c27-796f2463a38b",
+  "objectDefinitionExternalReferenceCode2": "9ceea969-bcef-dd07-827f-b638a13fb0f5",
+  "objectDefinitionName2": "JiraIntegrationRequest"
+}

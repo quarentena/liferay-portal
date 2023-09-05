@@ -1,0 +1,29 @@
+[
+  {
+    "name_i18n": {
+      "en-US": "Pending"
+    },
+    "name": "Pending",
+    "type": "",
+    "key": "pending",
+    "externalReferenceCode": "4e30c204-f078-f7a0-bcbe-62437c905888"
+  },
+  {
+    "name_i18n": {
+      "en-US": "Running"
+    },
+    "name": "Running",
+    "type": "",
+    "key": "running",
+    "externalReferenceCode": "a301e04f-bace-c5b5-c5a5-81fff4bf8a4b"
+  },
+  {
+    "name_i18n": {
+      "en-US": "Done"
+    },
+    "name": "Done",
+    "type": "",
+    "key": "done",
+    "externalReferenceCode": "931965ca-997f-b80f-29ca-6a0465adbb25"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "parameterObjectFieldName": "",
+  "parameterObjectFieldId": 0,
+  "label": {
+    "en_US": "RequestResponses"
+  },
+  "reverse": false,
+  "type": "oneToMany",
+  "name": "requestResponses",
+  "deletionType": "prevent",
+  "objectDefinitionExternalReferenceCode1": "9ceea969-bcef-dd07-827f-b638a13fb0f5",
+  "objectDefinitionExternalReferenceCode2": "c67ae143-99fc-6d40-5f66-37103df3e5d8",
+  "objectDefinitionName2": "JiraIntegrationRequestResponse"
+}

@@ -1,0 +1,6 @@
+Bundle-Name: Liferay Site Initializer Agileray
+Bundle-SymbolicName: com.liferay.site.initializer.agileray
+Bundle-Version: 1.0.182
+Liferay-Site-Initializer-Name: Agileray
+Provide-Capability: liferay.site.initializer
+Web-ContextPath: /site-initializer-agileray
