@@ -2728,16 +2728,6 @@ public class PortalImpl implements Portal {
 	@Override
 	public String getLayoutActualURL(
 			long groupId, boolean privateLayout, String mainPath,
-			String friendlyURL)
-		throws PortalException {
-
-		return getLayoutActualURL(
-			groupId, privateLayout, mainPath, friendlyURL, null, null);
-	}
-
-	@Override
-	public String getLayoutActualURL(
-			long groupId, boolean privateLayout, String mainPath,
 			String friendlyURL, Map<String, String[]> params,
 			Map<String, Object> requestContext)
 		throws PortalException {
@@ -4027,24 +4017,6 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
-	public InetAddress getPortalLocalInetAddress(boolean secure) {
-		InetSocketAddress inetSocketAddress = null;
-
-		if (secure) {
-			inetSocketAddress = _securePortalLocalInetSocketAddress.get();
-		}
-		else {
-			inetSocketAddress = _portalLocalInetSocketAddress.get();
-		}
-
-		if (inetSocketAddress == null) {
-			return null;
-		}
-
-		return inetSocketAddress.getAddress();
-	}
-
-	@Override
 	public int getPortalLocalPort(boolean secure) {
 		InetSocketAddress inetSocketAddress = null;
 
@@ -4065,24 +4037,6 @@ public class PortalImpl implements Portal {
 	@Override
 	public Properties getPortalProperties() {
 		return PropsUtil.getProperties();
-	}
-
-	@Override
-	public InetAddress getPortalServerInetAddress(boolean secure) {
-		InetSocketAddress inetSocketAddress = null;
-
-		if (secure) {
-			inetSocketAddress = _securePortalServerInetSocketAddress.get();
-		}
-		else {
-			inetSocketAddress = _portalServerInetSocketAddress.get();
-		}
-
-		if (inetSocketAddress == null) {
-			return null;
-		}
-
-		return inetSocketAddress.getAddress();
 	}
 
 	@Override
@@ -4336,11 +4290,6 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
-	public String getPortletLongTitle(Portlet portlet, Locale locale) {
-		return getPortletLongTitle(portlet.getPortletId(), locale);
-	}
-
-	@Override
 	public String getPortletLongTitle(
 		Portlet portlet, ServletContext servletContext, Locale locale) {
 
@@ -4372,16 +4321,6 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
-	public String getPortletLongTitle(Portlet portlet, String languageId) {
-		return getPortletLongTitle(portlet.getPortletId(), languageId);
-	}
-
-	@Override
-	public String getPortletLongTitle(Portlet portlet, User user) {
-		return getPortletLongTitle(portlet.getPortletId(), user);
-	}
-
-	@Override
 	public String getPortletLongTitle(String portletId, Locale locale) {
 		String portletLongTitle = LanguageUtil.get(
 			locale,
@@ -4395,18 +4334,6 @@ public class PortalImpl implements Portal {
 		}
 
 		return portletLongTitle;
-	}
-
-	@Override
-	public String getPortletLongTitle(String portletId, String languageId) {
-		Locale locale = LocaleUtil.fromLanguageId(languageId);
-
-		return getPortletLongTitle(portletId, locale);
-	}
-
-	@Override
-	public String getPortletLongTitle(String portletId, User user) {
-		return getPortletLongTitle(portletId, user.getLocale());
 	}
 
 	@Override
@@ -4560,15 +4487,6 @@ public class PortalImpl implements Portal {
 			StringBundler.concat(
 				JavaConstants.JAVAX_PORTLET_TITLE, StringPool.PERIOD,
 				portletId));
-	}
-
-	@Override
-	public String getPortletXmlFileName() {
-		if (PropsValues.AUTO_DEPLOY_CUSTOM_PORTLET_XML) {
-			return PORTLET_XML_FILE_NAME_CUSTOM;
-		}
-
-		return PORTLET_XML_FILE_NAME_STANDARD;
 	}
 
 	@Override
@@ -6006,46 +5924,6 @@ public class PortalImpl implements Portal {
 			PermissionCheckerFactoryUtil.create(user);
 
 		return permissionChecker.isCompanyAdmin();
-	}
-
-	@Override
-	public boolean isCompanyControlPanelPortlet(
-			String portletId, String category, ThemeDisplay themeDisplay)
-		throws PortalException {
-
-		PermissionChecker permissionChecker =
-			themeDisplay.getPermissionChecker();
-
-		if (permissionChecker.isCompanyAdmin()) {
-			return true;
-		}
-
-		Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
-			themeDisplay.getCompanyId());
-
-		themeDisplay.setScopeGroupId(companyGroup.getGroupId());
-
-		return isControlPanelPortlet(portletId, category, themeDisplay);
-	}
-
-	@Override
-	public boolean isCompanyControlPanelPortlet(
-			String portletId, ThemeDisplay themeDisplay)
-		throws PortalException {
-
-		PermissionChecker permissionChecker =
-			themeDisplay.getPermissionChecker();
-
-		if (permissionChecker.isCompanyAdmin()) {
-			return true;
-		}
-
-		Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
-			themeDisplay.getCompanyId());
-
-		themeDisplay.setScopeGroupId(companyGroup.getGroupId());
-
-		return isControlPanelPortlet(portletId, themeDisplay);
 	}
 
 	@Override
