@@ -1,0 +1,14 @@
+assemble:
+    - fromTask: bootJar
+liferay-agileray-oauth-user-agent:
+    .serviceAddress: 172.18.0.4:58081
+    .serviceScheme: http
+    name: Liferay Agileray OAuth Application User Agent
+    scopes:
+        - Liferay.Headless.Admin.Workflow.everything
+    type: oAuthApplicationUserAgent
+liferay-agileray-request-afteradd:
+    name: Liferay Agileray Request Afteradd
+    oAuth2ApplicationExternalReferenceCode: liferay-agileray-oauth-user-agent
+    resourcePath: /request/afteradd
+    type: objectAction

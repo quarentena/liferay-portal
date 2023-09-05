@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping("/object/action/1")
 @RestController
-public class ObjectAction1RestController extends BaseRestController {
+public class RequestAfterAddRestController extends BaseRestController {
 
 	@PostMapping
 	public ResponseEntity<String> post(
@@ -36,6 +36,6 @@ public class ObjectAction1RestController extends BaseRestController {
 	}
 
 	private static final Log _log = LogFactory.getLog(
-		ObjectAction1RestController.class);
+		RequestAfterAddRestController.class);
 
 }

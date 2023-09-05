@@ -18,10 +18,10 @@ import org.springframework.context.annotation.Import;
  */
 @Import(ClientExtensionUtilSpringBootComponentScan.class)
 @SpringBootApplication
-public class SampleSpringBootApplication {
+public class jiraIntegrationApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SampleSpringBootApplication.class, args);
+		SpringApplication.run(jiraIntegrationApplication.class, args);
 	}
 
 }
