@@ -4,8 +4,11 @@ liferay-agileray-oauth-user-agent:
     .serviceAddress: 172.18.0.4:58081
     .serviceScheme: http
     name: Liferay Agileray OAuth Application User Agent
+    allowedObjectDefinitionNames:
+        - C_AgileReport
     scopes:
-        - Liferay.Headless.Admin.Workflow.everything
+        - C_AgileReport.everything
+        - c_JiraIntegrationRequest.everything
     type: oAuthApplicationUserAgent
 liferay-agileray-request-afteradd:
     name: Liferay Agileray Request Afteradd

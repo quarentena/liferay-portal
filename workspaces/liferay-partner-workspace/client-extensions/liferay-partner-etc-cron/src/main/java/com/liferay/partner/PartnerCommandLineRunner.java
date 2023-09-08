@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.util.UriBuilder;
 
 /**
@@ -193,7 +194,7 @@ public class PartnerCommandLineRunner implements CommandLineRunner {
 		}
 	}
 
-	private JSONObject _get(Function<UriBuilder, URI> uriFunction) {
+	private JSONObject _get(Function<UriBuilder, URI> uriFunction) throws WebClientException{
 		return new JSONObject(
 			WebClient.create(
 				_lxcDXPServerProtocol + "://" + _lxcDXPMainDomain
