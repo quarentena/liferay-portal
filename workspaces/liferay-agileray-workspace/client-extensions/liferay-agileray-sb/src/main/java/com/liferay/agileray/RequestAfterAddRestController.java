@@ -37,7 +37,8 @@ public class RequestAfterAddRestController extends BaseRestController {
 
 		String agileReportId = requestJSON.getJSONObject("objectEntryDTOJiraIntegrationRequest").getJSONObject("properties").getString("r_agileReportToJiraIntegrationRequest_c_agileReportId");
 
-		agileReport.updateReport(jwt.getTokenValue(),agileReportId);
+		agileReport.setAgileReportId(agileReportId);
+		agileReport.updateReport(jwt.getTokenValue());
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

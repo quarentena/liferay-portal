@@ -92,13 +92,70 @@
       },
       "type": "Long",
       "required": true,
-      "externalReferenceCode": "0522c73a-b214-7673-c53a-5c728be0179e",
+      "externalReferenceCode": "AGI001",
       "indexedAsKeyword": false,
       "system": false,
       "indexedLanguageId": "",
       "name": "jiraFilterId",
       "state": false,
       "businessType": "LongInteger",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira Instance URL"
+      },
+      "type": "String",
+      "required": true,
+      "externalReferenceCode": "AGI002",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraInstanceURL",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira User"
+      },
+      "type": "String",
+      "required": true,
+      "externalReferenceCode": "AGI003",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraUser",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira API Token"
+      },
+      "type": "String",
+      "required": true,
+      "externalReferenceCode": "AGI004",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraAPIToken",
+      "state": false,
+      "businessType": "Text",
       "readOnlyConditionExpression": ""
     },
     {
