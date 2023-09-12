@@ -1,0 +1,14 @@
+{
+  "parameterObjectFieldName": "",
+  "parameterObjectFieldId": 0,
+  "label": {
+    "en_US": "IssueToTransition"
+  },
+  "reverse": false,
+  "type": "oneToMany",
+  "name": "issueToTransition",
+  "deletionType": "prevent",
+  "objectDefinitionExternalReferenceCode1": "[$OBJECT_DEFINITION_ID:JiraIssue$]",
+  "objectDefinitionExternalReferenceCode2": "[$OBJECT_DEFINITION_ID:JiraIssueTransition$]",
+  "objectDefinitionName2": "JiraIssueTransition"
+}

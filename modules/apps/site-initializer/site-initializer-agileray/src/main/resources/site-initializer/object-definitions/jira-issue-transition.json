@@ -1,31 +1,11 @@
 {
   "enableComments": false,
-  "objectRelationships": [],
   "enableCategorization": true,
   "accountEntryRestrictedObjectFieldName": "",
   "objectActions": [],
   "accountEntryRestricted": false,
-  "externalReferenceCode": "c67ae143-99fc-6d40-5f66-37103df3e5d8",
+  "externalReferenceCode": "cf85605a-fee6-607f-3558-15169683aff0",
   "objectFields": [
-    {
-      "indexed": false,
-      "objectFieldSettings": [],
-      "readOnly": "true",
-      "DBType": "Date",
-      "label": {
-        "en_US": "Create Date"
-      },
-      "type": "Date",
-      "required": false,
-      "externalReferenceCode": "7c92b4de-277f-7d70-c238-02e533e186d2",
-      "indexedAsKeyword": false,
-      "system": true,
-      "indexedLanguageId": "",
-      "name": "createDate",
-      "state": false,
-      "businessType": "Date",
-      "readOnlyConditionExpression": ""
-    },
     {
       "indexed": false,
       "objectFieldSettings": [],
@@ -36,13 +16,32 @@
       },
       "type": "String",
       "required": false,
-      "externalReferenceCode": "b55109c6-acd3-7db2-70bf-b4dc0c4fc8b0",
+      "externalReferenceCode": "15da6b39-6657-25f9-06e4-883130bd08d9",
       "indexedAsKeyword": false,
       "system": true,
       "indexedLanguageId": "",
       "name": "creator",
       "state": false,
       "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Create Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "4eb3c2b5-30ef-b901-68d3-6b202b763e0e",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "createDate",
+      "state": false,
+      "businessType": "Date",
       "readOnlyConditionExpression": ""
     },
     {
@@ -55,7 +54,7 @@
       },
       "type": "String",
       "required": false,
-      "externalReferenceCode": "1c61e4e2-24ba-66e7-b2de-668939f33956",
+      "externalReferenceCode": "5b31e895-3101-8ae9-6331-44160582ac26",
       "indexedAsKeyword": false,
       "system": true,
       "indexedLanguageId": "",
@@ -74,7 +73,7 @@
       },
       "type": "Long",
       "required": false,
-      "externalReferenceCode": "3f4f6dac-4b3a-e0f8-ccac-fc19453831c4",
+      "externalReferenceCode": "814718bc-4842-0206-62ec-5937aaa477c3",
       "indexedAsKeyword": true,
       "system": true,
       "indexedLanguageId": "",
@@ -93,37 +92,13 @@
       },
       "type": "Date",
       "required": false,
-      "externalReferenceCode": "58d94a41-05e0-bc5a-48a0-c394dc334c22",
+      "externalReferenceCode": "0cb1dc85-a719-4d11-be36-7a7f2b0402d0",
       "indexedAsKeyword": false,
       "system": true,
       "indexedLanguageId": "",
       "name": "modifiedDate",
       "state": false,
       "businessType": "Date",
-      "readOnlyConditionExpression": ""
-    },
-    {
-      "indexed": true,
-      "objectFieldSettings": [
-        {
-          "name": "showCounter",
-          "value": false
-        }
-      ],
-      "readOnly": "false",
-      "DBType": "Clob",
-      "label": {
-        "en_US": "Response"
-      },
-      "type": "Clob",
-      "required": false,
-      "externalReferenceCode": "ab62b077-0025-8f95-5925-833c9d397e9a",
-      "indexedAsKeyword": false,
-      "system": false,
-      "indexedLanguageId": "en_US",
-      "name": "response",
-      "state": false,
-      "businessType": "LongText",
       "readOnlyConditionExpression": ""
     },
     {
@@ -136,7 +111,7 @@
       },
       "type": "String",
       "required": false,
-      "externalReferenceCode": "be48b23f-de5e-7552-6a01-5211b5f706e4",
+      "externalReferenceCode": "8e90c370-c859-07eb-64fd-a2322be7f36e",
       "indexedAsKeyword": false,
       "system": true,
       "indexedLanguageId": "",
@@ -144,9 +119,85 @@
       "state": false,
       "businessType": "Text",
       "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Transition From"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "19f465aa-5d98-47f8-0a05-a8d5165bb9f7",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "transitionFrom",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Transition To"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "2c3b2589-26c2-e5dc-41af-6b1335e7ad70",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "transitionTo",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Who"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "cf0bbab9-ce39-c8f9-8981-566070a38db9",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "who",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "Date",
+      "label": {
+        "en_US": "When"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "60a581ff-263c-b209-cc1b-4768984862d5",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "when",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
     }
   ],
-  "restContextPath": "/o/c/jiraintegrationrequestresponses",
+  "restContextPath": "/o/c/jiraissuetransitions",
   "scope": "company",
   "portlet": true,
   "parameterRequired": false,
@@ -156,16 +207,16 @@
   "active": true,
   "defaultLanguageId": "en_US",
   "label": {
-    "en_US": "Jira Integration Request Response"
+    "en_US": "Jira Issue Transition"
   },
   "panelCategoryKey": "control_panel.object",
   "pluralLabel": {
-    "en_US": "Jira Integration Request Responses"
+    "en_US": "Jira Issue Transitions"
   },
   "objectLayouts": [],
   "system": false,
   "objectViews": [],
-  "name": "JiraIntegrationRequestResponse",
+  "name": "JiraIssueTransition",
   "actions": {
     "permissions": {},
     "get": {},

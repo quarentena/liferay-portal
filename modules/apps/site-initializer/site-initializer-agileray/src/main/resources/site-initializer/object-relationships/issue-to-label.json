@@ -1,0 +1,14 @@
+{
+  "parameterObjectFieldName": "",
+  "parameterObjectFieldId": 0,
+  "label": {
+    "en_US": "IssueToLabel"
+  },
+  "reverse": false,
+  "type": "oneToMany",
+  "name": "issueToLabel",
+  "deletionType": "prevent",
+  "objectDefinitionExternalReferenceCode1": "[$OBJECT_DEFINITION_ID:JiraIssue$]",
+  "objectDefinitionExternalReferenceCode2": "[$OBJECT_DEFINITION_ID:JiraIssueLabel$]",
+  "objectDefinitionName2": "JiraIssueLabel"
+}

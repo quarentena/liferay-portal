@@ -1,0 +1,312 @@
+{
+  "enableComments": false,
+  "enableCategorization": true,
+  "accountEntryRestrictedObjectFieldName": "",
+  "objectActions": [],
+  "accountEntryRestricted": false,
+  "externalReferenceCode": "bf2d12b2-ea77-18ae-07f3-390ab5b1acc0",
+  "objectFields": [
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "String",
+      "label": {
+        "en_US": "Author"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "abca5efe-f30f-f59f-d51a-b640d9c45cb0",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "creator",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Create Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "aed1f4d8-ac75-22eb-eab9-e21dd7dcbe97",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "createDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "External Reference Code"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "62aefdce-18a0-01e8-4783-ceae4e5c09c3",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "externalReferenceCode",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Long",
+      "label": {
+        "en_US": "ID"
+      },
+      "type": "Long",
+      "required": false,
+      "externalReferenceCode": "509c28bc-c532-c47d-9c0b-b4c90300f26a",
+      "indexedAsKeyword": true,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "id",
+      "state": false,
+      "businessType": "LongInteger",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Modified Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "e9ba386f-ea69-3142-4b9d-a6d5154900e5",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "modifiedDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "String",
+      "label": {
+        "en_US": "Status"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "c44d8f27-ffe3-e508-ddc3-b9d9f25b7d8a",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "status",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [
+        {
+          "name": "uniqueValues",
+          "value": true
+        }
+      ],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Key"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "63ebbd1f-26e5-0c89-0ff8-ee9453bc9b6e",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "key",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Summary"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "c7bc3e73-bb07-f057-631e-1a331d4877a8",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "summary",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Issue Type"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "68da355d-a989-3d46-b018-4cbff835c781",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "issueType",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira Status"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "40bf6889-c613-2c10-3015-d67940642016",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "jiraStatus",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Due Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "12c625d6-8bdf-5314-e211-6d4f0a09af7f",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "dueDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Jira Create Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "911dc538-9dd2-d94a-92cd-0b6b684362f3",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraCreateDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Jira Resolution Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "9eaa6894-31b4-cc6c-aac6-19271ca1dea1",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraResolutionDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira Resolution"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "8ebd14c7-7837-6083-bf05-10458f7ca518",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "jiraResolution",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    }
+  ],
+  "restContextPath": "/o/c/jiraissues",
+  "scope": "company",
+  "portlet": true,
+  "parameterRequired": false,
+  "enableObjectEntryHistory": false,
+  "titleObjectFieldName": "id",
+  "objectValidationRules": [],
+  "active": true,
+  "defaultLanguageId": "en_US",
+  "label": {
+    "en_US": "Jira Issue"
+  },
+  "panelCategoryKey": "control_panel.object",
+  "pluralLabel": {
+    "en_US": "Jira Issues"
+  },
+  "objectLayouts": [],
+  "system": false,
+  "objectViews": [],
+  "name": "JiraIssue",
+  "actions": {
+    "permissions": {},
+    "get": {},
+    "update": {},
+    "delete": {}
+  },
+  "status": {
+    "label_i18n": "Approved",
+    "code": 0,
+    "label": "approved"
+  }
+}
