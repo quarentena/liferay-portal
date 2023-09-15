@@ -198,7 +198,7 @@
     }
   ],
   "restContextPath": "/o/c/jiraissuetransitions",
-  "scope": "company",
+  "scope": "site",
   "portlet": true,
   "parameterRequired": false,
   "enableObjectEntryHistory": false,

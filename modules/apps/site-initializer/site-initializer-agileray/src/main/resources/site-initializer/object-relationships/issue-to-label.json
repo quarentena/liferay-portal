@@ -7,8 +7,8 @@
   "reverse": false,
   "type": "oneToMany",
   "name": "issueToLabel",
-  "deletionType": "prevent",
-  "objectDefinitionExternalReferenceCode1": "[$OBJECT_DEFINITION_ID:JiraIssue$]",
-  "objectDefinitionExternalReferenceCode2": "[$OBJECT_DEFINITION_ID:JiraIssueLabel$]",
+  "deletionType": "cascade",
+  "objectDefinitionId1": "[$OBJECT_DEFINITION_ID:JiraIssue$]",
+  "objectDefinitionId2": "[$OBJECT_DEFINITION_ID:JiraIssueLabel$]",
   "objectDefinitionName2": "JiraIssueLabel"
 }

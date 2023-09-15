@@ -2,7 +2,27 @@
   "enableComments": false,
   "enableCategorization": true,
   "accountEntryRestrictedObjectFieldName": "",
-  "objectActions": [],
+  "objectActions": [
+    {
+      "conditionExpression":"",
+      "objectActionExecutorKey":"function#liferay-agileray-request-afteradd",
+      "errorMessage":{},
+      "active":true,
+      "description":"",
+      "label":{
+        "en_US":"jiraRequest"
+      },
+      "externalReferenceCode":"980313cf-3a57-ed11-a1c9-582a365d2113",
+      "objectActionTriggerKey":"onAfterAdd",
+      "name":"jiraRequest",
+      "parameters":{},
+      "status":{
+        "label_i18n":"Success",
+        "code":1,
+        "label":"success"
+      }
+    }
+  ],
   "accountEntryRestricted": false,
   "externalReferenceCode": "9ceea969-bcef-dd07-827f-b638a13fb0f5",
   "objectFields": [
@@ -179,7 +199,7 @@
     }
   ],
   "restContextPath": "/o/c/jiraintegrationrequests",
-  "scope": "company",
+  "scope": "site",
   "portlet": true,
   "parameterRequired": false,
   "enableObjectEntryHistory": false,

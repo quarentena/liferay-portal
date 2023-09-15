@@ -2,13 +2,13 @@
   "parameterObjectFieldName": "",
   "parameterObjectFieldId": 0,
   "label": {
-    "en_US": "IssueToTransition"
+    "en_US": "RequestToIssue"
   },
   "reverse": false,
   "type": "oneToMany",
-  "name": "issueToTransition",
+  "name": "requestToIssue",
   "deletionType": "cascade",
-  "objectDefinitionId1": "[$OBJECT_DEFINITION_ID:JiraIssue$]",
-  "objectDefinitionId2": "[$OBJECT_DEFINITION_ID:JiraIssueTransition$]",
+  "objectDefinitionId1": "[$OBJECT_DEFINITION_ID:JiraIntegrationRequest$]",
+  "objectDefinitionId2": "[$OBJECT_DEFINITION_ID:JiraIssue$]",
   "objectDefinitionName2": "JiraIssueTransition"
 }

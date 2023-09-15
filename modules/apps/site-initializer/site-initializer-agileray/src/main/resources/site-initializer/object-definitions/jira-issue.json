@@ -122,12 +122,7 @@
     },
     {
       "indexed": true,
-      "objectFieldSettings": [
-        {
-          "name": "uniqueValues",
-          "value": true
-        }
-      ],
+      "objectFieldSettings": [],
       "readOnly": "false",
       "DBType": "String",
       "label": {
@@ -279,7 +274,7 @@
     }
   ],
   "restContextPath": "/o/c/jiraissues",
-  "scope": "company",
+  "scope": "site",
   "portlet": true,
   "parameterRequired": false,
   "enableObjectEntryHistory": false,

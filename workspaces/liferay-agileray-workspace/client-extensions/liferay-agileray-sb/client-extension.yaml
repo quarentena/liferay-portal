@@ -8,7 +8,10 @@ liferay-agileray-oauth-user-agent:
         - C_AgileReport
     scopes:
         - C_AgileReport.everything
-        - c_JiraIntegrationRequest.everything
+        - C_JiraIntegrationRequest.everything
+        - C_JiraIssue.everything
+        - C_JiraIssueLabel.everything
+        - C_JiraIssueTransition.everything
     type: oAuthApplicationUserAgent
 liferay-agileray-request-afteradd:
     name: Liferay Agileray Request Afteradd

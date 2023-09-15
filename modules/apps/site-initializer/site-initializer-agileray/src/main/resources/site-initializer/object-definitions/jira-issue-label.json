@@ -141,7 +141,7 @@
     }
   ],
   "restContextPath": "/o/c/jiraissuelabels",
-  "scope": "company",
+  "scope": "site",
   "portlet": true,
   "parameterRequired": false,
   "enableObjectEntryHistory": false,

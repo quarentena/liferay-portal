@@ -1,0 +1,14 @@
+{
+  "parameterObjectFieldName": "",
+  "parameterObjectFieldId": 0,
+  "label": {
+    "en_US": "accountToReport"
+  },
+  "reverse": false,
+  "type": "oneToMany",
+  "name": "accountToReport",
+  "deletionType": "cascade",
+  "objectDefinitionId1": "[$OBJECT_DEFINITION_ID:AccountEntry$]",
+  "objectDefinitionId2": "[$OBJECT_DEFINITION_ID:AgileReport$]",
+  "objectDefinitionName2": "AgileReport"
+}

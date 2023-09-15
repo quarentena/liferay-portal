@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -26,64 +27,125 @@ import java.util.Base64;
 public class ReportUpdateAsyncExecutor{
 
     private String agileReportId;
+    private String integrationRequestERC;
 
-    public void setAgileReportId(String agileReportId) {
+    public void setAgileReportId (String agileReportId) {
         this.agileReportId = agileReportId;
+    }
+    public void setIntegrationRequestERC (String integrationRequestERC) {
+        this.integrationRequestERC = integrationRequestERC;
     }
 
     @Async("asyncRunner")
-    public void updateReport(String jwtToken){
+    public void updateReport(Jwt jwt){
         try {
-            int issueAmount = 100;
-            int startAt = 1;
-            JSONArray issues = new JSONArray();
-
             Thread.sleep(2000);
 
-            JSONObject agileReport = this.getJiraAuthInfo(jwtToken, this.agileReportId);
+            JSONObject agileReport = this.getJiraAuthInfo(jwt.getTokenValue(), this.agileReportId);
 
-            Integer jiraFilterId =  agileReport.getInt("jiraFilterId");
-            String jiraInstanceURL = agileReport.getString("jiraInstanceURL");
-            String jiraAPIToken = agileReport.getString("jiraAPIToken");
-            String jiraUser = agileReport.getString("jiraUser");
+            JSONArray issues = getJiraIssues(agileReport.getString("jiraUser"
+                                           ),agileReport.getString("jiraAPIToken"
+                                           ),agileReport.getString("jiraInstanceURL"
+                                           ),agileReport.getInt("jiraFilterId"));
 
-            while (startAt < issueAmount) {
-                JSONObject jiraData = this._getFromJira(
-                        jiraUser,
-                        jiraAPIToken,
-                        jiraInstanceURL,
-                        jiraFilterId,
-                        UriComponentsBuilder.fromPath("/rest/api/latest/search"
-                            ).queryParam("jql", "filter=" + jiraFilterId
-                            //).queryParam("expand", "changelog"
-                            ).queryParam("startAt", startAt
-                            ).queryParam("fields", "key"
-                            ).queryParam("maxResults", "100"
-                            ).build());
+            JSONObject responseBody = postJiraIssues(jwt.getTokenValue(),issues);
 
-                issueAmount = jiraData.getInt("total");
-                startAt+= 100;
-
-                issues.putAll(jiraData.getJSONArray("issues"));
-            }
-
-            for (int i = 0; i<issues.length();i++){
-                JSONObject issue = issues.getJSONObject(i);
-                System.out.println(issue.getString("key"));
-            }
+            System.out.println(responseBody);
 
         } catch (InterruptedException e) {
             //
         }
     }
     public JSONObject getJiraAuthInfo (String jwtToken, String agileReportId){
-        JSONObject responseJSONObject = _getFromLRObjects(
+        return _getFromLRObjects(
                 jwtToken,
                 uriBuilder -> uriBuilder.path(
                         "o/c/agilereports/" + agileReportId
                 ).build());
+    }
 
-        return responseJSONObject;
+    public JSONArray getJiraIssues (String jiraUser, String jiraAPIToken, String jiraInstanceURL, int jiraFilterId){
+        int issueAmount = 100;
+        int startAt = 1;
+        JSONArray issues = new JSONArray();
+
+        while (startAt < issueAmount) {
+            JSONObject jiraData = this._getFromJira(
+                    jiraUser,
+                    jiraAPIToken,
+                    jiraInstanceURL,
+                    jiraFilterId,
+                    UriComponentsBuilder.fromPath("/rest/api/latest/search"
+                    ).queryParam("jql", "filter=" + jiraFilterId
+                    ).queryParam("expand", "changelog"
+                    ).queryParam("startAt", startAt
+                    ).queryParam("fields", "status,summary,key,reporter,issuetype,duedate,labels,created,resolution,customfield_10014"
+                    ).queryParam("maxResults", "100"
+                    ).build());
+
+            issueAmount = jiraData.getInt("total");
+            startAt+= 100;
+
+            issues.putAll(jiraData.getJSONArray("issues"));
+        }
+
+        return issues;
+    }
+
+    public JSONObject postJiraIssues(String jwtToken, JSONArray issues){
+        JSONArray batchRequest = new JSONArray();
+
+        for (int idxIssue = 0; idxIssue < issues.length() ; idxIssue++){
+            JSONObject issue = new JSONObject();
+
+            String issueERC = this.integrationRequestERC + "." + issues.getJSONObject(idxIssue).getString("key");
+
+            issue.put("key", issues.getJSONObject(idxIssue).getString("key"));
+            issue.put("externalReferenceCode", issueERC);
+            issue.put("summary", issues.getJSONObject(idxIssue).getJSONObject("fields").getString("summary"));
+            issue.put("jiraStatus", issues.getJSONObject(idxIssue).getJSONObject("fields").getJSONObject("status").getString("name"));
+            issue.put("issueType", issues.getJSONObject(idxIssue).getJSONObject("fields").getJSONObject("issuetype").getString("name"));
+            issue.put("r_requestToIssue_c_jiraIntegrationRequestERC", this.integrationRequestERC);
+
+            JSONArray labels = issues.getJSONObject(idxIssue).getJSONObject("fields").getJSONArray("labels");
+            JSONArray issueLabels = new JSONArray();
+
+            for (int idxLabel = 0; idxLabel < labels.length(); idxLabel++) {
+                JSONObject issueLabel = new JSONObject();
+                issueLabel.put("label",labels.getString(idxLabel));
+                issueLabel.put("r_issueToLabel_c_jiraIssueERC",issueERC);
+
+                issueLabels.put(issueLabel);
+            }
+
+            issue.put("issueToLabel", issueLabels);
+
+            JSONArray histories = issues.getJSONObject(idxIssue).getJSONObject("changelog").getJSONArray("histories");
+
+            JSONArray issueTransitions = new JSONArray();
+            for (int idxHistory = 0; idxHistory < histories.length();idxHistory++){
+                JSONArray historyItems = histories.getJSONObject(idxHistory).getJSONArray("items");
+                for (int idxTransitionItem = 0; idxTransitionItem < historyItems.length(); idxTransitionItem++) {
+                    if (historyItems.getJSONObject(idxTransitionItem).getString("field").equals(new String("status"))) {
+                        JSONObject issueTransition = new JSONObject();
+                        issueTransition.put("transitionFrom", historyItems.getJSONObject(idxTransitionItem).getString("fromString"));
+                        issueTransition.put("transitionTo", historyItems.getJSONObject(idxTransitionItem).getString("toString"));
+                        issueTransition.put("when", new String(histories.getJSONObject(idxHistory).getString("created")).substring(0,10));
+                        issueTransition.put("who", histories.getJSONObject(idxHistory).getJSONObject("author").getString("displayName"));
+                        issueTransition.put("r_issueToTransition_c_jiraIssueERC", issueERC);
+
+                        issueTransitions.put(issueTransition);
+                    }
+                }
+            }
+
+            issue.put("issueToTransition", issueTransitions);
+
+            batchRequest.put(issue);
+        }
+
+        System.out.println(batchRequest);
+        return _postInLRObjects(jwtToken,batchRequest.toString(),"/o/c/jiraissues/batch");
     }
 
     private JSONObject _getFromJira(String jiraUser,String jiraApiToken, String jiraInstanceURL, int jiraFilterId, UriComponents uriComp) {
@@ -125,25 +187,27 @@ public class ReportUpdateAsyncExecutor{
                 ).block());
     }
 
-    private void _putInLRObjects(String token, String bodyValue, String path) {
-        WebClient.create(
-                _lxcDXPServerProtocol + "://" + _lxcDXPMainDomain
-        ).put(
-        ).uri(
-                uriBuilder -> uriBuilder.path(
-                        path
-                ).build()
-        ).accept(
-                MediaType.APPLICATION_JSON
-        ).contentType(
-                MediaType.APPLICATION_JSON
-        ).header(
-                HttpHeaders.AUTHORIZATION,
-                "bearer " + token
-        ).bodyValue(
-                bodyValue
-        ).retrieve(
-        );
+    private JSONObject _postInLRObjects(String token, String bodyValue, String path) {
+        return new JSONObject(
+                WebClient.create(
+                    _lxcDXPServerProtocol + "://" + _lxcDXPMainDomain
+                ).post(
+                ).uri(
+                        uriBuilder -> uriBuilder.path(
+                                path
+                        ).build()
+                ).accept(
+                        MediaType.APPLICATION_JSON
+                ).contentType(
+                        MediaType.APPLICATION_JSON
+                ).header(
+                        "Authorization","Bearer " + token
+                ).bodyValue(
+                        bodyValue
+                ).retrieve(
+                ).bodyToMono(
+                        String.class
+                ).block());
     }
 
     @Value("${com.liferay.lxc.dxp.mainDomain}")
