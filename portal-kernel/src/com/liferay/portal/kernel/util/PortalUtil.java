@@ -5,7 +5,6 @@
 
 package com.liferay.portal.kernel.util;
 
-import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.Company;
@@ -28,7 +27,6 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 import java.util.Date;
 import java.util.List;
@@ -50,7 +48,6 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 import javax.portlet.PreferencesValidator;
-import javax.portlet.ValidatorException;
 import javax.portlet.WindowState;
 
 import javax.servlet.ServletContext;
@@ -791,31 +788,6 @@ public class PortalUtil {
 		PortletPreferences preferences, long companyId, String defaultValue) {
 
 		return _portal.getEmailFromName(preferences, companyId, defaultValue);
-	}
-
-	public static Map<String, Serializable> getExpandoBridgeAttributes(
-			ExpandoBridge expandoBridge, HttpServletRequest httpServletRequest)
-		throws PortalException {
-
-		return _portal.getExpandoBridgeAttributes(
-			expandoBridge, httpServletRequest);
-	}
-
-	public static Map<String, Serializable> getExpandoBridgeAttributes(
-			ExpandoBridge expandoBridge, PortletRequest portletRequest)
-		throws PortalException {
-
-		return _portal.getExpandoBridgeAttributes(
-			expandoBridge, portletRequest);
-	}
-
-	public static Serializable getExpandoValue(
-			HttpServletRequest httpServletRequest, String name, int type,
-			String displayType)
-		throws PortalException {
-
-		return _portal.getExpandoValue(
-			httpServletRequest, name, type, displayType);
 	}
 
 	public static String getForwardedHost(
@@ -1662,18 +1634,6 @@ public class PortalUtil {
 		return _portal.isCompanyAdmin(user);
 	}
 
-	public static boolean isControlPanelPortlet(
-		String portletId, String category, ThemeDisplay themeDisplay) {
-
-		return _portal.isControlPanelPortlet(portletId, category, themeDisplay);
-	}
-
-	public static boolean isControlPanelPortlet(
-		String portletId, ThemeDisplay themeDisplay) {
-
-		return _portal.isControlPanelPortlet(portletId, themeDisplay);
-	}
-
 	public static boolean isCustomPortletMode(PortletMode portletMode) {
 		return _portal.isCustomPortletMode(portletMode);
 	}
@@ -1721,14 +1681,6 @@ public class PortalUtil {
 		HttpServletRequest httpServletRequest) {
 
 		return _portal.isLoginRedirectRequired(httpServletRequest);
-	}
-
-	public static boolean isMethodGet(PortletRequest portletRequest) {
-		return _portal.isMethodGet(portletRequest);
-	}
-
-	public static boolean isMethodPost(PortletRequest portletRequest) {
-		return _portal.isMethodPost(portletRequest);
 	}
 
 	public static boolean isMultipartRequest(
@@ -1787,10 +1739,6 @@ public class PortalUtil {
 
 	public static void resetCDNHosts() {
 		_portal.resetCDNHosts();
-	}
-
-	public static String resetPortletParameters(String url, String portletId) {
-		return _portal.resetPortletParameters(url, portletId);
 	}
 
 	public static void sendError(
@@ -1885,12 +1833,6 @@ public class PortalUtil {
 		HttpServletRequest httpServletRequest) {
 
 		_portal.setPortalInetSocketAddresses(httpServletRequest);
-	}
-
-	public static void storePreferences(PortletPreferences portletPreferences)
-		throws IOException, ValidatorException {
-
-		_portal.storePreferences(portletPreferences);
 	}
 
 	public static String[] stripURLAnchor(String url, String separator) {

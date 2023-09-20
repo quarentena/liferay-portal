@@ -82,7 +82,8 @@ public class CPDefinitionInfoItemFieldValuesProvider
 					new InfoItemReference(
 						CPDefinition.class.getName(),
 						cpDefinition.getCPDefinitionId()),
-					StringPool.BLANK, _getThemeDisplay())
+					StringPool.BLANK, CPDefinition.class.getSimpleName(),
+					_getThemeDisplay())
 			).infoFieldValues(
 				_templateInfoItemFieldSetProvider.getInfoFieldValues(
 					CPDefinition.class.getName(), cpDefinition)
@@ -335,7 +336,7 @@ public class CPDefinitionInfoItemFieldValuesProvider
 					cpDefinition.isIncomplete()));
 
 			if ((themeDisplay != null) &&
-				!FeatureFlagManagerUtil.isEnabled("LPS-183727")) {
+				!FeatureFlagManagerUtil.isEnabled("LPS-195205")) {
 
 				cpDefinitionInfoFieldValues.add(
 					new InfoFieldValue<>(

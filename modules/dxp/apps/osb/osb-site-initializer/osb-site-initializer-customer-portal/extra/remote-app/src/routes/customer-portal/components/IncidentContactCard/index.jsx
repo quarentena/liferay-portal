@@ -5,12 +5,15 @@
 
 import {useModal} from '@clayui/core';
 import ClayIcon from '@clayui/icon';
-
 import ClayModal from '@clayui/modal';
 import classNames from 'classnames';
 import {useEffect, useState} from 'react';
+import SearchBuilder from '~/common/core/SearchBuilder';
 import {getHighPriorityContacts} from '~/common/services/liferay/api';
 import i18n from '../../../../common/I18n';
+import useCurrentKoroneikiAccount from '../../../../common/hooks/useCurrentKoroneikiAccount';
+import {useCustomerPortal} from '../../../../routes/customer-portal/context';
+import useMyUserAccountByAccountExternalReferenceCode from '../../../customer-portal/pages/Project/TeamMembers/components/TeamMembersTable/hooks/useMyUserAccountByAccountExternalReferenceCode';
 import {HIGH_PRIORITY_CONTACT_CATEGORIES} from '../../utils/getHighPriorityContacts';
 import IncidentContactEditForm from './components/IncidentContactEditModal';
 import IncidentContactsButton from './components/IncidentContactsButton';
@@ -19,7 +22,22 @@ const IncidentContactCard = ({
 	accountSubscriptionGroupsNames,
 	hasActiveProduct,
 }) => {
+	const [{project}] = useCustomerPortal();
+
 	const incidentContactStandard = 2;
+	const {loading} = useCurrentKoroneikiAccount();
+
+	const {
+		data: myUserAccountData,
+	} = useMyUserAccountByAccountExternalReferenceCode(
+		loading,
+		project?.accountKey
+	);
+
+	const loggedUserAccount = myUserAccountData?.myUserAccount;
+
+	const hasAdministratorRole =
+		loggedUserAccount?.selectedAccountSummary.hasAdministratorRole;
 
 	const [
 		currentHighPriorityContacts,
@@ -37,7 +55,6 @@ const IncidentContactCard = ({
 		onOpenChange(true);
 		setModalMonitoring(true);
 	};
-
 	const closeModal = () => {
 		onOpenChange(false);
 		setModalMonitoring(false);
@@ -56,10 +73,14 @@ const IncidentContactCard = ({
 				key: lowerCaseFirstLetter.replace(/\s/g, ''),
 				name: `${filter}`,
 			},
-			filterRequest: `contactsCategory eq '${lowerCaseFirstLetter.replace(
-				/\s/g,
-				''
-			)}'`,
+			filterRequest: new SearchBuilder()
+				.eq('contactsCategory', lowerCaseFirstLetter.replace(/\s/g, ''))
+				.and()
+				.eq(
+					'r_accountEntryToHighPriorityContacts_accountEntryERC',
+					project.accountKey
+				)
+				.build(),
 		};
 	};
 
@@ -109,7 +130,6 @@ const IncidentContactCard = ({
 					);
 					updatedFilteredContacts[filter] = contacts;
 				}
-
 				setCurrentHighPriorityContacts(updatedFilteredContacts);
 			} catch (error) {
 				console.error(
@@ -121,7 +141,7 @@ const IncidentContactCard = ({
 
 		fetchHighPriorityContacts();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [modalMonitoring]);
+	}, [modalMonitoring, !project?.accountKey]);
 
 	const generateContactBody = ({contact, email, index, label}) => (
 		<div className="customer-portal-cards" key={index}>
@@ -140,10 +160,10 @@ const IncidentContactCard = ({
 			)}
 		</div>
 	);
-
 	const criticalIncidentContacts = currentHighPriorityContacts.criticalIncident?.map(
 		generateContactBody
 	);
+
 	const privacyBreachContacts = currentHighPriorityContacts?.privacyBreach?.map(
 		generateContactBody
 	);
@@ -161,8 +181,8 @@ const IncidentContactCard = ({
 		.securityBreach?.length;
 
 	const handleOnClick = (highPriorityContactsCategory) => {
-		openModal();
 		setModalFilter(highPriorityContactsCategory);
+		openModal();
 	};
 
 	const HighPriorityContactsModal = () => {
@@ -223,16 +243,17 @@ const IncidentContactCard = ({
 											'critical-incident-contacts'
 										)}
 
-										{hasCriticalIncidentContact && (
-											<ClayIcon
-												onClick={() =>
-													handleOnClick(
-														HIGH_PRIORITY_CONTACT_CATEGORIES.criticalIncident
-													)
-												}
-												symbol="pencil"
-											/>
-										)}
+										{hasCriticalIncidentContact &&
+											hasAdministratorRole && (
+												<ClayIcon
+													onClick={() =>
+														handleOnClick(
+															HIGH_PRIORITY_CONTACT_CATEGORIES.criticalIncident
+														)
+													}
+													symbol="pencil"
+												/>
+											)}
 									</h3>
 
 									<div
@@ -243,17 +264,17 @@ const IncidentContactCard = ({
 												incidentContactStandard,
 										})}
 									>
-										{hasCriticalIncidentContact ? (
-											criticalIncidentContacts
-										) : (
-											<IncidentContactsButton
-												onClick={() =>
-													handleOnClick(
-														HIGH_PRIORITY_CONTACT_CATEGORIES.criticalIncident
-													)
-												}
-											/>
-										)}
+										{hasCriticalIncidentContact
+											? criticalIncidentContacts
+											: hasAdministratorRole && (
+													<IncidentContactsButton
+														onClick={() =>
+															handleOnClick(
+																HIGH_PRIORITY_CONTACT_CATEGORIES.criticalIncident
+															)
+														}
+													/>
+											  )}
 									</div>
 								</div>
 
@@ -265,16 +286,17 @@ const IncidentContactCard = ({
 													'security-breach'
 												)}
 
-												{hasSecurityBreachContact && (
-													<ClayIcon
-														onClick={() =>
-															handleOnClick(
-																HIGH_PRIORITY_CONTACT_CATEGORIES.securityBreach
-															)
-														}
-														symbol="pencil"
-													/>
-												)}
+												{hasSecurityBreachContact &&
+													hasAdministratorRole && (
+														<ClayIcon
+															onClick={() =>
+																handleOnClick(
+																	HIGH_PRIORITY_CONTACT_CATEGORIES.securityBreach
+																)
+															}
+															symbol="pencil"
+														/>
+													)}
 											</h3>
 
 											<div
@@ -286,17 +308,17 @@ const IncidentContactCard = ({
 														incidentContactStandard,
 												})}
 											>
-												{hasSecurityBreachContact ? (
-													securityBreachContacts
-												) : (
-													<IncidentContactsButton
-														onClick={() =>
-															handleOnClick(
-																HIGH_PRIORITY_CONTACT_CATEGORIES.securityBreach
-															)
-														}
-													/>
-												)}
+												{hasSecurityBreachContact
+													? securityBreachContacts
+													: hasAdministratorRole && (
+															<IncidentContactsButton
+																onClick={() =>
+																	handleOnClick(
+																		HIGH_PRIORITY_CONTACT_CATEGORIES.securityBreach
+																	)
+																}
+															/>
+													  )}
 											</div>
 										</div>
 
@@ -306,16 +328,17 @@ const IncidentContactCard = ({
 													'privacy-breach'
 												)}
 
-												{hasPrivacyBreachContact && (
-													<ClayIcon
-														onClick={() =>
-															handleOnClick(
-																HIGH_PRIORITY_CONTACT_CATEGORIES.privacyBreach
-															)
-														}
-														symbol="pencil"
-													/>
-												)}
+												{hasPrivacyBreachContact &&
+													hasAdministratorRole && (
+														<ClayIcon
+															onClick={() =>
+																handleOnClick(
+																	HIGH_PRIORITY_CONTACT_CATEGORIES.privacyBreach
+																)
+															}
+															symbol="pencil"
+														/>
+													)}
 											</h3>
 
 											<div
@@ -327,17 +350,17 @@ const IncidentContactCard = ({
 														incidentContactStandard,
 												})}
 											>
-												{hasPrivacyBreachContact ? (
-													privacyBreachContacts
-												) : (
-													<IncidentContactsButton
-														onClick={() =>
-															handleOnClick(
-																HIGH_PRIORITY_CONTACT_CATEGORIES.privacyBreach
-															)
-														}
-													/>
-												)}
+												{hasPrivacyBreachContact
+													? privacyBreachContacts
+													: hasAdministratorRole && (
+															<IncidentContactsButton
+																onClick={() =>
+																	handleOnClick(
+																		HIGH_PRIORITY_CONTACT_CATEGORIES.privacyBreach
+																	)
+																}
+															/>
+													  )}
 											</div>
 										</div>
 

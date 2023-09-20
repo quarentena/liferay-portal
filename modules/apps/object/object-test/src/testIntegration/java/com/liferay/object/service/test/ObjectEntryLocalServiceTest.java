@@ -181,6 +181,7 @@ public class ObjectEntryLocalServiceTest {
 				null, TestPropsValues.getUserId(),
 				Collections.singletonMap(
 					LocaleUtil.getDefault(), RandomTestUtil.randomString()),
+				false,
 				ListUtil.concat(
 					_createListTypeEntries(
 						"listTypeEntryKey", "List Type Entry Key ", 3),
@@ -846,7 +847,8 @@ public class ObjectEntryLocalServiceTest {
 			Collections.singletonList(
 				new ObjectValidationRuleSettingBuilder(
 				).name(
-					ObjectValidationRuleSettingConstants.NAME_OBJECT_FIELD_ID
+					ObjectValidationRuleSettingConstants.
+						NAME_OUTPUT_OBJECT_FIELD_ID
 				).value(
 					String.valueOf(objectField.getObjectFieldId())
 				).build()));
@@ -1378,6 +1380,7 @@ public class ObjectEntryLocalServiceTest {
 			_objectDefinition.isEnableCategorization(),
 			_objectDefinition.isEnableComments(),
 			_objectDefinition.isEnableLocalization(),
+			_objectDefinition.isEnableObjectEntryDraft(),
 			_objectDefinition.isEnableObjectEntryHistory(),
 			_objectDefinition.getLabelMap(), _objectDefinition.getName(),
 			_objectDefinition.getPanelAppOrder(),

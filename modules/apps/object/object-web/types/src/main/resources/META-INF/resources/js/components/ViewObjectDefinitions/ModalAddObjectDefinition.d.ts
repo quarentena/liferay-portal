@@ -7,15 +7,17 @@
 
 import './ModalAddObjectDefinition.scss';
 interface ModalAddObjectDefinitionProps {
-	apiURL: string;
 	handleOnClose: () => void;
+	objectDefinitionsStorageTypes: LabelValueObject[];
 	objectFolderExternalReferenceCode?: string;
-	storages: LabelTypeObject[];
+	onAfterSubmit?: (value: ObjectDefinition) => void;
+	reload?: boolean;
 }
 export declare function ModalAddObjectDefinition({
-	apiURL,
 	handleOnClose,
+	objectDefinitionsStorageTypes,
 	objectFolderExternalReferenceCode,
-	storages,
+	onAfterSubmit,
+	reload,
 }: ModalAddObjectDefinitionProps): JSX.Element;
 export {};

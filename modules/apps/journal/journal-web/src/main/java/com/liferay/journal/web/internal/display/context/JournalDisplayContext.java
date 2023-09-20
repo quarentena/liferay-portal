@@ -53,6 +53,7 @@ import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.service.MBMessageLocalServiceUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.bean.BeanParamUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -64,7 +65,6 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
@@ -972,16 +972,17 @@ public class JournalDisplayContext {
 	}
 
 	public int getTotalItems() throws PortalException {
-		SearchContainer<?> articleSearch = _getArticlesSearchContainer();
+		SearchContainer<?> articleSearchContainer =
+			_getArticlesSearchContainer();
 
-		return articleSearch.getTotal();
+		return articleSearchContainer.getTotal();
 	}
 
 	public int getVersionsTotal() throws PortalException {
-		SearchContainer<JournalArticle> articleSearch =
+		SearchContainer<JournalArticle> articleSearchContainer =
 			_getVersionsSearchContainer();
 
-		return articleSearch.getTotal();
+		return articleSearchContainer.getTotal();
 	}
 
 	public boolean hasCommentsResults() throws PortalException {

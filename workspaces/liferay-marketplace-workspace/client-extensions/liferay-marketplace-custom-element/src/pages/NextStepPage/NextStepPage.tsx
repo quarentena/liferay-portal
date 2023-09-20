@@ -9,7 +9,6 @@ import {ReactNode, useState} from 'react';
 
 import catalogIcon from '../../assets/icons/catalog_icon.svg';
 import {AccountAndAppCard} from '../../components/Card/AccountAndAppCard';
-import {Footer} from '../../components/Footer/Footer';
 import {Header} from '../../components/Header/Header';
 import {NewAppPageFooterButtons} from '../../components/NewAppPageFooterButtons/NewAppPageFooterButtons';
 import {Liferay} from '../../liferay/liferay';
@@ -97,7 +96,7 @@ export function NextStepPage({
 								<AccountAndAppCard
 									category="Application"
 									logo={
-										!appLogo
+										appLogo
 											? showAppImage(
 													appLogo as string
 											  ).replace(
@@ -132,7 +131,7 @@ export function NextStepPage({
 							description={
 								header?.description ?? (
 									<>
-										Congratulations on the purchase of
+										Congratulations on the purchase of&nbsp;
 										<b>{appName}</b>. You will now need to
 										configure the app in the Cloud Console.
 										To access the Cloud Console, click the
@@ -182,8 +181,6 @@ export function NextStepPage({
 						</a>
 					</div>
 				</div>
-
-				<Footer />
 			</div>
 		</>
 	);

@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import {openModal} from 'frontend-js-web';
+
 function attachListener(element, eventType, callback) {
 	element?.addEventListener(eventType, callback);
 
@@ -13,7 +15,12 @@ function attachListener(element, eventType, callback) {
 	};
 }
 
-export default function EditKBArticle({kbArticle, namespace, publishAction}) {
+export default function EditKBArticle({
+	kbArticle,
+	namespace,
+	publishAction,
+	scheduleModalURL,
+}) {
 	const contextualSidebarButton = document.getElementById(
 		`${namespace}contextualSidebarButton`
 	);
@@ -45,12 +52,56 @@ export default function EditKBArticle({kbArticle, namespace, publishAction}) {
 		event.currentTarget.dataset.customUrl = urlTitleInput.value !== '';
 	};
 
+	const scheduleItemOnClick = () => {
+		openScheduleModal(Liferay.Language.get('schedule-publication'));
+	};
+
+	const scheduledButtonOnClick = () => {
+		openScheduleModal(Liferay.Language.get('edit-scheduled-publication'));
+	};
+
+	const openScheduleModal = (modalTitle) => {
+		const modalEventHandlers = [];
+
+		openModal({
+			height: '65vh',
+			id: 'scheduleKBArticleDialog',
+			iframeBodyCssClass: '',
+			onClose: () => {
+				modalEventHandlers.forEach((eventHandler) => {
+					eventHandler.detach();
+				});
+
+				modalEventHandlers.splice(0, modalEventHandlers.length);
+			},
+			onOpen: () => {
+				const scheduleEventHandler = Liferay.on(
+					'scheduleKBArticle',
+					publishButtonOnClick
+				);
+
+				modalEventHandlers.push(scheduleEventHandler);
+			},
+			size: 'md',
+			title: modalTitle,
+			url: scheduleModalURL,
+		});
+	};
+
 	const form = document.getElementById(`${namespace}fm`);
 
 	let publishButton;
+	let scheduleItem;
+	let scheduledButton;
 
 	if (Liferay.FeatureFlags['LPS-188060']) {
 		publishButton = document.getElementById(`${namespace}publishItem`);
+
+		scheduledButton = document.getElementById(
+			`${namespace}scheduledButton`
+		);
+
+		scheduleItem = document.getElementById(`${namespace}scheduleItem`);
 	}
 	else {
 		publishButton = document.getElementById(`${namespace}publishButton`);
@@ -120,6 +171,15 @@ export default function EditKBArticle({kbArticle, namespace, publishAction}) {
 			beforeSubmit();
 		}),
 	];
+
+	if (Liferay.FeatureFlags['LPS-188060']) {
+		eventHandlers.push(
+			attachListener(scheduleItem, 'click', scheduleItemOnClick)
+		);
+		eventHandlers.push(
+			attachListener(scheduledButton, 'click', scheduledButtonOnClick)
+		);
+	}
 
 	if (!kbArticle) {
 		eventHandlers.push(

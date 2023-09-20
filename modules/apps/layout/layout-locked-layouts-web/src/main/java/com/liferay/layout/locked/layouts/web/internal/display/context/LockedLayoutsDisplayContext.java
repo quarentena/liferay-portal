@@ -7,19 +7,24 @@ package com.liferay.layout.locked.layouts.web.internal.display.context;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
+import com.liferay.layout.constants.LockedLayoutType;
 import com.liferay.layout.manager.LayoutLockManager;
 import com.liferay.layout.model.LockedLayout;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
+import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -33,11 +38,13 @@ import java.util.List;
 public class LockedLayoutsDisplayContext {
 
 	public LockedLayoutsDisplayContext(
-		Language language, LayoutLockManager layoutLockManager,
+		Language language, LayoutLocalService layoutLocalService,
+		LayoutLockManager layoutLockManager,
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse) {
 
 		_language = language;
+		_layoutLocalService = layoutLocalService;
 		_layoutLockManager = layoutLockManager;
 		_liferayPortletRequest = liferayPortletRequest;
 		_liferayPortletResponse = liferayPortletResponse;
@@ -60,6 +67,14 @@ public class LockedLayoutsDisplayContext {
 		return _layoutLockManager.getLayoutType(
 			lockedLayout.getClassPK(), _themeDisplay.getLocale(),
 			lockedLayout.getType());
+	}
+
+	public String getLayoutURL(LockedLayout lockedLayout)
+		throws PortalException {
+
+		Layout layout = _layoutLocalService.fetchLayout(lockedLayout.getPlid());
+
+		return PortalUtil.getLayoutFullURL(layout, _themeDisplay);
 	}
 
 	public List<DropdownItem> getLockedLayoutDropdownItems(
@@ -87,6 +102,17 @@ public class LockedLayoutsDisplayContext {
 					}
 				).build())
 		).build();
+	}
+
+	public LockedLayoutType getLockedLayoutType() {
+		if (_lockedLayoutType != null) {
+			return _lockedLayoutType;
+		}
+
+		_lockedLayoutType = LockedLayoutType.create(
+			ParamUtil.getString(_liferayPortletRequest, "type"));
+
+		return _lockedLayoutType;
 	}
 
 	public String getName(LockedLayout lockedLayout) {
@@ -156,7 +182,8 @@ public class LockedLayoutsDisplayContext {
 		}
 
 		_lockedLayouts = _layoutLockManager.getLockedLayouts(
-			_themeDisplay.getCompanyId(), _themeDisplay.getScopeGroupId());
+			_themeDisplay.getCompanyId(), _themeDisplay.getScopeGroupId(),
+			getLockedLayoutType());
 
 		return _lockedLayouts;
 	}
@@ -178,10 +205,12 @@ public class LockedLayoutsDisplayContext {
 	private List<LockedLayout> _filteredLockedLayouts;
 	private String _keywords;
 	private final Language _language;
+	private final LayoutLocalService _layoutLocalService;
 	private final LayoutLockManager _layoutLockManager;
 	private final LiferayPortletRequest _liferayPortletRequest;
 	private final LiferayPortletResponse _liferayPortletResponse;
 	private List<LockedLayout> _lockedLayouts;
+	private LockedLayoutType _lockedLayoutType;
 	private SearchContainer<LockedLayout> _searchContainer;
 	private final ThemeDisplay _themeDisplay;
 

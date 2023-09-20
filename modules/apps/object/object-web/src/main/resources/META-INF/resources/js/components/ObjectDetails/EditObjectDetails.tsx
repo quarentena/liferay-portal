@@ -37,6 +37,7 @@ interface EditObjectDetailsProps {
 	hasPublishObjectPermission: boolean;
 	hasUpdateObjectDefinitionPermission: boolean;
 	isApproved: boolean;
+	isRootDescendantNode: boolean;
 	label: LocalizedValue<string>;
 	nonRelationshipObjectFieldsInfo: {
 		label: LocalizedValue<string>;
@@ -80,6 +81,7 @@ export default function EditObjectDetails({
 	hasPublishObjectPermission,
 	hasUpdateObjectDefinitionPermission,
 	isApproved,
+	isRootDescendantNode,
 	label,
 	nonRelationshipObjectFieldsInfo,
 	objectDefinitionId,
@@ -143,7 +145,7 @@ export default function EditObjectDetails({
 			}
 
 			if (!draft) {
-				const publishResponse = await API.publishObjectDefinitionById(
+				const publishResponse = await API.postObjectDefinitionPublish(
 					values.id as number
 				);
 
@@ -186,7 +188,7 @@ export default function EditObjectDetails({
 
 	useEffect(() => {
 		const makeFetch = async () => {
-			const objectFieldsResponse = await API.getObjectFieldsByExternalReferenceCode(
+			const objectFieldsResponse = await API.getObjectDefinitionByExternalReferenceCodeObjectFields(
 				externalReferenceCode
 			);
 			const objectDefinitionResponse = await API.getObjectDefinitionByExternalReferenceCode(
@@ -212,6 +214,7 @@ export default function EditObjectDetails({
 						hasUpdateObjectDefinitionPermission
 					}
 					isApproved={isApproved}
+					isRootDescendantNode={isRootDescendantNode}
 					label={getLocalizableLabel(
 						values.defaultLanguageId as Liferay.Language.Locale,
 						values.label,
@@ -303,14 +306,15 @@ export default function EditObjectDetails({
 					>
 						<ClayPanel.Body>
 							<ScopeContainer
-								companyKeyValuePair={companyKeyValuePair}
+								companyKeyValuePairs={companyKeyValuePair}
 								errors={errors}
 								hasUpdateObjectDefinitionPermission={
 									hasUpdateObjectDefinitionPermission
 								}
 								isApproved={isApproved}
+								isRootDescendantNode={isRootDescendantNode}
 								setValues={setValues}
-								siteKeyValuePair={siteKeyValuePair}
+								siteKeyValuePairs={siteKeyValuePair}
 								values={values}
 							/>
 						</ClayPanel.Body>
@@ -331,6 +335,7 @@ export default function EditObjectDetails({
 								<AccountRestrictionContainer
 									errors={errors}
 									isApproved={isApproved}
+									isRootDescendantNode={isRootDescendantNode}
 									objectFields={objectFields}
 									setValues={setValues}
 									values={values}
@@ -350,6 +355,7 @@ export default function EditObjectDetails({
 								hasUpdateObjectDefinitionPermission={
 									hasUpdateObjectDefinitionPermission
 								}
+								isRootDescendantNode={isRootDescendantNode}
 								setValues={setValues}
 								values={values}
 							/>

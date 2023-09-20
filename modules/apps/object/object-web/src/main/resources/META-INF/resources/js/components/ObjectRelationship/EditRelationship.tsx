@@ -24,18 +24,14 @@ import {
 } from './ObjectRelationshipFormBase';
 import SelectRelationship from './SelectRelationship';
 
-export type TDeletionType = {
-	label: string;
-	value: string;
-};
 interface EditRelationshipProps {
 	baseResourceURL: string;
-	deletionTypes: TDeletionType[];
+	deletionTypes: LabelValueObject[];
 	hasUpdateObjectDefinitionPermission: boolean;
 	objectDefinitionExternalReferenceCode: string;
 	objectRelationship: ObjectRelationship;
-	parameterEndpoint: string;
 	parameterRequired: boolean;
+	restContextPath: string;
 }
 
 export default function EditRelationship({
@@ -44,12 +40,12 @@ export default function EditRelationship({
 	hasUpdateObjectDefinitionPermission,
 	objectDefinitionExternalReferenceCode,
 	objectRelationship: initialValues,
-	parameterEndpoint,
 	parameterRequired,
+	restContextPath,
 }: EditRelationshipProps) {
 	const onSubmit = async (objectRelationship: ObjectRelationship) => {
 		try {
-			await API.updateRelationship(objectRelationship);
+			await API.putObjectRelationship(objectRelationship);
 			saveAndReload();
 
 			openToast({
@@ -143,7 +139,7 @@ export default function EditRelationship({
 						<Input
 							label={Liferay.Language.get('api-endpoint')}
 							readOnly
-							value={parameterEndpoint}
+							value={restContextPath}
 						/>
 
 						<SelectRelationship

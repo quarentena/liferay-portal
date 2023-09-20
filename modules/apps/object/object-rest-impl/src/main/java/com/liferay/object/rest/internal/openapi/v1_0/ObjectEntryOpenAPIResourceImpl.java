@@ -39,6 +39,7 @@ import com.liferay.portal.vulcan.resource.OpenAPIResource;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 
 import java.util.ArrayList;
@@ -117,6 +118,7 @@ public class ObjectEntryOpenAPIResourceImpl
 				Field.of(
 					propertySchema.getDescription(), propertyName,
 					GetterUtil.getBoolean(propertySchema.getReadOnly()),
+					_getRef(propertySchema),
 					requiredPropertySchemaNames.contains(propertyName),
 					propertySchema.getType(),
 					GetterUtil.getBoolean(propertySchema.getWriteOnly())));
@@ -164,6 +166,20 @@ public class ObjectEntryOpenAPIResourceImpl
 			dtoProperty.setRequired(objectField.isRequired());
 
 			return dtoProperty;
+		}
+		else if (Objects.equals(
+					objectField.getBusinessType(),
+					ObjectFieldConstants.BUSINESS_TYPE_DATE) &&
+				 _fieldNameMappings.containsKey(objectField.getName())) {
+
+			return new DTOProperty(
+				null, _fieldNameMappings.get(objectField.getName()),
+				ObjectFieldConstants.BUSINESS_TYPE_DATE_TIME) {
+
+				{
+					setRequired(objectField.isRequired());
+				}
+			};
 		}
 		else if (Objects.equals(
 					objectField.getBusinessType(),
@@ -349,6 +365,16 @@ public class ObjectEntryOpenAPIResourceImpl
 		return openAPISchemaFilter;
 	}
 
+	private String _getRef(Schema schema) {
+		if (schema instanceof ArraySchema) {
+			Schema itemsSchema = ((ArraySchema)schema).getItems();
+
+			return itemsSchema.get$ref();
+		}
+
+		return schema.get$ref();
+	}
+
 	private List<String> _getRequiredPropertySchemaNames(Schema schema) {
 		List<String> requiredPropertySchemaNames = schema.getRequired();
 
@@ -407,6 +433,11 @@ public class ObjectEntryOpenAPIResourceImpl
 
 	private final BundleContext _bundleContext;
 	private final DTOConverterRegistry _dtoConverterRegistry;
+	private final Map<String, String> _fieldNameMappings = HashMapBuilder.put(
+		"createDate", "dateCreated"
+	).put(
+		"modifiedDate", "dateModified"
+	).build();
 	private final ObjectActionLocalService _objectActionLocalService;
 	private final ObjectDefinition _objectDefinition;
 	private final ObjectDefinitionLocalService _objectDefinitionLocalService;

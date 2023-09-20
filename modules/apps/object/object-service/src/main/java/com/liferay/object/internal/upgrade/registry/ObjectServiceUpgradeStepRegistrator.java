@@ -330,6 +330,16 @@ public class ObjectServiceUpgradeStepRegistrator
 			"7.1.1", "8.0.0",
 			new com.liferay.object.internal.upgrade.v8_0_0.
 				ObjectFolderItemUpgradeProcess(_portalUUID));
+
+		registry.register(
+			"8.0.0", "8.1.0",
+			UpgradeProcessFactory.addColumns(
+				"ObjectDefinition", "enableObjectEntryDraft BOOLEAN"));
+
+		registry.register(
+			"8.1.0", "8.2.0",
+			new com.liferay.object.internal.upgrade.v8_2_0.
+				ObjectValidationRuleSettingsUpgradeProcess());
 	}
 
 	@Reference

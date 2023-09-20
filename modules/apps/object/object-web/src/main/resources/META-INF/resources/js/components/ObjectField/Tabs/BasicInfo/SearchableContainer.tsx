@@ -5,7 +5,7 @@
 
 import ClayAlert from '@clayui/alert';
 import ClayForm, {ClayRadio, ClayRadioGroup} from '@clayui/form';
-import {Card, SingleSelect, Toggle} from '@liferay/object-js-components-web';
+import {SingleSelect, Toggle} from '@liferay/object-js-components-web';
 import React, {useMemo} from 'react';
 
 import {defaultLanguageId} from '../../../../utils/constants';
@@ -48,7 +48,7 @@ export function SearchableContainer({
 	}, [objectField.indexedLanguageId]);
 
 	return (
-		<Card title={Liferay.Language.get('searchable')}>
+		<>
 			{isApproved && (
 				<ClayAlert displayType="info" title="Info">
 					{Liferay.Language.get(
@@ -59,7 +59,10 @@ export function SearchableContainer({
 
 			<ClayForm.Group>
 				<Toggle
-					disabled={objectField.businessType === 'Encrypted'}
+					disabled={
+						objectField.businessType === 'Encrypted' ||
+						objectField.system
+					}
 					label={Liferay.Language.get('searchable')}
 					name="indexed"
 					onToggle={(indexed) => setValues({indexed})}
@@ -118,6 +121,6 @@ export function SearchableContainer({
 					value={selectedLanguage}
 				/>
 			)}
-		</Card>
+		</>
 	);
 }

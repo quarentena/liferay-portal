@@ -258,7 +258,7 @@ definition {
 			locator1 = "FormFields#FIELD_DISABLED");
 
 		AssertVisible(
-			key_text = "Copy",
+			key_text = "Make a Copy",
 			locator1 = "Button#ANY_DISABLED");
 
 		Button.clickSelect();
@@ -304,10 +304,13 @@ definition {
 
 		SelectFrame(locator1 = "relative=top");
 
-		Button.click(button = "Copy");
+		Button.click(button = "Make a Copy");
 
 		if (isSet(copyDuplicatedDocument)) {
 			Alert.viewErrorMessage(errorMessage = "A folder already exists with name ${dmFolderName}");
+		}
+		else if (isSet(copyToUnconnectedSite)) {
+			Alert.viewErrorMessage(errorMessage = "The item is not copied because the site and asset library are not connected.");
 		}
 		else {
 			Alert.viewSuccessMessage();
@@ -521,9 +524,7 @@ definition {
 
 		VerifyElementPresent(locator1 = "Message#SUCCESS");
 
-		AssertTextEquals.assertPartialText(
-			locator1 = "Message#EMPTY_INFO",
-			value1 = "There are no documents or media files in this folder.");
+		DMFolder.viewEntryNotPresent(dmFolderName = ${dmFolderName});
 	}
 
 	macro removePermissions {

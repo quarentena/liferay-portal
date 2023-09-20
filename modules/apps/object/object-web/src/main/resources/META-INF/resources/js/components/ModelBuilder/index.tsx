@@ -4,34 +4,54 @@
  */
 
 import React from 'react';
+import {ReactFlowProvider} from 'react-flow-renderer';
 
 import {KeyValuePair} from '../ObjectDetails/EditObjectDetails';
-import {TDeletionType} from '../ObjectRelationship/EditRelationship';
 import EditObjectFolder from './EditObjectFolder';
-import {FolderContextProvider} from './objectFolderContext';
+import {ObjectFolderContextProvider} from './ModelBuilderContext/objectFolderContext';
 
-interface ICustomFolderWrapperProps extends React.HTMLAttributes<HTMLElement> {
-	companyKeyValuePair: KeyValuePair[];
-	deletionTypes: TDeletionType[];
-	objectDefinitions: ObjectDefinition[];
-	siteKeyValuePair: KeyValuePair[];
+interface CustomObjectFolderWrapperProps {
+	baseResourceURL: string;
+	companyKeyValuePairs: KeyValuePair[];
+	editObjectDefinitionURL: string;
+	objectDefinitionPermissionsURL: string;
+	objectDefinitionsStorageTypes: LabelValueObject[];
+	objectRelationshipDeletionTypes: LabelValueObject[];
+	siteKeyValuePairs: KeyValuePair[];
 }
 
-const CustomFolderWrapper: React.FC<ICustomFolderWrapperProps> = ({
-	companyKeyValuePair,
-	deletionTypes,
-	objectDefinitions,
-	siteKeyValuePair,
-}) => {
-	return (
-		<FolderContextProvider value={{objectDefinitions}}>
-			<EditObjectFolder
-				companyKeyValuePair={companyKeyValuePair}
-				deletionTypes={deletionTypes}
-				siteKeyValuePair={siteKeyValuePair}
-			/>
-		</FolderContextProvider>
-	);
-};
+export default function CustomObjectFolderWrapper({
+	baseResourceURL,
+	companyKeyValuePairs,
+	editObjectDefinitionURL,
+	objectDefinitionPermissionsURL,
+	objectDefinitionsStorageTypes,
+	objectRelationshipDeletionTypes,
+	siteKeyValuePairs,
+}: CustomObjectFolderWrapperProps) {
+	const urlSearchParams = new URLSearchParams(window.location.search);
 
-export default CustomFolderWrapper;
+	const objectFolderName = urlSearchParams.get('objectFolderName');
+
+	return (
+		<ReactFlowProvider>
+			<ObjectFolderContextProvider
+				value={{
+					baseResourceURL,
+					editObjectDefinitionURL,
+					objectDefinitionPermissionsURL,
+					objectDefinitionsStorageTypes,
+				}}
+			>
+				<EditObjectFolder
+					companyKeyValuePairs={companyKeyValuePairs}
+					objectFolderName={objectFolderName ?? ''}
+					objectRelationshipDeletionTypes={
+						objectRelationshipDeletionTypes
+					}
+					siteKeyValuePairs={siteKeyValuePairs}
+				/>
+			</ObjectFolderContextProvider>
+		</ReactFlowProvider>
+	);
+}

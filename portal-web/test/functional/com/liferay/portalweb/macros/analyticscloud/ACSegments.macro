@@ -246,10 +246,12 @@ definition {
 			var index = 1;
 		}
 
-		Click(
-			criteriaName = ${criteriaName},
-			index = ${index},
-			locator1 = "ACSegments#CRITERIA_ELLIPSIS");
+		if (IsElementNotPresent(locator1 = "ACSegments#CRITERIA_ELLIPSIS_OPTION_OPEN")) {
+			Click(
+				criteriaName = ${criteriaName},
+				index = ${index},
+				locator1 = "ACSegments#CRITERIA_ELLIPSIS");
+		}
 
 		MenuItem.click(menuItem = "Duplicate");
 	}
@@ -284,14 +286,6 @@ definition {
 		Click(
 			key_day = ${day},
 			locator1 = "ACSegments#DAY_CALENDAR_OPTION");
-	}
-
-	macro editFormControlCriterion {
-		var key_criterion = ${criterionName};
-
-		Select(
-			locator1 = "ACSegments#FORM_CONTROL_CRITERION",
-			value1 = ${option});
 	}
 
 	macro editNumberCriterion {

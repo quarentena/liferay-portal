@@ -12,7 +12,7 @@ import React, {useEffect, useState} from 'react';
 
 import {defaultLanguageId} from '../../utils/constants';
 import {toCamelCase} from '../../utils/string';
-import PicklistDefaultValueSelect from './DefaultValueFields/PicklistDefaultValueSelect';
+import ListTypeDefaultValueSelect from './DefaultValueFields/ListTypeDefaultValueSelect';
 import ObjectFieldFormBase from './ObjectFieldFormBase';
 import {useObjectFieldForm} from './useObjectFieldForm';
 
@@ -77,7 +77,7 @@ export function ModalAddObjectField({
 			delete field.listTypeDefinitionId;
 
 			try {
-				await API.save(apiURL, field, 'POST');
+				await API.save({item: field, method: 'POST', url: apiURL});
 
 				onClose();
 				window.location.reload();
@@ -220,7 +220,7 @@ export function ModalAddObjectField({
 						</ObjectFieldFormBase>
 
 						{values.state && (
-							<PicklistDefaultValueSelect
+							<ListTypeDefaultValueSelect
 								creationLanguageId={creationLanguageId}
 								defaultValue={
 									values.objectFieldSettings?.find(

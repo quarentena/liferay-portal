@@ -85,7 +85,7 @@ Map<String, Object> componentContext = journalDisplayContext.getComponentContext
 				<c:choose>
 					<c:when test='<%= Objects.equals(journalDisplayContext.getDisplayStyle(), "descriptive") %>'>
 						<liferay-ui:search-container-column-text>
-							<liferay-ui:user-portrait
+							<liferay-user:user-portrait
 								userId="<%= curArticle.getStatusByUserId() %>"
 							/>
 						</liferay-ui:search-container-column-text>
@@ -457,26 +457,23 @@ Map<String, Object> componentContext = journalDisplayContext.getComponentContext
 	/>
 </liferay-ui:search-container>
 
-<aui:script use="liferay-journal-navigation">
-	var journalNavigation = new Liferay.Portlet.JournalNavigation({
-		editEntryUrl: '<portlet:actionURL />',
-		form: {
-			method: 'POST',
-			node: A.one(document.<portlet:namespace />fm),
-		},
-		moveEntryUrl:
-			'<portlet:renderURL><portlet:param name="mvcPath" value="/move_articles_and_folders.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>',
-		namespace: '<portlet:namespace />',
-		searchContainerId: 'articles',
-	});
+<portlet:renderURL var="moveEntryURL">
+	<portlet:param name="mvcPath" value="/move_articles_and_folders.jsp" />
+	<portlet:param name="redirect" value="<%= currentURL %>" />
+</portlet:renderURL>
 
-	var clearJournalNavigationHandles = function (event) {
-		if (event.portletId === '<%= portletDisplay.getRootPortletId() %>') {
-			journalNavigation.destroy();
+<portlet:actionURL var="editEntryURL" />
 
-			Liferay.detach('destroyPortlet', clearJournalNavigationHandles);
-		}
-	};
-
-	Liferay.on('destroyPortlet', clearJournalNavigationHandles);
-</aui:script>
+<liferay-frontend:component
+	context='<%=
+		HashMapBuilder.<String, Object>put(
+			"editEntryURL", editEntryURL
+		).put(
+			"moveEntryURL", moveEntryURL
+		).put(
+			"searchContainerId", "articles"
+		).build()
+	%>'
+	module="js/Navigation"
+	servletContext="<%= application %>"
+/>

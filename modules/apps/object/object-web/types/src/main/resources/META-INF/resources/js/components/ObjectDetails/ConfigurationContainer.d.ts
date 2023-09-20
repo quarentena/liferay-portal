@@ -7,11 +7,15 @@
 
 interface ConfigurationContainerProps {
 	hasUpdateObjectDefinitionPermission: boolean;
+	isLinkedObjectDefinition?: boolean;
+	isRootDescendantNode: boolean;
 	setValues: (values: Partial<ObjectDefinition>) => void;
 	values: Partial<ObjectDefinition>;
 }
 export declare function ConfigurationContainer({
 	hasUpdateObjectDefinitionPermission,
+	isLinkedObjectDefinition,
+	isRootDescendantNode,
 	setValues,
 	values,
 }: ConfigurationContainerProps): JSX.Element;

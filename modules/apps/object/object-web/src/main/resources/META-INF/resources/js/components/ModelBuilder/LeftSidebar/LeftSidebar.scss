@@ -6,8 +6,29 @@
 	padding: 1rem;
 	position: inherit;
 
+	&-current-object-folder-container {
+		align-items: center;
+		display: flex;
+		justify-content: space-between;
+		padding-right: 0.5rem;
+	}
+
+	&-current-object-folder-content {
+		align-items: center;
+		display: flex;
+		gap: 1rem;
+	}
+
+	&-item-linked.treeview-link {
+		background-color: transparent;
+		color: #6b6c7e80;
+	}
+
 	.navbar-form,
 	.container-fluid {
 		padding: 0 !important;
+	}
+	.navbar-form-autofit {
+		flex-basis: 75px;
 	}
 }

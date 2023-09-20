@@ -97,6 +97,16 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
+	public void testUpgradeJavaAddFileEntryParameterCheck() throws Exception {
+		test(
+			"upgrade/UpgradeJavaAddFileEntryParameterCheck.testjava",
+			StringBundler.concat(
+				"Unable to format method addFileEntry from DLAppLocalService ",
+				"and DLAppLocalServiceUtil. Fill the new parameters manually, ",
+				"see LPS-194818"));
+	}
+
+	@Test
 	public void testUpgradeJavaAddFolderParameterCheck() throws Exception {
 		test("upgrade/UpgradeJavaAddFolderParameterCheck.testjava");
 	}
@@ -106,6 +116,11 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 		throws Exception {
 
 		test("upgrade/UpgradeJavaAssetEntryAssetCategoriesCheck.testjava");
+	}
+
+	@Test
+	public void testUpgradeJavaCaptchaUtilCheck() throws Exception {
+		test("upgrade/UpgradeJavaCaptchaUtilCheck.testjava");
 	}
 
 	@Test
@@ -334,6 +349,21 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 	@Test
 	public void testUpgradeRejectedExecutionHandlerCheck() throws Exception {
 		test("upgrade/UpgradeRejectedExecutionHandlerCheck.testjava");
+	}
+
+	@Test
+	public void testUpgradeSCSSImportsCheck() throws Exception {
+		test("upgrade/UpgradeSCSSImportsCheck.testscss");
+	}
+
+	@Test
+	public void testUpgradeSCSSMixinsCheck() throws Exception {
+		test(
+			"upgrade/UpgradeSCSSMixinsCheck.testscss",
+			StringBundler.concat(
+				"Do not use 'media-query' mixing, replace with its equivalent ",
+				"(e.g., media-breakpoint-up, media-breakpoint-only, ",
+				"media-breakpoint-down, etc.), see LPS-194507."));
 	}
 
 	@Test

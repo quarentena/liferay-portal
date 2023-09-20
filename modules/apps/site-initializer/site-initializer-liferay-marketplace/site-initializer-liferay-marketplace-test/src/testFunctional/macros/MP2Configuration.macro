@@ -1,61 +1,24 @@
 definition {
 
-	static var companyWebId = "";
 	static var clientExtension = "";
-
-	macro addUserAndSetAccount {
-		if (!(isSet(groupName))) {
-			var groupName = "Marketplace Site";
-		}
-
-		JSONUser.addUser(
-			userEmailAddress = ${userEmailAddress},
-			userFirstName = ${userFirstName},
-			userLastName = ${userLastName},
-			userScreenName = ${userScreenName});
-
-		JSONUser.setFirstPassword(
-			agreeToTermsAndAnswerReminderQuery = "true",
-			requireReset = "false",
-			userEmailAddress = ${userEmailAddress});
-
-		JSONRole.assignRoleToUser(
-			roleTitle = ${regularRole},
-			userEmailAddress = StringUtil.toLowerCase(${userEmailAddress}));
-
-		JSONUser.addUserToSite(
-			groupName = ${groupName},
-			userEmailAddress = ${userEmailAddress});
-
-		JSONRole.assignSiteRoleToUser(
-			groupName = ${groupName},
-			roleTitle = ${roleTitle},
-			userEmailAddress = ${userEmailAddress});
-
-		JSONAccountEntryUser.addExistUsertoAccount(
-			accountEntryName = ${accountEntryName},
-			userEmailAddress = ${userEmailAddress});
-
-		JSONAccountRole.associateUser(
-			accountEntryName = ${accountEntryName},
-			accountRole = ${accountRole},
-			userEmailAddress = ${userEmailAddress});
-	}
+	static var companyWebId = "";
 
 	macro commerceTearDown {
 		JSONUser.tearDownNonAdminUsers();
 
 		CommerceJSONAccountsAPI._deleteAllCommerceAccounts();
 
+		CommerceJSONCatalogsAPI._deleteAllNoSystemCommerceCatalogs();
+
+		CommerceJSONChannelsAPI._deleteAllCommerceChannels();
+
 		CommerceJSONOptionsAPI._deleteAllCommerceOptions();
+
+		CommerceJSONProductsAPI._deleteAllCommerceProducts();
 
 		CommerceJSONSpecificationGroupsAPI._deleteAllCommerceSpecificationGroups();
 
 		CommerceJSONSpecificationsAPI._deleteAllCommerceSpecifications();
-
-		CommerceJSONChannelsAPI._deleteAllCommerceChannels();
-
-		CommerceJSONCatalogsAPI._deleteAllNoSystemCommerceCatalogs();
 
 		CommerceConfiguration.commerceInitializersTearDown();
 	}
@@ -117,12 +80,6 @@ definition {
 		User.firstLoginPG();
 
 		var companyWebId = JSONCompany.getWebId();
-		var liferayHome = PropsUtil.get("liferay.home.dir.name");
-		var moduleBaseDir = "workspaces/liferay-marketplace-workspace";
-		var projectDir = PropsUtil.get("project.dir");
-
-		FileUtil.replaceStringInFile("${projectDir}/${moduleBaseDir}/gradle.properties", "liferay.workspace.home.dir=", "liferay.workspace.home.dir=${liferayHome}");
-
 		var clientExtension = "liferay-marketplace-custom-element";
 
 		AntCommands.runCommand("build-test-workspace.xml", "deploy-workspace-client-extension -Dvirtual.instance.id=${companyWebId} -Dworkspace.client.extension.name=${clientExtension}");
@@ -135,6 +92,8 @@ definition {
 			templateType = "Site Initializer");
 
 		ApplicationsMenu.gotoSite(site = "Marketplace Site");
+
+		WaitForPageLoad();
 	}
 
 }

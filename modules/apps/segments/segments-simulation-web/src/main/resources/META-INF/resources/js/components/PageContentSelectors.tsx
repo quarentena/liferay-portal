@@ -111,7 +111,7 @@ function PageContentSelectors({
 						Liferay.Language.get(
 							'showing-content-for-the-experience-x'
 						),
-						selectedSegmentsExperience.segmentsExperienceName
+						selectedSegmentsExperience?.segmentsExperienceName
 					),
 				});
 
@@ -125,28 +125,43 @@ function PageContentSelectors({
 	);
 
 	useEffect(() => {
-		const deactivateSimulationEventHandler = Liferay.on(
-			'SimulationMenu:closeSimulationPanel',
-			fetchDeactivateSimulation
+		const simulationToggle = document.querySelector(
+			'.product-menu-toggle.lfr-has-simulation-panel'
 		);
 
-		const openSimulationPanelEventHandler = Liferay.on(
-			'SimulationMenu:openSimulationPanel',
-			() => {
-				firstRenderRef.current = false;
+		if (!simulationToggle) {
+			return;
+		}
+
+		// @ts-ignore
+
+		const sidenavInstance = Liferay.SideNavigation.initialize(
+			simulationToggle
+		);
+
+		sidenavInstance.on('open.lexicon.sidenav', () => {
+			if (!firstRenderRef.current) {
 				simulateSegmentsEntries();
 			}
-		);
+		});
+
+		sidenavInstance.on('closed.lexicon.sidenav', () => {
+			fetchDeactivateSimulation();
+		});
+
+		if (firstRenderRef.current) {
+			if (sidenavInstance && sidenavInstance.visible()) {
+				firstRenderRef.current = false;
+
+				simulateSegmentsEntries();
+			}
+		}
 
 		return () => {
 
 			// @ts-ignore
 
-			deactivateSimulationEventHandler.detach();
-
-			// @ts-ignore
-
-			openSimulationPanelEventHandler.detach();
+			Liferay.SideNavigation.destroy(simulationToggle);
 		};
 	}, [fetchDeactivateSimulation, simulateSegmentsEntries]);
 
@@ -159,7 +174,7 @@ function PageContentSelectors({
 	useEffect(() => {
 		if (!firstRenderRef.current) {
 			simulateSegmentsExperiment(
-				selectedSegmentsExperience.segmentsExperienceId
+				selectedSegmentsExperience?.segmentsExperienceId
 			);
 		}
 	}, [selectedSegmentsExperience, simulateSegmentsExperiment]);
@@ -191,7 +206,7 @@ function PageContentSelectors({
 				method: 'POST',
 			}).then(() => {
 				simulateSegmentsExperiment(
-					selectedSegmentsExperience.segmentsExperienceId
+					selectedSegmentsExperience?.segmentsExperienceId
 				);
 			});
 		}

@@ -4,45 +4,92 @@
  */
 
 import {SetStateAction} from 'react';
-import {ViewObjectDefinitionsModals} from './ViewObjectDefinitions';
-declare type folderAction = {
+import {DropDownItems} from '../ModelBuilder/types';
+import {DeletedObjectDefinition} from './ViewObjectDefinitions';
+declare type DeleteObjectDefinitionProps = {
+	baseResourceURL: string;
+	handleShowDeleteObjectDefinitionModal: () => void;
+	objectDefinitionId: number;
+	objectDefinitionName: string;
+	setDeletedObjectDefinition: (value: DeletedObjectDefinition) => void;
+	status: string;
+};
+declare type ObjectDefinitionNodeActionsProps = {
+	baseResourceURL: string;
+	handleShowDeleteObjectDefinitionModal: () => void;
+	handleShowEditObjectDefinitionExternalReferenceCodeModal: () => void;
+	handleShowRedirectObjectDefinitionModal: () => void;
+	hasObjectDefinitionDeleteResourcePermission: boolean;
+	hasObjectDefinitionManagePermissionsResourcePermission: boolean;
+	objectDefinitionId: number;
+	objectDefinitionName: string;
+	objectDefinitionPermissionsURL: string;
+	setDeletedObjectDefinition: (value: DeletedObjectDefinition) => void;
+	status: {
+		code: number;
+		label: string;
+		label_i18n: string;
+	};
+};
+declare type ObjectFolderAction = {
 	href: string;
 	method: string;
 };
-declare type folderActions = {
-	delete?: folderAction;
-	get?: folderAction;
-	permissions?: folderAction;
-	update?: folderAction;
+declare type ObjectFolderActions = {
+	delete?: ObjectFolderAction;
+	get?: ObjectFolderAction;
+	permissions?: ObjectFolderAction;
+	update?: ObjectFolderAction;
 };
-export declare function deleteFolder(
+export declare function deleteObjectFolder(
 	id: number,
-	folderName: string
+	objectFolderName: string
 ): Promise<void>;
-export declare function deleteObjectDefinition(
+export declare function deleteObjectDefinitionToast(
 	id: number,
 	objectDefinitionName: string
 ): Promise<void>;
+export declare function deleteObjectDefinition({
+	baseResourceURL,
+	handleShowDeleteObjectDefinitionModal,
+	objectDefinitionId,
+	objectDefinitionName,
+	setDeletedObjectDefinition,
+	status,
+}: DeleteObjectDefinitionProps): Promise<void>;
 export declare function deleteRelationship(id: number): Promise<void>;
-export declare function getFolderActions(
+export declare function getObjectDefinitionNodeActions({
+	baseResourceURL,
+	handleShowDeleteObjectDefinitionModal,
+	handleShowEditObjectDefinitionExternalReferenceCodeModal,
+	handleShowRedirectObjectDefinitionModal,
+	hasObjectDefinitionDeleteResourcePermission,
+	hasObjectDefinitionManagePermissionsResourcePermission,
+	objectDefinitionId,
+	objectDefinitionName,
+	objectDefinitionPermissionsURL,
+	setDeletedObjectDefinition,
+	status,
+}: ObjectDefinitionNodeActionsProps): DropDownItems[];
+export declare function getObjectFolderActions(
 	id: number,
 	objectFolderPermissionsURL: string,
 	setShowModal: (value: SetStateAction<ViewObjectDefinitionsModals>) => void,
-	actions?: folderActions
+	actions?: ObjectFolderActions
 ): (
-	| {
-			label: string;
-			onClick: () => void;
-			symbolLeft: string;
-			value: string;
-			type?: undefined;
-	  }
 	| {
 			type: string;
 			label?: undefined;
 			onClick?: undefined;
 			symbolLeft?: undefined;
 			value?: undefined;
+	  }
+	| {
+			label: string;
+			onClick: () => void;
+			symbolLeft: string;
+			value: string;
+			type?: undefined;
 	  }
 )[];
 export declare function normalizeName(str: string): string;

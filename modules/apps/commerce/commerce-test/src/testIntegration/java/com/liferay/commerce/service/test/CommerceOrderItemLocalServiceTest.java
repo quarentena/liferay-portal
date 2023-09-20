@@ -900,7 +900,7 @@ public class CommerceOrderItemLocalServiceTest {
 				null, _serviceContext.getUserId(),
 				RandomTestUtil.randomLocaleStringMap(),
 				RandomTestUtil.randomLocaleStringMap(),
-				CPTestUtil.getDefaultDDMFormFieldType(skuContributor),
+				CPTestUtil.getDefaultCommerceOptionTypeKey(skuContributor),
 				RandomTestUtil.randomBoolean(), RandomTestUtil.randomBoolean(),
 				skuContributor, commerceOptionValue.getOptionKey(),
 				_serviceContext);
@@ -920,7 +920,7 @@ public class CommerceOrderItemLocalServiceTest {
 				CPDefinitionOptionRelLocalServiceUtil.addCPDefinitionOptionRel(
 					cpDefinition.getCPDefinitionId(), cpOption.getCPOptionId(),
 					cpOption.getNameMap(), cpOption.getDescriptionMap(),
-					cpOption.getDDMFormFieldTypeName(), 0.0, false, false,
+					cpOption.getCommerceOptionTypeKey(), 0.0, false, false,
 					cpOption.isSkuContributor(), true,
 					commerceOptionValue.getPriceType(), _serviceContext);
 
@@ -1190,7 +1190,7 @@ public class CommerceOrderItemLocalServiceTest {
 
 		CPOption dynamicPriceTypeCPOption = CPTestUtil.addCPOption(
 			_commerceCatalog.getGroupId(),
-			CPTestUtil.getDefaultDDMFormFieldType(true), true);
+			CPTestUtil.getDefaultCommerceOptionTypeKey(true), true);
 
 		_cpOptions.add(dynamicPriceTypeCPOption);
 

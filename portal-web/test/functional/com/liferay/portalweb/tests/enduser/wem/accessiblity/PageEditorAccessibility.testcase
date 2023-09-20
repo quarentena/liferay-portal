@@ -200,6 +200,8 @@ definition {
 			PagesAdmin.gotoPageEllipsisMenuItem(
 				menuItem = "Edit",
 				pageName = "Test Page Name");
+
+			PageEditor.assertFragmentSidebarLoaded();
 		}
 
 		task ("When the page creator opens the Product Menu") {
@@ -389,7 +391,7 @@ definition {
 			KeyPress(
 				key_menuItem = "Page Design",
 				locator1 = "MenuItem#ANY_MENU_ITEM",
-				value1 = "\DOWN");
+				value1 = "\UP");
 
 			KeyPress(
 				key_menuItem = "Content Editing",
@@ -610,6 +612,55 @@ definition {
 		}
 	}
 
+	@description = "This is a test for LPS-194375. The Page Editor filter is WCAG 2.1 AA compliant."
+	@priority = 3
+	test ViewAccessibilityOfFilterByContentTypeSelector {
+		task ("Given a page creator has displayed assets on content page") {
+			JSONWebcontent.addWebContent(
+				content = "Web Content Content",
+				groupName = ${randomSiteName},
+				title = "Web Content Title");
+
+			JSONLayout.addPublicLayout(
+				groupName = ${randomSiteName},
+				layoutName = "Test Page Name",
+				type = "content");
+
+			ContentPagesNavigator.openEditContentPage(
+				pageName = "Test Page Name",
+				siteName = ${randomSiteName});
+
+			PageEditor.addFragment(
+				collectionName = "Basic Components",
+				fragmentName = "Heading");
+
+			PageEditor.addFragment(
+				collectionName = "Content Display",
+				fragmentName = "Content Display",
+				targetFragmentName = "Heading");
+
+			PageEditor.editContentDisplay(
+				fragmentName = "Content Display",
+				webcontent = "true",
+				webContentContent = "Web Content Content",
+				webContentTitle = "Web Content Title");
+		}
+
+		task ("When the page creator opens the dropdown menu of Filter by Content Type") {
+			PageEditor.gotoTab(tabName = "Page Content");
+
+			Click(locator1 = "PageEditor#PAGE_CONTENTS_CONTENT_FILTER_TOGGLE");
+		}
+
+		task ("Then the dropdown menu should have correct accessibility") {
+			AssertElementAccessible(locator1 = "//div[contains(@class,'dropdown-menu-select')][contains(@class,'show')]//li");
+
+			AssertElementAccessible(locator1 = "xpath=(//div[contains(@class,'dropdown-menu-select')][contains(@class,'show')]//li)[2]");
+
+			AssertElementAccessible(locator1 = "xpath=(//div[contains(@class,'dropdown-menu-select')][contains(@class,'show')]//li)[3]");
+		}
+	}
+
 	@description = "This is a test for LPS-165625. The Language Selector shouldn't have aria-pressed attribute."
 	@priority = 2
 	test ViewAccessibilityOfLanguageSelector {
@@ -627,9 +678,9 @@ definition {
 		}
 
 		task ("Then the Language Selector should have correct accessibility") {
-			AssertElementNotPresent(locator1 = "//button[contains(@class,'dropdown-toggle')][@aria-pressed][*[name()='svg'][contains(@class,'lexicon-icon-en-us')]]");
+			AssertElementNotPresent(locator1 = "//button[contains(@type,'button')][@aria-pressed][*[name()='svg'][contains(@class,'lexicon-icon-en-us')]]");
 
-			AssertElementPresent(locator1 = "//button[contains(@class,'dropdown-toggle')]//span[normalize-space()='Select a language, current language: en-US.']");
+			AssertElementPresent(locator1 = "//button[contains(@type,'button')][@aria-label='Select a language, current language: en-US.']");
 		}
 	}
 
@@ -719,6 +770,31 @@ definition {
 				attribute1 = "title",
 				locator1 = "PageEditor#MORE_LINK",
 				value1 = "More Page Design Options");
+		}
+	}
+
+	@description = "This is a test for LPS-194373. The Page Design / Content Editing picker should comply with WCAG 2.1 AA standard."
+	@priority = 3
+	test ViewAccessibilityOfPageEditionModeSelector {
+		task ("Given a page creator has a content page") {
+			JSONLayout.addPublicLayout(
+				groupName = ${randomSiteName},
+				layoutName = "Test Page Name",
+				type = "content");
+		}
+
+		task ("When the page creator opens the dropdown menu of page edition mode") {
+			ContentPagesNavigator.openEditContentPage(
+				pageName = "Test Page Name",
+				siteName = ${randomSiteName});
+
+			Click(locator1 = "PageEditor#EDIT_MODE_SELECTOR");
+		}
+
+		task ("Then the dropdown menu should have correct accessibility") {
+			AssertElementAccessible(locator1 = "//div[contains(@class,'dropdown-menu-select')][contains(@class,'show')]//li");
+
+			AssertElementAccessible(locator1 = "xpath=(//div[contains(@class,'dropdown-menu-select')][contains(@class,'show')]//li)[2]");
 		}
 	}
 

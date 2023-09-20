@@ -260,11 +260,11 @@ public class DDMDataProviderDisplayContext {
 	}
 
 	public String getEmptyResultsMessage() {
-		SearchContainer<?> search = getSearch();
+		SearchContainer<?> searchContainer = getSearchContainer();
 
 		return LanguageUtil.get(
 			_ddmDataProviderRequestHelper.getRequest(),
-			search.getEmptyResultsMessage());
+			searchContainer.getEmptyResultsMessage());
 	}
 
 	public List<DropdownItem> getFilterItemsDropdownItems() {
@@ -424,7 +424,7 @@ public class DDMDataProviderDisplayContext {
 		).buildPortletURL();
 	}
 
-	public SearchContainer<?> getSearch() {
+	public SearchContainer<?> getSearchContainer() {
 		PortletURL portletURL = PortletURLBuilder.create(
 			getPortletURL()
 		).setParameter(
@@ -491,7 +491,7 @@ public class DDMDataProviderDisplayContext {
 	}
 
 	public int getTotalItems() {
-		SearchContainer<?> searchContainer = getSearch();
+		SearchContainer<?> searchContainer = getSearchContainer();
 
 		return searchContainer.getTotal();
 	}

@@ -1709,3 +1709,76 @@ The removal of this extension point has no direct replacement.
 ### Why was this change made?
 
 These listeners are not used in Liferay. Liferay decided to not support these extension points.
+
+---------------------------------------
+
+## Removed API to register/unregister `MessageListener` from `Destination`
+- **Date:** 2023-Sep-1
+- **JIRA Ticket:** [LPS-194337](https://liferay.atlassian.net/browse/LPS-194337)
+
+### What changed?
+
+The following API methods related to `MessageListener` registration have been removed from interface `Destination`:
+- `copyMessageListeners`
+- `getMessageListenerCount`
+- `isRegistered`
+- `register`
+- `unregister`
+
+A new interface `MessageListenerRegistry` is added with an API to get message listeners associated with provided destination name.
+
+### Who is affected?
+
+This affects anyone registering/unregistering such listeners directly on `Destination` interface.
+
+### How should I update my code?
+
+Register `MessageListener` as OSGi service, with the property `destination.name` mapped to the corresponding destination name.
+
+### Why was this change made?
+
+Liferay decided to not support these API methods to simplify the message bus infrastructure and usage.
+
+---------------------------------------
+
+## Portal property `discussion.subscribe` moved to instance settings
+- **Date:** 2023-September-4
+- **JIRA Ticket:** [LPS-194379](https://liferay.atlassian.net/browse/LPS-194379)
+
+### What changed?
+
+The portal property `discussion.subscribe` can no longer be set from the `portal.properties` file.
+
+### Who is affected?
+
+This affects anyone using `discussion.subscribe` with a value different than the default.
+
+### How should I update my code?
+
+There's no need to update the code. Further changes to the property must be made through instance settings.
+
+### Why was this change made?
+
+Configuration options in portal properties are global. Product needs required it to be customizable at instance level.
+
+---------------------------------------
+
+## Removal of repository registration support from the `com.liferay.portal.deploy.hot.HookHotDeployListener`.
+- **Date:** 2023-September-4
+- **JIRA Ticket:** [LPS-194350](https://liferay.atlassian.net/browse/LPS-194350)
+
+### What changed?
+
+The support for deploying a external repository via hook has been removed from the `com.liferay.portal.deploy.hot.HookHotDeployListener`.
+
+### Who is affected?
+
+This affects anyone providing its own repository implementation via hook.
+
+### How should I update my code?
+
+If you are providing your own repository implementation via a hook, convert it to an OSGi service.
+
+### Why was this change made?
+
+External repositories deployed via hook don't support the same feature set as OSGi ones.

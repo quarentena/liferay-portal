@@ -91,6 +91,7 @@
 		<column name="enableCategorization" type="boolean" />
 		<column name="enableComments" type="boolean" />
 		<column name="enableLocalization" type="boolean" />
+		<column name="enableObjectEntryDraft" type="boolean" />
 		<column name="enableObjectEntryHistory" type="boolean" />
 		<column name="modifiable" type="boolean" />
 		<column name="name" type="String" />
@@ -142,12 +143,6 @@
 		<finder name="C_A_S" return-type="Collection">
 			<finder-column name="companyId" />
 			<finder-column name="active" />
-			<finder-column name="status" />
-		</finder>
-		<finder name="C_A_M_S" return-type="Collection">
-			<finder-column name="companyId" />
-			<finder-column name="active" />
-			<finder-column name="modifiable" />
 			<finder-column name="status" />
 		</finder>
 		<finder name="C_A_S_S" return-type="Collection">
@@ -974,7 +969,9 @@
 		<exception>ObjectDefinitionLabel</exception>
 		<exception>ObjectDefinitionModifiable</exception>
 		<exception>ObjectDefinitionName</exception>
+		<exception>ObjectDefinitionPanelCategoryKey</exception>
 		<exception>ObjectDefinitionPluralLabel</exception>
+		<exception>ObjectDefinitionPortlet</exception>
 		<exception>ObjectDefinitionRootObjectDefinitionId</exception>
 		<exception>ObjectDefinitionScope</exception>
 		<exception>ObjectDefinitionStatus</exception>
@@ -993,6 +990,7 @@
 		<exception>ObjectFieldSettingName</exception>
 		<exception>ObjectFieldSettingValue</exception>
 		<exception>ObjectFieldState</exception>
+		<exception>ObjectFieldSystem</exception>
 		<exception>ObjectFilter</exception>
 		<exception>ObjectFolderLabel</exception>
 		<exception>ObjectFolderName</exception>

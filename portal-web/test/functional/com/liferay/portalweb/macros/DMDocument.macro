@@ -1359,6 +1359,9 @@ definition {
 		if (isSet(copyDuplicatedDocument)) {
 			Alert.viewErrorMessage(errorMessage = "A file entry already exists with title ${dmDocumentTitle}");
 		}
+		else if (isSet(copyToUnconnectedSite)) {
+			Alert.viewErrorMessage(errorMessage = "The item is not copied because the site and asset library are not connected.");
+		}
 		else {
 			Alert.viewSuccessMessage();
 		}
@@ -2991,6 +2994,13 @@ definition {
 		}
 		else {
 			DMNavigator.openToConfigInSystemSettings(portlet = "Documents and Media Size Limits");
+		}
+
+		if (isSet(checkPortletTitle)) {
+			AssertTextEquals(
+				key_portletTitle = "File Upload Limits",
+				locator1 = "DocumentsAndMedia#PORTLET_TITLE",
+				value1 = "File Upload Limits");
 		}
 
 		if (${indexNumber} == 2) {

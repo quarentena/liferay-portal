@@ -9,35 +9,33 @@ import {IFDSTableProps} from '../../utils/fds';
 import './ViewObjectDefinitions.scss';
 interface ViewObjectDefinitionsProps extends IFDSTableProps {
 	baseResourceURL: string;
+	editObjectDefinitionURL: string;
 	modelBuilderURL: string;
+	objectDefinitionsAPIURL: any;
+	objectDefinitionsCreationMenu: {
+		primaryItems?: any[];
+		secondaryItems?: any[];
+	};
+	objectDefinitionsFDSActionDropdownItems: any[];
+	objectDefinitionsFDSName: any;
+	objectDefinitionsStorageTypes: LabelValueObject[];
 	objectFolderPermissionsURL: string;
-	storages: LabelTypeObject[];
 }
-export declare type ViewObjectDefinitionsModals = {
-	addFolder: boolean;
-	addObjectDefinition: boolean;
-	bindToRootObjectDefinition: boolean;
-	deleteFolder: boolean;
-	deleteObjectDefinition: boolean;
-	deletionNotAllowed: boolean;
-	editFolder: boolean;
-	moveObjectDefinition: boolean;
-	unbindFromRootObjectDefinition: boolean;
-};
-export interface DeletedObjectDefinition extends ObjectDefinition {
+export interface DeletedObjectDefinition {
 	hasObjectRelationship: boolean;
+	id: number;
+	name: string;
 	objectEntriesCount: number;
 }
 export default function ViewObjectDefinitions({
-	apiURL,
 	baseResourceURL,
-	creationMenu,
-	id,
-	items,
+	editObjectDefinitionURL,
 	modelBuilderURL,
+	objectDefinitionsAPIURL,
+	objectDefinitionsCreationMenu,
+	objectDefinitionsFDSActionDropdownItems,
+	objectDefinitionsFDSName,
+	objectDefinitionsStorageTypes,
 	objectFolderPermissionsURL,
-	sorting,
-	storages,
-	url,
 }: ViewObjectDefinitionsProps): JSX.Element;
 export {};

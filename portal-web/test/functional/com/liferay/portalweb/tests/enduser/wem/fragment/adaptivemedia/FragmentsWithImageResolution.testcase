@@ -259,6 +259,10 @@ definition {
 		}
 
 		task ("Take down the Width and File Size of image resolution in Tablet viewport") {
+			Navigator.gotoNavTab(navTab = "General");
+
+			Navigator.gotoNavTab(navTab = "Styles");
+
 			var fileSizeTablet = PageEditor.getFileSizeOfSelectedImageResolution();
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
@@ -341,7 +345,6 @@ definition {
 	@uitest
 	test ViewAutoImageResolutionForImageMappedToWebContent {
 		property portal.acceptance = "true";
-		property timeout.explicit.wait = "20";
 
 		task ("Add an Image Resolution with 2000px Max Width") {
 			ApplicationsMenu.gotoPortlet(

@@ -106,6 +106,7 @@ public class PublishLayoutPageTemplateEntryMVCActionCommand
 			draftLayout.getTypeSettingsProperties();
 
 		typeSettingsUnicodeProperties.put("published", Boolean.TRUE.toString());
+		typeSettingsUnicodeProperties.remove("designConfigurationModified");
 
 		draftLayout.setTypeSettingsProperties(typeSettingsUnicodeProperties);
 

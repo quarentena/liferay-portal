@@ -62,16 +62,10 @@ definition {
 		}
 
 		if (isSet(userRole)) {
-			ApplicationsMenu.gotoPortlet(
-				category = "Accounts",
-				panel = "Control Panel",
-				portlet = "Accounts");
-
-			LexiconEntry.gotoEntry(rowEntry = ${accountName});
-
-			Account.addAssigneeToRoleViaUsersTab(
-				accountRoleTitle = ${userRole},
-				accountUserName = ${userEmailAddress});
+			JSONAccountRole.associateUser(
+				accountEntryName = ${accountName},
+				accountRole = ${userRole},
+				userEmailAddress = ${userEmailAddress});
 		}
 	}
 
@@ -220,6 +214,8 @@ definition {
 		Check.checkToggleSwitch(locator1 = "CommerceEntry#SUBJECT_TO_VAT_CHECKBOX");
 
 		Check.checkToggleSwitch(locator1 = "CommerceEntry#ACTIVE_CHECKBOX");
+
+		Button.clickSave();
 	}
 
 	macro addNewCurrenciesEntry {
@@ -430,6 +426,8 @@ definition {
 			value1 = ${code});
 
 		Check.checkToggleSwitch(locator1 = "CommerceEntry#ACTIVE_CHECKBOX");
+
+		Button.clickSave();
 	}
 
 	macro addNewWarehousesEntry {
@@ -1119,6 +1117,26 @@ definition {
 		Type(
 			locator1 = "CommerceEntry#SHORT_DESCRIPTION_FIELD",
 			value1 = ${newEntryShortDescription});
+	}
+
+	macro editPriceListsFromProductSKU {
+		CommerceNavigator.gotoEntry(entryName = ${skuName});
+
+		SelectFrame.selectFrameNoLoading(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
+
+		CommerceEntry.gotoMenuTab(menuTab = "Price Lists");
+
+		CommerceNavigator.gotoEntry(entryName = ${priceList});
+
+		SelectFrame.selectFrameNoLoading(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
+
+		Type(
+			locator1 = "CommerceEntry#PRICE_FIELD",
+			value1 = ${price});
+
+		Button.clickSave();
+
+		Click(locator1 = "Icon#CLOSE");
 	}
 
 	macro editSkuPricingAndInventory {

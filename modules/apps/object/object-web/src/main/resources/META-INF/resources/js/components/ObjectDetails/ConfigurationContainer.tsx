@@ -9,12 +9,16 @@ import React from 'react';
 
 interface ConfigurationContainerProps {
 	hasUpdateObjectDefinitionPermission: boolean;
+	isLinkedObjectDefinition?: boolean;
+	isRootDescendantNode: boolean;
 	setValues: (values: Partial<ObjectDefinition>) => void;
 	values: Partial<ObjectDefinition>;
 }
 
 export function ConfigurationContainer({
 	hasUpdateObjectDefinitionPermission,
+	isLinkedObjectDefinition,
+	isRootDescendantNode,
 	setValues,
 	values,
 }: ConfigurationContainerProps) {
@@ -22,10 +26,15 @@ export function ConfigurationContainer({
 		? !values.modifiable && values.system
 		: values.system;
 
+	const disabled =
+		!hasUpdateObjectDefinitionPermission ||
+		isLinkedObjectDefinition ||
+		isReadOnly;
+
 	return (
 		<div className="lfr-objects__object-definition-details-configuration">
 			<Toggle
-				disabled={isReadOnly || !hasUpdateObjectDefinitionPermission}
+				disabled={disabled || isRootDescendantNode}
 				label={sub(
 					Liferay.Language.get('show-widget-in-x'),
 					Liferay.Language.get('page-builder')
@@ -36,7 +45,7 @@ export function ConfigurationContainer({
 			/>
 
 			<Toggle
-				disabled={isReadOnly || !hasUpdateObjectDefinitionPermission}
+				disabled={disabled}
 				label={sub(
 					Liferay.Language.get('enable-x'),
 					Liferay.Language.get('categorization-of-object-entries')
@@ -51,7 +60,7 @@ export function ConfigurationContainer({
 			/>
 
 			<Toggle
-				disabled={isReadOnly || !hasUpdateObjectDefinitionPermission}
+				disabled={disabled}
 				label={sub(
 					Liferay.Language.get('enable-x'),
 					Liferay.Language.get('comments-in-page-builder')
@@ -66,7 +75,7 @@ export function ConfigurationContainer({
 			/>
 
 			<Toggle
-				disabled={isReadOnly}
+				disabled={isLinkedObjectDefinition || isReadOnly}
 				label={sub(
 					Liferay.Language.get('enable-x'),
 					Liferay.Language.get('entry-history-in-audit-framework')
@@ -79,6 +88,24 @@ export function ConfigurationContainer({
 				}
 				toggled={values.enableObjectEntryHistory}
 			/>
+
+			{Liferay.FeatureFlags['LPS-181663'] && (
+				<Toggle
+					disabled={
+						isReadOnly || !hasUpdateObjectDefinitionPermission
+					}
+					label={Liferay.Language.get(
+						'allow-users-to-save-entries-as-draft'
+					)}
+					name="enableObjectEntryDraft"
+					onToggle={() =>
+						setValues({
+							enableObjectEntryDraft: !values.enableObjectEntryDraft,
+						})
+					}
+					toggled={values.enableObjectEntryDraft}
+				/>
+			)}
 		</div>
 	);
 }

@@ -8,7 +8,6 @@
 import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import {
-	Card,
 	ExpressionBuilder,
 	SidebarCategory,
 	Toggle,
@@ -23,7 +22,7 @@ import {
 	getUpdatedDefaultValueType,
 } from '../../../../utils/defaultValues';
 import {removeFieldSettings} from '../../../../utils/fieldSettings';
-import PicklistDefaultValueSelect from '../../DefaultValueFields/PicklistDefaultValueSelect';
+import ListTypeDefaultValueSelect from '../../DefaultValueFields/ListTypeDefaultValueSelect';
 import {ObjectFieldErrors} from '../../ObjectFieldFormBase';
 interface DefaultValueContainerProps {
 	creationLanguageId: Liferay.Language.Locale;
@@ -53,7 +52,7 @@ type InputAsValueFieldComponents = {
 };
 
 const InputAsValueFieldComponents: Partial<InputAsValueFieldComponents> = {
-	Picklist: PicklistDefaultValueSelect,
+	Picklist: ListTypeDefaultValueSelect,
 };
 
 export function DefaultValueContainer({
@@ -111,7 +110,7 @@ export function DefaultValueContainer({
 		];
 
 	return (
-		<Card disabled={false} title={Liferay.Language.get('default-value')}>
+		<>
 			{!values.state && (
 				<ClayAlert displayType="info" title="Info">
 					{Liferay.Language.get(
@@ -257,6 +256,6 @@ export function DefaultValueContainer({
 						}
 					/>
 				)}
-		</Card>
+		</>
 	);
 }

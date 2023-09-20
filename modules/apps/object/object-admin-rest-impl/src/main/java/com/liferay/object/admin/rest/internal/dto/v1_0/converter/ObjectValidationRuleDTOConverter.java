@@ -109,21 +109,42 @@ public class ObjectValidationRuleDTOConverter
 			{
 				setName(
 					() -> {
-						if (objectValidationRuleSetting.compareName(
+						if (FeatureFlagManagerUtil.isEnabled("LPS-187854") &&
+							objectValidationRuleSetting.compareName(
 								ObjectValidationRuleSettingConstants.
-									NAME_OBJECT_FIELD_ID)) {
+									NAME_KEY_OBJECT_FIELD_ID)) {
 
 							return ObjectValidationRuleSettingConstants.
-								NAME_OBJECT_FIELD_EXTERNAL_REFERENCE_CODE;
+								NAME_KEY_OBJECT_FIELD_EXTERNAL_REFERENCE_CODE;
+						}
+
+						if (objectValidationRuleSetting.compareName(
+								ObjectValidationRuleSettingConstants.
+									NAME_OUTPUT_OBJECT_FIELD_ID)) {
+
+							return ObjectValidationRuleSettingConstants.
+								NAME_OUTPUT_OBJECT_FIELD_EXTERNAL_REFERENCE_CODE;
 						}
 
 						return objectValidationRuleSetting.getName();
 					});
 				setValue(
 					() -> {
-						if (!objectValidationRuleSetting.compareName(
+						if (FeatureFlagManagerUtil.isEnabled("LPS-187854") &&
+							!(objectValidationRuleSetting.compareName(
 								ObjectValidationRuleSettingConstants.
-									NAME_OBJECT_FIELD_ID)) {
+									NAME_KEY_OBJECT_FIELD_ID) ||
+							  objectValidationRuleSetting.compareName(
+								  ObjectValidationRuleSettingConstants.
+									  NAME_OUTPUT_OBJECT_FIELD_ID))) {
+
+							return objectValidationRuleSetting.getValue();
+						}
+
+						if (!(FeatureFlagManagerUtil.isEnabled("LPS-187854") ||
+							  objectValidationRuleSetting.compareName(
+								  ObjectValidationRuleSettingConstants.
+									  NAME_OUTPUT_OBJECT_FIELD_ID))) {
 
 							return objectValidationRuleSetting.getValue();
 						}

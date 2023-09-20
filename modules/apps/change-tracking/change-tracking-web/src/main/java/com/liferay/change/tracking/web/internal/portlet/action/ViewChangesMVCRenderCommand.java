@@ -14,6 +14,7 @@ import com.liferay.change.tracking.service.CTCollectionLocalService;
 import com.liferay.change.tracking.service.CTCollectionService;
 import com.liferay.change.tracking.service.CTEntryLocalService;
 import com.liferay.change.tracking.service.CTPreferencesLocalService;
+import com.liferay.change.tracking.service.CTRemoteLocalService;
 import com.liferay.change.tracking.service.CTSchemaVersionLocalService;
 import com.liferay.change.tracking.spi.display.CTDisplayRendererRegistry;
 import com.liferay.change.tracking.web.internal.configuration.CTConfiguration;
@@ -24,12 +25,12 @@ import com.liferay.change.tracking.web.internal.display.context.ViewChangesDispl
 import com.liferay.change.tracking.web.internal.scheduler.PublishScheduler;
 import com.liferay.osgi.util.service.Snapshot;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
-import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
@@ -106,7 +107,7 @@ public class ViewChangesMVCRenderCommand implements MVCRenderCommand {
 					new PublicationsDisplayContext(
 						_ctCollectionLocalService, _ctCollectionService,
 						_ctDisplayRendererRegistry, _ctEntryLocalService,
-						_ctPreferencesLocalService,
+						_ctPreferencesLocalService, _ctRemoteLocalService,
 						_portal.getHttpServletRequest(renderRequest), _language,
 						renderRequest, renderResponse),
 					_publishSchedulerSnapshot.get(), renderRequest,
@@ -183,6 +184,9 @@ public class ViewChangesMVCRenderCommand implements MVCRenderCommand {
 
 	@Reference
 	private CTPreferencesLocalService _ctPreferencesLocalService;
+
+	@Reference
+	private CTRemoteLocalService _ctRemoteLocalService;
 
 	@Reference
 	private CTSchemaVersionLocalService _ctSchemaVersionLocalService;

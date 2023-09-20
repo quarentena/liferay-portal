@@ -5,31 +5,76 @@
 
 import {ClayButtonWithIcon} from '@clayui/button';
 import {sub} from 'frontend-js-web';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {Edge, Node, isEdge, isNode} from 'react-flow-renderer';
 
 import './RightSidebarObjectRelationshipDetails.scss';
 
-import {Input, SingleSelect} from '@liferay/object-js-components-web';
+import {API, Input, SingleSelect} from '@liferay/object-js-components-web';
 import {InputLocalized} from 'frontend-js-components-web';
 
 import {firstLetterUppercase} from '../../../utils/string';
-import {TDeletionType} from '../../ObjectRelationship/EditRelationship';
-import {useFolderContext} from '../objectFolderContext';
+import {useObjectRelationshipForm} from '../../ObjectRelationship/ObjectRelationshipFormBase';
+import {useObjectFolderContext} from '../ModelBuilderContext/objectFolderContext';
+import {ObjectRelationshipEdgeData} from '../types';
 
 interface RightSidebarObjectRelationshipDetailsProps {
-	deletionTypes: TDeletionType[];
+	objectRelationshipDeletionTypes: LabelValueObject[];
 }
 
 export function RightSidebarObjectRelationshipDetails({
-	deletionTypes,
+	objectRelationshipDeletionTypes,
 }: RightSidebarObjectRelationshipDetailsProps) {
-	const [
-		{selectedDefinitionNode, selectedObjectRelationship},
-	] = useFolderContext();
+	const [{elements}] = useObjectFolderContext();
+	const [readOnly, setReadOnly] = useState(true);
 
-	const readOnly =
-		!selectedDefinitionNode.hasUpdateObjectDefinitionPermission ||
-		selectedObjectRelationship.reverse;
+	const selectedObjectRelationshipEdge = elements.find((element) => {
+		if (isEdge(element)) {
+			return (element as Edge<ObjectRelationshipEdgeData>).data?.selected;
+		}
+	}) as Edge<ObjectRelationshipEdgeData>;
+
+	const {setValues, values} = useObjectRelationshipForm({
+		initialValues: {
+			id: 0,
+			label: {},
+			name: '',
+		},
+		onSubmit: () => {},
+		parameterRequired: false,
+	});
+
+	useEffect(() => {
+		const makeFetch = async () => {
+			if (selectedObjectRelationshipEdge) {
+				const selectedObjectRelationshipResponse = (await API.getObjectRelationship(
+					selectedObjectRelationshipEdge.data!.objectRelationshipId
+				)) as ObjectRelationship;
+
+				setValues(selectedObjectRelationshipResponse);
+
+				const nodeObjectDefinition1 = elements.find(
+					(element) =>
+						isNode(element) &&
+						element.id ===
+							selectedObjectRelationshipResponse.objectDefinitionId1.toString()
+				);
+
+				if (nodeObjectDefinition1) {
+					const readOnly =
+						!(nodeObjectDefinition1 as Node<
+							ObjectDefinitionNodeData
+						>).data?.hasObjectDefinitionUpdateResourcePermission ||
+						selectedObjectRelationshipResponse.reverse;
+
+					setReadOnly(readOnly);
+				}
+			}
+		};
+
+		makeFetch();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedObjectRelationshipEdge]);
 
 	return (
 		<>
@@ -59,53 +104,50 @@ export function RightSidebarObjectRelationshipDetails({
 					label={Liferay.Language.get('label')}
 					onChange={() => {}}
 					required
-					translations={
-						selectedObjectRelationship.label as LocalizedValue<
-							string
-						>
-					}
+					translations={values.label as LocalizedValue<string>}
 				/>
 
 				<Input
-					disabled={readOnly}
+					disabled
 					error=""
 					label={Liferay.Language.get('name')}
 					onChange={() => {}}
 					required
-					value={selectedObjectRelationship.name}
+					value={values.name}
 				/>
 
 				<Input
-					disabled={readOnly}
+					disabled
 					error=""
 					label={
-						selectedObjectRelationship.type === 'manyToMany'
+						values.type === 'manyToMany'
 							? Liferay.Language.get('many-records-of')
 							: Liferay.Language.get('one-record-of')
 					}
 					onChange={() => {}}
 					required
-					value={selectedDefinitionNode.name}
+					value={values.name}
 				/>
 
 				<Input
-					disabled={readOnly}
+					disabled
 					error=""
 					label={Liferay.Language.get('many-records-of')}
 					onChange={() => {}}
 					required
-					value={selectedObjectRelationship.objectDefinitionName2}
+					value={values.objectDefinitionName2}
 				/>
 
 				<SingleSelect
 					disabled={readOnly}
 					label={Liferay.Language.get('deletion-type')}
 					onChange={() => {}}
-					options={deletionTypes}
+					options={objectRelationshipDeletionTypes}
 					required
-					value={firstLetterUppercase(
-						selectedObjectRelationship.deletionType as string
-					)}
+					value={
+						values.deletionType &&
+						firstLetterUppercase(values.deletionType)
+					}
 				/>
 			</div>
 		</>

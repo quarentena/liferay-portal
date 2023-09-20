@@ -6,19 +6,23 @@
 package com.liferay.layout.internal.manager;
 
 import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
+import com.liferay.layout.constants.LockedLayoutType;
 import com.liferay.layout.manager.LayoutLockManager;
 import com.liferay.layout.model.LockedLayout;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
+import com.liferay.layout.page.template.model.LayoutPageTemplateEntryTable;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalService;
 import com.liferay.layout.utility.page.kernel.LayoutUtilityPageEntryViewRenderer;
 import com.liferay.layout.utility.page.kernel.LayoutUtilityPageEntryViewRendererRegistryUtil;
 import com.liferay.layout.utility.page.model.LayoutUtilityPageEntry;
+import com.liferay.layout.utility.page.model.LayoutUtilityPageEntryTable;
 import com.liferay.layout.utility.page.service.LayoutUtilityPageEntryLocalService;
 import com.liferay.petra.sql.dsl.Column;
 import com.liferay.petra.sql.dsl.DSLFunctionFactoryUtil;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.base.BaseTable;
+import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.LockedLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -129,9 +133,14 @@ public class LayoutLockManagerImpl implements LayoutLockManager {
 			}
 		}
 		else if (lock.getUserId() == themeDisplay.getUserId()) {
-			_lockManager.refresh(
-				lock.getUuid(), lock.getCompanyId(),
-				LayoutModelImpl.LOCK_EXPIRATION_TIME);
+			try {
+				_lockManager.refresh(
+					lock.getUuid(), lock.getCompanyId(),
+					LayoutModelImpl.LOCK_EXPIRATION_TIME);
+			}
+			catch (PortalException portalException) {
+				throw new LockedLayoutException(portalException);
+			}
 		}
 		else {
 			throw new LockedLayoutException();
@@ -139,7 +148,9 @@ public class LayoutLockManagerImpl implements LayoutLockManager {
 	}
 
 	@Override
-	public List<LockedLayout> getLockedLayouts(long companyId, long groupId) {
+	public List<LockedLayout> getLockedLayouts(
+		long companyId, long groupId, LockedLayoutType lockedLayoutType) {
+
 		List<Object[]> results = _layoutLocalService.dslQuery(
 			DSLQueryFactoryUtil.select(
 			).from(
@@ -160,26 +171,16 @@ public class LayoutLockManagerImpl implements LayoutLockManager {
 							DSLFunctionFactoryUtil.castText(
 								LayoutTable.INSTANCE.plid))
 					)
+				).leftJoinOn(
+					LayoutPageTemplateEntryTable.INSTANCE,
+					_getLayoutPageTemplateEntryTableLeftJoinOnPredicate(
+						groupId, lockedLayoutType)
+				).leftJoinOn(
+					LayoutUtilityPageEntryTable.INSTANCE,
+					_getLayoutUtilityPageEntryTableLeftJoin(
+						groupId, lockedLayoutType)
 				).where(
-					LayoutTable.INSTANCE.groupId.eq(
-						groupId
-					).and(
-						LayoutTable.INSTANCE.classPK.gt(0L)
-					).and(
-						LayoutTable.INSTANCE.hidden.eq(true)
-					).and(
-						LayoutTable.INSTANCE.system.eq(true)
-					).and(
-						LayoutTable.INSTANCE.status.eq(
-							WorkflowConstants.STATUS_DRAFT)
-					).and(
-						LayoutTable.INSTANCE.type.in(
-							new String[] {
-								LayoutConstants.TYPE_ASSET_DISPLAY,
-								LayoutConstants.TYPE_COLLECTION,
-								LayoutConstants.TYPE_CONTENT
-							})
-					)
+					_getWherePredicate(groupId, lockedLayoutType)
 				).orderBy(
 					orderByStep -> orderByStep.orderBy(
 						LockTable.INSTANCE.createDate.descending())
@@ -330,6 +331,93 @@ public class LayoutLockManagerImpl implements LayoutLockManager {
 		}
 	}
 
+	@Override
+	public void unlockLayoutsByUserId(long companyId, long userId) {
+		List<Long> plids = _layoutLocalService.dslQuery(
+			DSLQueryFactoryUtil.selectDistinct(
+				LayoutTable.INSTANCE.plid
+			).from(
+				LayoutTable.INSTANCE
+			).innerJoinON(
+				LockTable.INSTANCE,
+				LockTable.INSTANCE.companyId.eq(
+					companyId
+				).and(
+					LockTable.INSTANCE.className.eq(Layout.class.getName())
+				).and(
+					LockTable.INSTANCE.key.eq(
+						DSLFunctionFactoryUtil.castText(
+							LayoutTable.INSTANCE.plid))
+				).and(
+					LockTable.INSTANCE.userId.eq(userId)
+				).and(
+					LockTable.INSTANCE.owner.eq(String.valueOf(userId))
+				)
+			).where(
+				LayoutTable.INSTANCE.companyId.eq(
+					companyId
+				).and(
+					LayoutTable.INSTANCE.classPK.gt(0L)
+				).and(
+					LayoutTable.INSTANCE.hidden.eq(true)
+				).and(
+					LayoutTable.INSTANCE.system.eq(true)
+				).and(
+					LayoutTable.INSTANCE.status.eq(
+						WorkflowConstants.STATUS_DRAFT)
+				).and(
+					LayoutTable.INSTANCE.type.in(
+						new String[] {
+							LayoutConstants.TYPE_ASSET_DISPLAY,
+							LayoutConstants.TYPE_COLLECTION,
+							LayoutConstants.TYPE_CONTENT
+						})
+				)
+			));
+
+		for (Long plid : plids) {
+			_lockManager.unlock(Layout.class.getName(), String.valueOf(plid));
+		}
+	}
+
+	private Predicate _getLayoutPageTemplateEntryTableLeftJoinOnPredicate(
+		long groupId, LockedLayoutType lockedLayoutType) {
+
+		if ((lockedLayoutType == null) ||
+			Objects.equals(
+				lockedLayoutType, LockedLayoutType.COLLECTION_PAGE) ||
+			Objects.equals(
+				lockedLayoutType, LockedLayoutType.DISPLAY_PAGE_TEMPLATE) ||
+			Objects.equals(lockedLayoutType, LockedLayoutType.UTILITY_PAGE)) {
+
+			return null;
+		}
+
+		return LayoutPageTemplateEntryTable.INSTANCE.groupId.eq(
+			groupId
+		).and(
+			LayoutPageTemplateEntryTable.INSTANCE.plid.eq(
+				LayoutTable.INSTANCE.classPK)
+		);
+	}
+
+	private Integer _getLayoutPageTemplateEntryType(
+		LockedLayoutType lockedLayoutType) {
+
+		if (Objects.equals(
+				lockedLayoutType, LockedLayoutType.CONTENT_PAGE_TEMPLATE)) {
+
+			return LayoutPageTemplateEntryTypeConstants.TYPE_BASIC;
+		}
+		else if (Objects.equals(
+					lockedLayoutType, LockedLayoutType.MASTER_PAGE)) {
+
+			return LayoutPageTemplateEntryTypeConstants.TYPE_MASTER_LAYOUT;
+		}
+
+		return null;
+	}
+
 	private String _getLayoutPageTemplateEntryTypeLabel(
 		LayoutPageTemplateEntry layoutPageTemplateEntry, Locale locale) {
 
@@ -357,6 +445,43 @@ public class LayoutLockManagerImpl implements LayoutLockManager {
 		return StringPool.BLANK;
 	}
 
+	private String _getLayoutType(LockedLayoutType lockedLayoutType) {
+		if (Objects.equals(
+				lockedLayoutType, LockedLayoutType.COLLECTION_PAGE)) {
+
+			return LayoutConstants.TYPE_COLLECTION;
+		}
+		else if (Objects.equals(
+					lockedLayoutType, LockedLayoutType.CONTENT_PAGE)) {
+
+			return LayoutConstants.TYPE_CONTENT;
+		}
+		else if (Objects.equals(
+					lockedLayoutType, LockedLayoutType.DISPLAY_PAGE_TEMPLATE)) {
+
+			return LayoutConstants.TYPE_ASSET_DISPLAY;
+		}
+
+		return null;
+	}
+
+	private Predicate _getLayoutUtilityPageEntryTableLeftJoin(
+		long groupId, LockedLayoutType lockedLayoutType) {
+
+		if (!Objects.equals(lockedLayoutType, LockedLayoutType.CONTENT_PAGE) &&
+			!Objects.equals(lockedLayoutType, LockedLayoutType.UTILITY_PAGE)) {
+
+			return null;
+		}
+
+		return LayoutUtilityPageEntryTable.INSTANCE.groupId.eq(
+			groupId
+		).and(
+			LayoutUtilityPageEntryTable.INSTANCE.plid.eq(
+				LayoutTable.INSTANCE.classPK)
+		);
+	}
+
 	private String _getLayoutUtilityPageEntryTypeLabel(
 		LayoutUtilityPageEntry layoutUtilityPageEntry, Locale locale) {
 
@@ -370,6 +495,73 @@ public class LayoutLockManagerImpl implements LayoutLockManager {
 		}
 
 		return layoutUtilityPageEntryViewRenderer.getLabel(locale);
+	}
+
+	private Predicate _getWherePredicate(
+		long groupId, LockedLayoutType lockedLayoutType) {
+
+		Predicate wherePredicate = LayoutTable.INSTANCE.groupId.eq(
+			groupId
+		).and(
+			LayoutTable.INSTANCE.classPK.gt(0L)
+		).and(
+			LayoutTable.INSTANCE.hidden.eq(true)
+		).and(
+			LayoutTable.INSTANCE.system.eq(true)
+		).and(
+			LayoutTable.INSTANCE.status.eq(WorkflowConstants.STATUS_DRAFT)
+		);
+
+		if (lockedLayoutType == null) {
+			return wherePredicate.and(
+				LayoutTable.INSTANCE.type.in(
+					new String[] {
+						LayoutConstants.TYPE_ASSET_DISPLAY,
+						LayoutConstants.TYPE_COLLECTION,
+						LayoutConstants.TYPE_CONTENT
+					}));
+		}
+
+		Integer layoutPageTemplateEntryType = _getLayoutPageTemplateEntryType(
+			lockedLayoutType);
+
+		if (layoutPageTemplateEntryType != null) {
+			return wherePredicate.and(
+				LayoutPageTemplateEntryTable.INSTANCE.type.eq(
+					layoutPageTemplateEntryType));
+		}
+
+		String layoutType = _getLayoutType(lockedLayoutType);
+
+		if (layoutType != null) {
+			return wherePredicate.and(
+				LayoutTable.INSTANCE.type.eq(
+					layoutType
+				).and(
+					() -> {
+						if (Objects.equals(
+								layoutType, LayoutConstants.TYPE_CONTENT)) {
+
+							return LayoutPageTemplateEntryTable.INSTANCE.
+								layoutPageTemplateEntryId.isNull(
+								).and(
+									LayoutUtilityPageEntryTable.INSTANCE.
+										LayoutUtilityPageEntryId.isNull()
+								);
+						}
+
+						return null;
+					}
+				));
+		}
+
+		if (Objects.equals(lockedLayoutType, LockedLayoutType.UTILITY_PAGE)) {
+			return wherePredicate.and(
+				LayoutUtilityPageEntryTable.INSTANCE.LayoutUtilityPageEntryId.
+					isNotNull());
+		}
+
+		return wherePredicate;
 	}
 
 	@Reference

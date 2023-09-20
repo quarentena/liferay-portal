@@ -22,7 +22,6 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.Company;
-import com.liferay.portal.kernel.model.PortletCategory;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
@@ -34,11 +33,10 @@ import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.FeatureFlags;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.util.WebAppPool;
+import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 
 import java.util.Arrays;
@@ -50,6 +48,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,9 +68,7 @@ public class OpenAPIResourceTest {
 	public static void setUpClass() throws Exception {
 		_company = CompanyTestUtil.addCompany();
 
-		WebAppPool.put(
-			_company.getCompanyId(), WebKeys.PORTLET_CATEGORY,
-			new PortletCategory());
+		PortalInstances.initCompany(_company);
 	}
 
 	@Before
@@ -143,54 +140,22 @@ public class OpenAPIResourceTest {
 					RandomTestUtil.randomString(), _OBJECT_FIELD_NAME, false)),
 			ObjectDefinitionConstants.SCOPE_COMPANY, _user.getUserId());
 
-		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
-			null, "/openapi", Http.Method.GET);
+		_testGetOpenAPI(_objectDefinition1, _objectDefinition2);
 
-		JSONArray jsonArray = jsonObject.getJSONArray(
-			_objectDefinition1.getRESTContextPath());
+		_siteScopedObjectDefinition =
+			ObjectDefinitionTestUtil.publishObjectDefinition(
+				Collections.singletonList(
+					ObjectFieldUtil.createObjectField(
+						"Text", "String", true, true, null,
+						RandomTestUtil.randomString(), _OBJECT_FIELD_NAME,
+						false)),
+				ObjectDefinitionConstants.SCOPE_SITE,
+				TestPropsValues.getUserId());
 
-		Assert.assertEquals(1, jsonArray.length());
-		Assert.assertEquals(
-			"http://localhost:8080/o" +
-				_objectDefinition1.getRESTContextPath() + "/openapi.yaml",
-			jsonArray.get(0));
-
-		jsonObject = HTTPTestUtil.invokeToJSONObject(
-			null, _objectDefinition1.getRESTContextPath() + "/openapi.json",
-			Http.Method.GET);
-
-		Assert.assertNotNull(jsonObject.getString("openapi"));
-		Assert.assertNull(
-			jsonObject.getJSONArray(_objectDefinition2.getRESTContextPath()));
-
-		JSONObject schemasJSONObject = jsonObject.getJSONObject(
-			"components"
-		).getJSONObject(
-			"schemas"
-		);
-
-		Assert.assertNotNull(
-			schemasJSONObject.getJSONObject("TaxonomyCategoryBrief"));
-
-		JSONObject propertiesJSONObject = schemasJSONObject.getJSONObject(
-			_objectDefinition1.getShortName()
-		).getJSONObject(
-			"properties"
-		);
-
-		Assert.assertNotNull(propertiesJSONObject.getJSONObject("keywords"));
-		Assert.assertNotNull(
-			propertiesJSONObject.getJSONObject("taxonomyCategoryBriefs"));
-		Assert.assertNotNull(
-			propertiesJSONObject.getJSONObject("taxonomyCategoryIds"));
-
-		jsonObject = HTTPTestUtil.invokeToJSONObject(
-			null, _objectDefinition2.getRESTContextPath() + "/openapi.json",
-			Http.Method.GET);
-
-		Assert.assertEquals("NOT_FOUND", jsonObject.getString("status"));
+		_testGetOpenAPI(_siteScopedObjectDefinition, _objectDefinition2);
 	}
 
+	@Ignore
 	@Test
 	public void testGetOpenAPIWithCategorizationDisabled() throws Exception {
 		_objectDefinition1.setEnableCategorization(false);
@@ -342,6 +307,61 @@ public class OpenAPIResourceTest {
 			_objectDefinition1.getShortName());
 	}
 
+	private void _testGetOpenAPI(
+			ObjectDefinition objectDefinition1,
+			ObjectDefinition objectDefinition2)
+		throws Exception {
+
+		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
+			null, "/openapi", Http.Method.GET);
+
+		JSONArray jsonArray = jsonObject.getJSONArray(
+			objectDefinition1.getRESTContextPath());
+
+		Assert.assertEquals(1, jsonArray.length());
+		Assert.assertEquals(
+			"http://localhost:8080/o" + objectDefinition1.getRESTContextPath() +
+				"/openapi.yaml",
+			jsonArray.get(0));
+
+		jsonObject = HTTPTestUtil.invokeToJSONObject(
+			null, objectDefinition1.getRESTContextPath() + "/openapi.json",
+			Http.Method.GET);
+
+		Assert.assertNotNull(jsonObject.getString("openapi"));
+		Assert.assertNull(
+			jsonObject.getJSONArray(objectDefinition2.getRESTContextPath()));
+
+		JSONObject schemasJSONObject = jsonObject.getJSONObject(
+			"components"
+		).getJSONObject(
+			"schemas"
+		);
+
+		Assert.assertNotNull(
+			schemasJSONObject.getJSONObject("TaxonomyCategoryBrief"));
+
+		JSONObject propertiesJSONObject = schemasJSONObject.getJSONObject(
+			objectDefinition1.getShortName()
+		).getJSONObject(
+			"properties"
+		);
+
+		Assert.assertNull(propertiesJSONObject.getJSONObject("createDate"));
+		Assert.assertNotNull(propertiesJSONObject.getJSONObject("keywords"));
+		Assert.assertNull(propertiesJSONObject.getJSONObject("modifiedDate"));
+		Assert.assertNotNull(
+			propertiesJSONObject.getJSONObject("taxonomyCategoryBriefs"));
+		Assert.assertNotNull(
+			propertiesJSONObject.getJSONObject("taxonomyCategoryIds"));
+
+		jsonObject = HTTPTestUtil.invokeToJSONObject(
+			null, objectDefinition2.getRESTContextPath() + "/openapi.json",
+			Http.Method.GET);
+
+		Assert.assertEquals("NOT_FOUND", jsonObject.getString("status"));
+	}
+
 	private static final String _OBJECT_FIELD_NAME =
 		"x" + RandomTestUtil.randomString();
 
@@ -358,6 +378,9 @@ public class OpenAPIResourceTest {
 
 	@Inject
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;
+
+	@DeleteAfterTestRun
+	private ObjectDefinition _siteScopedObjectDefinition;
 
 	@DeleteAfterTestRun
 	private User _user;

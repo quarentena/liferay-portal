@@ -18,15 +18,25 @@ portletDisplay.setURLBack(backURL);
 renderResponse.setTitle(LanguageUtil.get(request, "object-model-builder"));
 %>
 
+<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" var="baseResourceURL" />
+
 <react:component
 	module="js/components/ModelBuilder/index"
 	props='<%=
 		HashMapBuilder.<String, Object>put(
-			"companyKeyValuePair", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs("company")
+			"baseResourceURL", String.valueOf(baseResourceURL)
 		).put(
-			"deletionTypes", objectDefinitionsRelationshipsDisplayContext.getObjectRelationshipDeletionTypesJSONArray()
+			"companyKeyValuePairs", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs(ObjectDefinitionConstants.SCOPE_COMPANY)
 		).put(
-			"siteKeyValuePair", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs("site")
+			"editObjectDefinitionURL", objectDefinitionsDetailsDisplayContext.getEditObjectDefinitionURL()
+		).put(
+			"objectDefinitionPermissionsURL", objectDefinitionsDetailsDisplayContext.getPermissionsURL(ObjectDefinition.class.getName())
+		).put(
+			"objectDefinitionsStorageTypes", objectDefinitionsDetailsDisplayContext.getStorageTypesJSONArray()
+		).put(
+			"objectRelationshipDeletionTypes", objectDefinitionsRelationshipsDisplayContext.getObjectRelationshipDeletionTypesJSONArray()
+		).put(
+			"siteKeyValuePairs", objectDefinitionsDetailsDisplayContext.getScopeKeyValuePairs(ObjectDefinitionConstants.SCOPE_SITE)
 		).build()
 	%>'
 />

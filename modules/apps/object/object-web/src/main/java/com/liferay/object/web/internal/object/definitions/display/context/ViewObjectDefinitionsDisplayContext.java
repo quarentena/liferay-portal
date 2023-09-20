@@ -186,7 +186,7 @@ public class ViewObjectDefinitionsDisplayContext {
 			_objectRequestHelper.getLiferayPortletResponse());
 	}
 
-	public JSONArray getStoragesJSONArray() throws Exception {
+	public JSONArray getStorageTypesJSONArray() throws Exception {
 		return JSONUtil.toJSONArray(
 			_objectEntryManagerRegistry.getObjectEntryManagers(
 				_objectRequestHelper.getCompanyId()),
@@ -195,7 +195,7 @@ public class ViewObjectDefinitionsDisplayContext {
 				objectEntryManager.getStorageLabel(
 					_objectRequestHelper.getLocale())
 			).put(
-				"type", objectEntryManager.getStorageType()
+				"value", objectEntryManager.getStorageType()
 			));
 	}
 

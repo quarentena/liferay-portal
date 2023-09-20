@@ -103,7 +103,7 @@ const LabelProperty = ({hideField, label}) => {
 
 const RequiredProperty = () => {
 	return (
-		<span aria-hidden="true" className="ddm-label-required reference-mark">
+		<span className="ddm-label-required reference-mark">
 			<ClayIcon symbol="asterisk" />
 		</span>
 	);
@@ -264,13 +264,12 @@ export function FieldBase({
 
 		const visitor = new PagesVisitor(pages);
 
-		const newFieldName = fieldName ?? fieldReference;
 		const newParentInstanceId = parentInstanceId;
 
 		visitor.mapFields(
 			(field) => {
 				if (
-					newFieldName === field.fieldName &&
+					fieldReference === field.fieldReference &&
 					newParentInstanceId === field.parentInstanceId
 				) {
 					repetitionsCounter++;

@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 
 import java.io.Serializable;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,7 +48,6 @@ public class EditCategoriesBulkSelectionAction
 
 		Set<Long> toAddCategoryIdsSet = _toLongSet(
 			inputMap, "toAddCategoryIds");
-
 		Set<Long> toRemoveCategoryIdsSet = _toLongSet(
 			inputMap, "toRemoveCategoryIds");
 
@@ -68,8 +68,8 @@ public class EditCategoriesBulkSelectionAction
 					long[] newCategoryIds = new long[0];
 
 					if (SetUtil.isNotEmpty(toAddCategoryIdsSet)) {
-						newCategoryIds = _getLongArray(
-							inputMap, "toAddCategoryIds");
+						newCategoryIds = ArrayUtil.toLongArray(
+							toAddCategoryIdsSet);
 					}
 
 					if (MapUtil.getBoolean(inputMap, "append")) {
@@ -97,14 +97,21 @@ public class EditCategoriesBulkSelectionAction
 			});
 	}
 
-	private long[] _getLongArray(Map<String, Serializable> map, String key) {
-		return ArrayUtil.toArray((Long[])map.getOrDefault(key, new Long[0]));
-	}
-
 	private Set<Long> _toLongSet(Map<String, Serializable> map, String key) {
 		try {
-			return SetUtil.fromArray(
-				(Long[])map.getOrDefault(key, new Long[0]));
+			Serializable values = map.get(key);
+
+			if (values instanceof Long[]) {
+				return SetUtil.fromArray((Long[])values);
+			}
+
+			Set<Long> set = new HashSet<>();
+
+			for (Integer value : (Integer[])values) {
+				set.add(value.longValue());
+			}
+
+			return set;
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {

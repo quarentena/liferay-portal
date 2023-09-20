@@ -7,6 +7,7 @@ import ClayForm from '@clayui/form';
 import {FieldArray, Formik} from 'formik';
 import {useEffect, useState} from 'react';
 import SearchBuilder from '~/common/core/SearchBuilder';
+import {useCustomerPortal} from '../../../routes/customer-portal/context';
 import useCurrentKoroneikiAccount from '../../hooks/useCurrentKoroneikiAccount';
 import {getHighPriorityContacts} from '../../services/liferay/api';
 import HighPriorityContactsInput from './HighPriorityContactsInput';
@@ -19,6 +20,7 @@ const SetupHighPriorityContact = ({
 	removedContactList,
 }) => {
 	const {data} = useCurrentKoroneikiAccount();
+	const [{project}] = useCustomerPortal();
 	const koroneikiAccount = data?.koroneikiAccountByExternalReferenceCode;
 	const [
 		currentHighPriorityContacts,
@@ -46,10 +48,17 @@ const SetupHighPriorityContact = ({
 		return {
 			contactsCategory: {
 				key: _filter,
-				name: `${filter}`,
+				name: filter,
 				role: getContactRoleByFilter(filter),
 			},
-			filterRequest: SearchBuilder.eq('contactsCategory', _filter),
+			filterRequest: new SearchBuilder()
+				.eq('contactsCategory', _filter)
+				.and()
+				.eq(
+					'r_accountEntryToHighPriorityContacts_accountEntryERC',
+					project.accountKey
+				)
+				.build(),
 		};
 	};
 

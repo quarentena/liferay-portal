@@ -14,8 +14,6 @@ import com.liferay.object.model.ObjectRelationship;
 import com.liferay.object.relationship.util.ObjectRelationshipUtil;
 import com.liferay.object.service.ObjectDefinitionService;
 import com.liferay.object.service.ObjectFieldService;
-import com.liferay.object.system.JaxRsApplicationDescriptor;
-import com.liferay.object.system.SystemObjectDefinitionManager;
 import com.liferay.object.system.SystemObjectDefinitionManagerRegistry;
 import com.liferay.object.web.internal.display.context.helper.ObjectRequestHelper;
 import com.liferay.petra.function.UnsafeConsumer;
@@ -138,6 +136,8 @@ public class ObjectDefinitionsRelationshipsDisplayContext
 		return JSONUtil.put(
 			"deletionType", objectRelationship.getDeletionType()
 		).put(
+			"id", Long.valueOf(objectRelationship.getObjectRelationshipId())
+		).put(
 			"label", objectRelationship.getLabelMap()
 		).put(
 			"name", objectRelationship.getName()
@@ -155,9 +155,6 @@ public class ObjectDefinitionsRelationshipsDisplayContext
 			Long.valueOf(objectRelationship.getObjectDefinitionId2())
 		).put(
 			"objectDefinitionName2", objectDefinition2.getShortName()
-		).put(
-			"objectRelationshipId",
-			Long.valueOf(objectRelationship.getObjectRelationshipId())
 		).put(
 			"parameterObjectFieldId",
 			objectRelationship.getParameterObjectFieldId()
@@ -191,32 +188,13 @@ public class ObjectDefinitionsRelationshipsDisplayContext
 	}
 
 	public String getRESTContextPath(ObjectDefinition objectDefinition) {
-		if (!objectDefinition.isUnmodifiableSystemObject()) {
-			return objectDefinition.getRESTContextPath();
-		}
-
-		SystemObjectDefinitionManager systemObjectDefinitionManager =
-			_systemObjectDefinitionManagerRegistry.
-				getSystemObjectDefinitionManager(objectDefinition.getName());
-
-		if (systemObjectDefinitionManager == null) {
-			return StringPool.BLANK;
-		}
-
-		JaxRsApplicationDescriptor jaxRsApplicationDescriptor =
-			systemObjectDefinitionManager.getJaxRsApplicationDescriptor();
-
-		return jaxRsApplicationDescriptor.getRESTContextPath();
+		return ObjectRelationshipUtil.getRESTContextPath(
+			objectDefinition, _systemObjectDefinitionManagerRegistry);
 	}
 
 	public boolean isParameterRequired(ObjectDefinition objectDefinition) {
-		String restContextPath = getRESTContextPath(objectDefinition);
-
-		if (restContextPath.matches(".*/\\{\\w+}/.*")) {
-			return true;
-		}
-
-		return false;
+		return ObjectRelationshipUtil.isParameterRequired(
+			objectDefinition, _systemObjectDefinitionManagerRegistry);
 	}
 
 	@Override

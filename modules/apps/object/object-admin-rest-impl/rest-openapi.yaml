@@ -81,6 +81,8 @@ components:
                     type: boolean
                 enableLocalization:
                     type: boolean
+                enableObjectEntryDraft:
+                    type: boolean
                 enableObjectEntryHistory:
                     type: boolean
                 externalReferenceCode:
@@ -617,7 +619,7 @@ components:
 info:
     description:
         "A Java client JAR is available for use with the group ID 'com.liferay', artifact ID
-        'com.liferay.object.admin.rest.client', and version '1.0.58'."
+        'com.liferay.object.admin.rest.client', and version '1.0.59'."
     license:
         name: "Apache 2.0"
         url: "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -1760,8 +1762,12 @@ paths:
             responses:
                 200:
                     content:
-                        application/json: {}
-                        application/xml: {}
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ObjectDefinition"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/ObjectDefinition"
             tags: ["ObjectDefinition"]
     "/object-fields/{objectFieldId}":
         delete:

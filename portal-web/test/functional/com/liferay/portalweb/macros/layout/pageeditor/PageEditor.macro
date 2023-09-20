@@ -2866,7 +2866,20 @@ definition {
 					value1 = ${subtype});
 			}
 
-			if (${successMessage} == "Embedded") {
+			if (${successMessage} == "Stay in Page") {
+				Select(
+					key_fieldLabel = "Success Interaction",
+					locator1 = "Select#GENERIC_SELECT_FIELD",
+					value1 = "Stay in Page");
+
+				AssertSelectedLabel(
+					key_fieldLabel = "Success Interaction",
+					locator1 = "Select#GENERIC_SELECT_FIELD",
+					value1 = "Stay in Page");
+
+				PageEditor.waitForAutoSave();
+			}
+			else if (${successMessage} == "Show Embedded Message") {
 				Select(
 					key_fieldLabel = "Success Interaction",
 					locator1 = "Select#GENERIC_SELECT_FIELD",
@@ -2888,15 +2901,15 @@ definition {
 						locator1 = "PageEditor#FRAGMENT_SIDEBAR_TITLE");
 				}
 
+				PageEditor.waitForAutoSave();
+
 				if (${previewSuccessState} == "true") {
 					Check.checkNotVisible(
 						checkboxName = "Preview Embedded Message",
 						locator1 = "Checkbox#ANY_CHECKBOX");
 				}
-
-				PageEditor.waitForAutoSave();
 			}
-			else if (${successMessage} == "Page") {
+			else if (${successMessage} == "Go to Page") {
 				Select(
 					key_fieldLabel = "Success Interaction",
 					locator1 = "Select#GENERIC_SELECT_FIELD",
@@ -2947,7 +2960,7 @@ definition {
 
 				PageEditor.waitForAutoSave();
 			}
-			else if (${successMessage} == "External URL") {
+			else if (${successMessage} == "Go to External URL") {
 				Select(
 					key_fieldLabel = "Success Interaction",
 					locator1 = "Select#GENERIC_SELECT_FIELD",
@@ -2971,7 +2984,7 @@ definition {
 
 				PageEditor.waitForAutoSave();
 			}
-			else if (${successMessage} == "Entry Display Page") {
+			else if (${successMessage} == "Go to Entry Display Page") {
 				Select(
 					key_fieldLabel = "Success Interaction",
 					locator1 = "Select#GENERIC_SELECT_FIELD",
@@ -2988,6 +3001,31 @@ definition {
 					value1 = ${displayPageName});
 
 				PageEditor.waitForAutoSave();
+			}
+
+			if (${showNotificationWhenFormIsSubmitted} == "true") {
+				Check.checkNotVisible(
+					checkboxName = "Show Notification when Form Is Submitted",
+					locator1 = "Checkbox#ANY_CHECKBOX");
+
+				if (isSet(successNotificationText)) {
+					Type(
+						key_text = "Success Notification Text",
+						locator1 = "TextInput#ANY",
+						value1 = ${successNotificationText});
+
+					Click(
+						key_sidebarButton = "Browser",
+						locator1 = "PageEditor#FRAGMENT_SIDEBAR_TITLE");
+
+					PageEditor.waitForAutoSave();
+				}
+
+				if (${previewSuccessNotification} == "true") {
+					Check.checkNotVisible(
+						checkboxName = "Preview Success Notification",
+						locator1 = "Checkbox#ANY_CHECKBOX");
+				}
 			}
 		}
 	}

@@ -44,7 +44,7 @@ export function FragmentGeneralPanel({item}) {
 		(state) => state.fragmentEntryLinks
 	);
 
-	let fieldSets =
+	const fieldSets =
 		fragmentEntryLink.configuration?.fieldSets?.filter(
 			({configurationRole, label}) =>
 				!configurationRole &&
@@ -53,20 +53,6 @@ export function FragmentGeneralPanel({item}) {
 						FRAGMENT_ENTRY_TYPES.input && !label
 				)
 		) ?? [];
-
-	if (
-		!Liferay.FeatureFlags['LPS-169992'] &&
-		fragmentEntryLink.fragmentEntryKey === 'BASIC_COMPONENT-button'
-	) {
-		fieldSets = fieldSets.map((fieldSet) => {
-			return {
-				...fieldSet,
-				fields: fieldSet.fields.filter(
-					(field) => field.name !== 'type'
-				),
-			};
-		});
-	}
 
 	const itemConfig = getResponsiveConfig(item.config, selectedViewportSize);
 
@@ -101,25 +87,39 @@ export function FragmentGeneralPanel({item}) {
 		<>
 			{selectedViewportSize === VIEWPORT_SIZES.desktop &&
 				fieldSets.map((fieldSet, index) => {
-					return (
-						<div className="mb-1 panel-group-sm" key={index}>
-							<FieldSet
-								description={fieldSet.description}
-								fields={fieldSet.fields}
-								fragmentEntryLinks={
-									fragmentEntryLinksRef.current
-								}
-								isCustomStylesFieldSet
-								label={fieldSet.label}
-								languageId={languageId}
-								onValueSelect={onValueSelect}
-								selectedViewportSize={selectedViewportSize}
-								values={getFragmentConfigurationValues(
-									fragmentEntryLink
-								)}
-							/>
-						</div>
-					);
+					let fields = fieldSet.fields;
+
+					if (
+						!Liferay.FeatureFlags['LPS-187846'] &&
+						fragmentEntryLink.fragmentEntryKey ===
+							'INPUTS-submit-button'
+					) {
+						fields = fields.filter(
+							(field) => field.name !== 'submittedEntryStatus'
+						);
+					}
+
+					{
+						return (
+							<div className="mb-1 panel-group-sm" key={index}>
+								<FieldSet
+									description={fieldSet.description}
+									fields={fields}
+									fragmentEntryLinks={
+										fragmentEntryLinksRef.current
+									}
+									isCustomStylesFieldSet
+									label={fieldSet.label}
+									languageId={languageId}
+									onValueSelect={onValueSelect}
+									selectedViewportSize={selectedViewportSize}
+									values={getFragmentConfigurationValues(
+										fragmentEntryLink
+									)}
+								/>
+							</div>
+						);
+					}
 				})}
 
 			<CommonStyles
