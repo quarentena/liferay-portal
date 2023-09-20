@@ -1,0 +1,102 @@
+{
+  "pageElement" : {
+    "pageElements" : [ {
+      "definition" : {
+        "indexed" : true,
+        "layout" : {
+          "align" : "Center",
+          "contentDisplay" : "FlexColumn",
+          "justify" : "Center"
+        }
+      },
+      "pageElements" : [ {
+        "definition" : {
+          "fragmentStyle" : {
+            "marginTop" : "5",
+            "width" : "1000px"
+          },
+          "indexed" : true,
+          "layout" : {
+            "marginTop" : 4
+          }
+        },
+        "pageElements" : [ {
+          "definition" : {
+            "fragment" : {
+              "key" : "BASIC_COMPONENT-button"
+            },
+            "fragmentConfig" : {
+              "buttonType" : "secondary",
+              "type" : "link",
+              "buttonSize" : "nm"
+            },
+            "fragmentFields" : [ {
+              "id" : "link",
+              "value" : {
+                "fragmentLink" : {
+                  "value" : {
+                    "href" : {
+                      "mapping" : {
+                        "itemReference" : {
+                          "className" : "com.liferay.portal.kernel.model.Layout",
+                          "fields" : [ {
+                            "fieldName" : "friendlyURL",
+                            "fieldValue" : "/home"
+                          }, {
+                            "fieldName" : "privatePage",
+                            "fieldValue" : "false"
+                          }, {
+                            "fieldName" : "siteKey",
+                            "fieldValue" : "[$GROUP_KEY$]"
+                          } ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "text" : {
+                  "value_i18n" : {
+                    "en_US" : "&lt; Back"
+                  }
+                }
+              }
+            } ],
+            "indexed" : true
+          },
+          "type" : "Fragment"
+        } ],
+        "type" : "Section"
+      }, {
+        "definition" : {
+          "fragmentStyle" : {
+            "width" : "1000px"
+          },
+          "indexed" : true,
+          "layout" : { }
+        },
+        "pageElements" : [ {
+          "definition" : {
+            "widgetInstance" : {
+              "widgetConfig" : { },
+              "widgetName" : "com_liferay_client_extension_web_internal_portlet_ClientExtensionEntryPortlet_20096_LXC_liferay_agileray_ce_react"
+            }
+          },
+          "type" : "Widget"
+        } ],
+        "type" : "Section"
+      } ],
+      "type" : "Section"
+    } ],
+    "type" : "Root"
+  },
+  "settings" : {
+    "colorSchemeName" : "01",
+    "themeName" : "Dialect",
+    "themeSettings" : {
+      "lfr-theme:regular:show-header" : "false",
+      "lfr-theme:regular:wrap-widget-page-content" : "false",
+      "lfr-theme:regular:show-header-search" : "false"
+    }
+  },
+  "version" : 1.1
+}

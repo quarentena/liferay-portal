@@ -1,0 +1,230 @@
+{
+  "enableComments": false,
+  "enableCategorization": true,
+  "accountEntryRestrictedObjectFieldName": "",
+  "accountEntryRestricted": false,
+  "externalReferenceCode": "41436cae-66da-eedd-8c27-796f2463a38b",
+  "objectFields": [
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Create Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "cf733388-55de-af62-e8bf-1180098890f8",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "createDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "String",
+      "label": {
+        "en_US": "Author"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "7cbfc544-34e4-2a0b-9bfc-ecd7f49bb7f5",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "creator",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "External Reference Code"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "4ac20d6c-94c9-5be1-cdb7-ab6706fef23b",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "externalReferenceCode",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Long",
+      "label": {
+        "en_US": "ID"
+      },
+      "type": "Long",
+      "required": false,
+      "externalReferenceCode": "6c30caa5-db63-b4c9-2fff-3ec32d8717a2",
+      "indexedAsKeyword": true,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "id",
+      "state": false,
+      "businessType": "LongInteger",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "Long",
+      "label": {
+        "en_US": "Jira Filter Id"
+      },
+      "type": "Long",
+      "required": true,
+      "externalReferenceCode": "AGI001",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraFilterId",
+      "state": false,
+      "businessType": "LongInteger",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira Instance URL"
+      },
+      "type": "String",
+      "required": true,
+      "externalReferenceCode": "AGI002",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraInstanceURL",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira User"
+      },
+      "type": "String",
+      "required": true,
+      "externalReferenceCode": "AGI003",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraUser",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira API Token"
+      },
+      "type": "String",
+      "required": true,
+      "externalReferenceCode": "AGI004",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraAPIToken",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Modified Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "0e4a6e10-69c2-bf30-598c-ee6f5a2b8011",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "modifiedDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": false,
+      "objectFieldSettings": [],
+      "readOnly": "true",
+      "DBType": "String",
+      "label": {
+        "en_US": "Status"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "ef6db6b6-c45c-508d-4595-c74cd8f6abdc",
+      "indexedAsKeyword": false,
+      "system": true,
+      "indexedLanguageId": "",
+      "name": "status",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    }
+  ],
+  "restContextPath": "/o/c/agilereports",
+  "scope": "company",
+  "portlet": true,
+  "parameterRequired": false,
+  "enableObjectEntryHistory": false,
+  "titleObjectFieldName": "id",
+  "objectValidationRules": [],
+  "active": true,
+  "defaultLanguageId": "en_US",
+  "label": {
+    "en_US": "Agile Report"
+  },
+  "panelCategoryKey": "control_panel.object",
+  "pluralLabel": {
+    "en_US": "Agile Reports"
+  },
+  "objectLayouts": [],
+  "system": false,
+  "objectViews": [],
+  "name": "AgileReport",
+  "actions": {
+    "permissions": {},
+    "get": {},
+    "update": {},
+    "delete": {}
+  },
+  "status": {
+    "label_i18n": "Approved",
+    "code": 0,
+    "label": "approved"
+  }
+}

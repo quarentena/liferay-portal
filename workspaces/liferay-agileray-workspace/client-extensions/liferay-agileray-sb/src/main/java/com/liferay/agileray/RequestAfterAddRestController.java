@@ -35,7 +35,6 @@ public class RequestAfterAddRestController extends BaseRestController {
 
 		JSONObject requestJSON = new JSONObject(requestBody);
 
-		log(jwt,_log,requestBody);
 		String agileReportId = requestJSON.getJSONObject("objectEntryDTOJiraIntegrationRequest").getJSONObject("properties").getString("r_agileReportToJiraIntegrationRequest_c_agileReportId");
 
 		agileReport.setAgileReportId(agileReportId);

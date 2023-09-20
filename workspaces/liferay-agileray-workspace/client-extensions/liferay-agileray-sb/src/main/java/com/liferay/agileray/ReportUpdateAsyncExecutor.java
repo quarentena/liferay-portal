@@ -28,6 +28,7 @@ public class ReportUpdateAsyncExecutor{
 
     private String agileReportId;
     private String integrationRequestERC;
+    private String scopeKey;
 
     public void setAgileReportId (String agileReportId) {
         this.agileReportId = agileReportId;
@@ -35,7 +36,6 @@ public class ReportUpdateAsyncExecutor{
     public void setIntegrationRequestERC (String integrationRequestERC) {
         this.integrationRequestERC = integrationRequestERC;
     }
-
     @Async("asyncRunner")
     public void updateReport(Jwt jwt){
         try {
@@ -49,11 +49,8 @@ public class ReportUpdateAsyncExecutor{
                                            ),agileReport.getInt("jiraFilterId"));
 
             JSONObject responseBody = postJiraIssues(jwt.getTokenValue(),issues);
-
-            System.out.println(responseBody);
-
         } catch (InterruptedException e) {
-            //
+            System.out.println(e.toString());
         }
     }
     public JSONObject getJiraAuthInfo (String jwtToken, String agileReportId){
@@ -144,7 +141,6 @@ public class ReportUpdateAsyncExecutor{
             batchRequest.put(issue);
         }
 
-        System.out.println(batchRequest);
         return _postInLRObjects(jwtToken,batchRequest.toString(),"/o/c/jiraissues/batch");
     }
 

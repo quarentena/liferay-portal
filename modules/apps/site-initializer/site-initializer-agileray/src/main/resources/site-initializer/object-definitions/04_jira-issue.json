@@ -4,7 +4,7 @@
   "accountEntryRestrictedObjectFieldName": "",
   "objectActions": [],
   "accountEntryRestricted": false,
-  "externalReferenceCode": "cf85605a-fee6-607f-3558-15169683aff0",
+  "externalReferenceCode": "bf2d12b2-ea77-18ae-07f3-390ab5b1acc0",
   "objectFields": [
     {
       "indexed": false,
@@ -16,7 +16,7 @@
       },
       "type": "String",
       "required": false,
-      "externalReferenceCode": "15da6b39-6657-25f9-06e4-883130bd08d9",
+      "externalReferenceCode": "abca5efe-f30f-f59f-d51a-b640d9c45cb0",
       "indexedAsKeyword": false,
       "system": true,
       "indexedLanguageId": "",
@@ -35,7 +35,7 @@
       },
       "type": "Date",
       "required": false,
-      "externalReferenceCode": "4eb3c2b5-30ef-b901-68d3-6b202b763e0e",
+      "externalReferenceCode": "aed1f4d8-ac75-22eb-eab9-e21dd7dcbe97",
       "indexedAsKeyword": false,
       "system": true,
       "indexedLanguageId": "",
@@ -54,7 +54,7 @@
       },
       "type": "String",
       "required": false,
-      "externalReferenceCode": "5b31e895-3101-8ae9-6331-44160582ac26",
+      "externalReferenceCode": "62aefdce-18a0-01e8-4783-ceae4e5c09c3",
       "indexedAsKeyword": false,
       "system": true,
       "indexedLanguageId": "",
@@ -73,7 +73,7 @@
       },
       "type": "Long",
       "required": false,
-      "externalReferenceCode": "814718bc-4842-0206-62ec-5937aaa477c3",
+      "externalReferenceCode": "509c28bc-c532-c47d-9c0b-b4c90300f26a",
       "indexedAsKeyword": true,
       "system": true,
       "indexedLanguageId": "",
@@ -92,7 +92,7 @@
       },
       "type": "Date",
       "required": false,
-      "externalReferenceCode": "0cb1dc85-a719-4d11-be36-7a7f2b0402d0",
+      "externalReferenceCode": "e9ba386f-ea69-3142-4b9d-a6d5154900e5",
       "indexedAsKeyword": false,
       "system": true,
       "indexedLanguageId": "",
@@ -111,7 +111,7 @@
       },
       "type": "String",
       "required": false,
-      "externalReferenceCode": "8e90c370-c859-07eb-64fd-a2322be7f36e",
+      "externalReferenceCode": "c44d8f27-ffe3-e508-ddc3-b9d9f25b7d8a",
       "indexedAsKeyword": false,
       "system": true,
       "indexedLanguageId": "",
@@ -126,15 +126,15 @@
       "readOnly": "false",
       "DBType": "String",
       "label": {
-        "en_US": "Transition From"
+        "en_US": "Key"
       },
       "type": "String",
       "required": false,
-      "externalReferenceCode": "19f465aa-5d98-47f8-0a05-a8d5165bb9f7",
+      "externalReferenceCode": "63ebbd1f-26e5-0c89-0ff8-ee9453bc9b6e",
       "indexedAsKeyword": false,
       "system": false,
       "indexedLanguageId": "en_US",
-      "name": "transitionFrom",
+      "name": "key",
       "state": false,
       "businessType": "Text",
       "readOnlyConditionExpression": ""
@@ -145,15 +145,15 @@
       "readOnly": "false",
       "DBType": "String",
       "label": {
-        "en_US": "Transition To"
+        "en_US": "Summary"
       },
       "type": "String",
       "required": false,
-      "externalReferenceCode": "2c3b2589-26c2-e5dc-41af-6b1335e7ad70",
+      "externalReferenceCode": "c7bc3e73-bb07-f057-631e-1a331d4877a8",
       "indexedAsKeyword": false,
       "system": false,
       "indexedLanguageId": "en_US",
-      "name": "transitionTo",
+      "name": "summary",
       "state": false,
       "businessType": "Text",
       "readOnlyConditionExpression": ""
@@ -164,15 +164,34 @@
       "readOnly": "false",
       "DBType": "String",
       "label": {
-        "en_US": "Who"
+        "en_US": "Issue Type"
       },
       "type": "String",
       "required": false,
-      "externalReferenceCode": "cf0bbab9-ce39-c8f9-8981-566070a38db9",
+      "externalReferenceCode": "68da355d-a989-3d46-b018-4cbff835c781",
       "indexedAsKeyword": false,
       "system": false,
       "indexedLanguageId": "en_US",
-      "name": "who",
+      "name": "issueType",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira Status"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "40bf6889-c613-2c10-3015-d67940642016",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "jiraStatus",
       "state": false,
       "businessType": "Text",
       "readOnlyConditionExpression": ""
@@ -183,22 +202,79 @@
       "readOnly": "false",
       "DBType": "Date",
       "label": {
-        "en_US": "When"
+        "en_US": "Due Date"
       },
       "type": "Date",
       "required": false,
-      "externalReferenceCode": "60a581ff-263c-b209-cc1b-4768984862d5",
+      "externalReferenceCode": "12c625d6-8bdf-5314-e211-6d4f0a09af7f",
       "indexedAsKeyword": false,
       "system": false,
       "indexedLanguageId": "",
-      "name": "when",
+      "name": "dueDate",
       "state": false,
       "businessType": "Date",
       "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Jira Create Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "911dc538-9dd2-d94a-92cd-0b6b684362f3",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraCreateDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "Date",
+      "label": {
+        "en_US": "Jira Resolution Date"
+      },
+      "type": "Date",
+      "required": false,
+      "externalReferenceCode": "9eaa6894-31b4-cc6c-aac6-19271ca1dea1",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "",
+      "name": "jiraResolutionDate",
+      "state": false,
+      "businessType": "Date",
+      "readOnlyConditionExpression": ""
+    },
+    {
+      "indexed": true,
+      "objectFieldSettings": [],
+      "readOnly": "false",
+      "DBType": "String",
+      "label": {
+        "en_US": "Jira Resolution"
+      },
+      "type": "String",
+      "required": false,
+      "externalReferenceCode": "8ebd14c7-7837-6083-bf05-10458f7ca518",
+      "indexedAsKeyword": false,
+      "system": false,
+      "indexedLanguageId": "en_US",
+      "name": "jiraResolution",
+      "state": false,
+      "businessType": "Text",
+      "readOnlyConditionExpression": ""
     }
   ],
-  "restContextPath": "/o/c/jiraissuetransitions",
-  "scope": "site",
+  "restContextPath": "/o/c/jiraissues",
+  "scope": "company",
   "portlet": true,
   "parameterRequired": false,
   "enableObjectEntryHistory": false,
@@ -207,16 +283,16 @@
   "active": true,
   "defaultLanguageId": "en_US",
   "label": {
-    "en_US": "Jira Issue Transition"
+    "en_US": "Jira Issue"
   },
   "panelCategoryKey": "control_panel.object",
   "pluralLabel": {
-    "en_US": "Jira Issue Transitions"
+    "en_US": "Jira Issues"
   },
   "objectLayouts": [],
   "system": false,
   "objectViews": [],
-  "name": "JiraIssueTransition",
+  "name": "JiraIssue",
   "actions": {
     "permissions": {},
     "get": {},

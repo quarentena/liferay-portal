@@ -1,0 +1,14 @@
+{
+  "parameterObjectFieldName": "",
+  "parameterObjectFieldId": 0,
+  "label": {
+    "en_US": "AgileReportToAgileReportState"
+  },
+  "reverse": false,
+  "type": "oneToMany",
+  "name": "agileReportToagileReportState",
+  "deletionType": "prevent",
+  "objectDefinitionId1": "[$OBJECT_DEFINITION_ID:AgileReport$]",
+  "objectDefinitionId2": "[$OBJECT_DEFINITION_ID:AgileReportState$]",
+  "objectDefinitionName2": "AgileReportState"
+}

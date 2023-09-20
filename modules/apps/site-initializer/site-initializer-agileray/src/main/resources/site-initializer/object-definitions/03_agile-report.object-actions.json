@@ -1,0 +1,38 @@
+[
+  {
+    "conditionExpression": "",
+    "objectActionExecutorKey": "add-object-entry",
+    "errorMessage": {
+      "en_US": "Error"
+    },
+    "active": true,
+    "description": "",
+    "label": {
+      "en_US": "Create Request"
+    },
+    "externalReferenceCode": "1c787354-fc77-db44-4870-e6e41e897341",
+    "objectActionTriggerKey": "standalone",
+    "name": "createRequest",
+    "parameters": {
+      "objectDefinitionExternalReferenceCode": "9ceea969-bcef-dd07-827f-b638a13fb0f5",
+      "relatedObjectEntries": true,
+      "system": "false",
+      "predefinedValues": [
+        {
+          "name": "requestState",
+          "inputAsValue": true,
+          "label": {
+            "en_US": "Request State"
+          },
+          "businessType": "Picklist",
+          "value": "pending"
+        }
+      ]
+    },
+    "status": {
+      "label_i18n": "Success",
+      "code": 1,
+      "label": "success"
+    }
+  }
+]

@@ -17,9 +17,9 @@ const App = ({report}) => {
 	return (
 		<div>
 			{Liferay.ThemeDisplay.isSignedIn() && (
-				<div>
-					<AgileReportDetail />
-				</div>
+                    <div>
+                        <AgileReportDetail />
+                    </div>
 			)}
 		</div>
 	);
