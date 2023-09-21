@@ -6,30 +6,30 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 
-import AgileReportDetail from './common/components/AgileReportDetail.js';
-import api from './common/services/liferay/api.js';
+import AgileReportStateAssembler from './common/components/AgileReportStateAssembler.jsx';
 import {Liferay} from './common/services/liferay/liferay.js';
-import HelloWorld from './routes/hello-world/pages/HelloWorld.js';
+import { MantineProvider, createTheme } from '@mantine/core';
 
-import './common/styles/index.scss';
+const theme = createTheme({
+  /** Put your mantine theme override here */
+});
 
-const App = ({report}) => {
-	return (
-		<div>
-			{Liferay.ThemeDisplay.isSignedIn() && (
-                    <div>
-                        <AgileReportDetail />
-                    </div>
-			)}
-		</div>
-	);
-};
+const App = () => {	
+	if (Liferay.ThemeDisplay.isSignedIn()){
+		return (			
+			<MantineProvider theme={theme}>
+      			<AgileReportStateAssembler />
+    		</MantineProvider>											
+		);
+	}else{
+		return (<h1>Not at liferay</h1>);
+	}	
+}
 
 class WebComponent extends HTMLElement {
 	connectedCallback() {
 		createRoot(this).render(
-			<App route={this.getAttribute('report')} />,
-			this
+			<App />
 		);
 	}
 }

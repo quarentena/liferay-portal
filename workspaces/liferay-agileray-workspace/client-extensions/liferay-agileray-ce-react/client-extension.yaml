@@ -1,15 +1,13 @@
 assemble:
     - from: build/static
       into: static
-liferay-agileray-ce-react:
-    cssURLs:
-        - css/main.*.css
+liferay-agileray-ce-react:    
     friendlyURLMapping: liferay-agileray-ce-react
     htmlElementName: liferay-agileray-ce-react
     instanceable: false
     name: Liferay Agileray Graphs
     portletCategoryName: category.client-extensions
-    type: customElement
+    type: customElement    
     urls:
         - js/main.*.js
     useESM: true

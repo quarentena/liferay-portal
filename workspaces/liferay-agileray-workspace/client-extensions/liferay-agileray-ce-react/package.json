@@ -12,14 +12,17 @@
 		]
 	},
 	"dependencies": {
+		"@hello-pangea/dnd": "^16.3.0",
+		"@mantine/core": "^7.0.0",
+		"@mantine/hooks": "^7.0.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-scripts": "5.0.1",
-		"sass": "^1.66.1",
-		"react-draggable": "^4.4.5"
+		"sass": "^1.66.1"
 	},
 	"name": "liferay-agileray-ce-react",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"build": "react-scripts build",
 		"eject": "react-scripts eject",

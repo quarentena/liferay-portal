@@ -111,6 +111,7 @@ public class ReportUpdateAsyncExecutor{
                 JSONObject issueLabel = new JSONObject();
                 issueLabel.put("label",labels.getString(idxLabel));
                 issueLabel.put("r_issueToLabel_c_jiraIssueERC",issueERC);
+                issueLabel.put("r_requestToIssueLabel_c_jiraIntegrationRequestERC", this.integrationRequestERC);
 
                 issueLabels.put(issueLabel);
             }
@@ -130,6 +131,7 @@ public class ReportUpdateAsyncExecutor{
                         issueTransition.put("when", new String(histories.getJSONObject(idxHistory).getString("created")).substring(0,10));
                         issueTransition.put("who", histories.getJSONObject(idxHistory).getJSONObject("author").getString("displayName"));
                         issueTransition.put("r_issueToTransition_c_jiraIssueERC", issueERC);
+                        issueTransition.put("r_requestToIssueTransition_c_jiraIntegrationRequestERC", this.integrationRequestERC);
 
                         issueTransitions.put(issueTransition);
                     }
@@ -140,6 +142,7 @@ public class ReportUpdateAsyncExecutor{
 
             batchRequest.put(issue);
         }
+        
 
         return _postInLRObjects(jwtToken,batchRequest.toString(),"/o/c/jiraissues/batch");
     }
