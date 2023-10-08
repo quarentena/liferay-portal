@@ -5,7 +5,6 @@
 
 package com.liferay.portal.cache.internal.dao.orm;
 
-import com.liferay.osgi.util.service.Snapshot;
 import com.liferay.petra.lang.CentralizedThreadLocal;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.string.StringPool;
@@ -27,6 +26,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
+import com.liferay.portal.kernel.module.service.Snapshot;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LRUMap;
@@ -88,8 +88,6 @@ public class EntityCacheImpl
 
 	@Override
 	public void dispose() {
-		_notifyFinderCache(null, null, true);
-
 		_portalCaches.clear();
 	}
 
@@ -205,8 +203,6 @@ public class EntityCacheImpl
 		if (portalCacheName.startsWith(_GROUP_KEY_PREFIX)) {
 			cacheName = portalCacheName.substring(_GROUP_KEY_PREFIX.length());
 		}
-
-		_notifyFinderCache(cacheName, null, true);
 
 		_portalCaches.remove(cacheName);
 	}
@@ -331,12 +327,7 @@ public class EntityCacheImpl
 			finderCacheImpl.removeByEntityCache(className, baseModel);
 		}
 		else if (removePortalCache) {
-			if (className == null) {
-				finderCacheImpl.dispose();
-			}
-			else {
-				finderCacheImpl.removeCacheByEntityCache(className);
-			}
+			finderCacheImpl.removeCacheByEntityCache(className);
 		}
 		else {
 			if (className == null) {

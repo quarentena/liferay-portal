@@ -16,11 +16,21 @@ import React, {
 	useState,
 } from 'react';
 
-import {EditAPIApplicationContext} from './EditAPIApplicationContext';
+import {
+	EditAPIApplicationContext,
+	EditSchemaContext,
+} from './EditAPIApplicationContext';
+import EditAPISchemaProperties from './EditAPISchemaProperties';
 import BaseAPISchemaFields from './baseComponents/BaseAPISchemaFields';
 import {CancelEditAPIApplicationModalContent} from './modals/CancelEditAPIApplicationModalContent';
-import {hasDataChanged, resetToFetched} from './utils/dataUtils';
-import {fetchJSON, updateData} from './utils/fetchUtil';
+import Sidebar from './sidebar/Sidebar';
+import {
+	AddObjectFieldsDataToProperties,
+	hasDataChanged,
+	hasPropertiesDataChanged,
+	resetToFetched,
+} from './utils/dataUtils';
+import {fetchJSON, getAllItems, updateData} from './utils/fetchUtil';
 
 import '../../css/main.scss';
 
@@ -28,17 +38,11 @@ interface EditAPISchemaProps {
 	apiURLPaths: APIURLPaths;
 	currentAPIApplicationId: string;
 	schemaId: number;
-	setMainSchemaNav: Dispatch<SetStateAction<MainSchemaNav>>;
+	setMainSchemaNav: Dispatch<SetStateAction<MainNav>>;
 	setManagementButtonsProps: Dispatch<SetStateAction<ManagementButtonsProps>>;
 	setStatus: Dispatch<SetStateAction<ApplicationStatusKeys>>;
 	setTitle: Dispatch<SetStateAction<string>>;
 }
-
-type DataError = {
-	description: boolean;
-	mainObjectDefinitionERC: boolean;
-	name: boolean;
-};
 
 export default function EditAPISchema({
 	apiURLPaths,
@@ -51,21 +55,29 @@ export default function EditAPISchema({
 }: EditAPISchemaProps) {
 	const {
 		fetchedData,
+		isDataUnsaved,
 		setFetchedData,
 		setHideManagementButtons,
 		setIsDataUnsaved,
 	} = useContext(EditAPIApplicationContext);
 
 	const [activeTab, setActiveTab] = useState(0);
+
+	const [displayError, setDisplayError] = useState<SchemaDataError>({
+		description: false,
+		mainObjectDefinitionERC: false,
+		name: false,
+	});
+
+	const [fetchedSchemaData, setFetchedSchemaData] = useState<
+		FetchedSchemaData
+	>({});
+
 	const [localUIData, setLocalUIData] = useState<APISchemaUIData>({
 		description: '',
 		mainObjectDefinitionERC: '',
 		name: '',
-	});
-	const [displayError, setDisplayError] = useState<DataError>({
-		description: false,
-		mainObjectDefinitionERC: false,
-		name: false,
+		schemaProperties: [],
 	});
 
 	const fetchAPISchema = () => {
@@ -73,21 +85,50 @@ export default function EditAPISchema({
 			input: apiURLPaths.schemas + schemaId,
 		}).then((response) => {
 			if (response.id === schemaId) {
-				setFetchedData((previous) => ({
+				setFetchedSchemaData((previous) => ({
 					...previous,
 					apiSchema: response,
 				}));
 
-				setLocalUIData({
+				setLocalUIData((previous) => ({
+					...previous,
 					description: response.description,
 					mainObjectDefinitionERC: response.mainObjectDefinitionERC,
 					name: response.name,
+				}));
+			}
+		});
+	};
+
+	const fetchAPISchemaProperties = () => {
+		getAllItems<APISchemaPropertyItem>({
+			url: `/o/headless-builder/schemas/${schemaId}/apiSchemaToAPIProperties`,
+		}).then((response) => {
+			setFetchedSchemaData((previous) => ({
+				...previous,
+				schemaProperties: response.length ? response : [],
+			}));
+
+			if (response.length) {
+				getAllItems<ObjectDefinition>({
+					url: '/o/object-admin/v1.0/object-definitions',
+				}).then((objectDefinitionsResponse) => {
+					if (response.length && fetchedSchemaData.apiSchema) {
+						setLocalUIData((previous) => ({
+							...previous,
+							schemaProperties: AddObjectFieldsDataToProperties({
+								apiSchema: fetchedSchemaData.apiSchema!,
+								objectDefinitions: objectDefinitionsResponse,
+								schemaProperties: response,
+							}),
+						}));
+					}
 				});
 			}
 		});
 	};
 
-	const resetLocalUIData = () => {
+	const resetLocalUIData = useCallback(() => {
 		if (fetchedData.apiSchema) {
 			setLocalUIData(
 				resetToFetched<APISchemaItem, APISchemaUIData>({
@@ -96,7 +137,7 @@ export default function EditAPISchema({
 				})
 			);
 		}
-	};
+	}, [fetchedData.apiSchema, localUIData]);
 
 	function validateData() {
 		let isDataValid = true;
@@ -107,7 +148,7 @@ export default function EditAPISchema({
 				(errors, field) => ({...errors, [field]: true}),
 				{}
 			);
-			setDisplayError(errors as DataError);
+			setDisplayError(errors as SchemaDataError);
 
 			isDataValid = false;
 		}
@@ -132,30 +173,34 @@ export default function EditAPISchema({
 		return isDataValid;
 	}
 
-	const handleUpdate = useCallback(
+	const handlePublish = useCallback(
 		({successMessage}: {successMessage: string}) => {
 			const isDataValid = validateData();
-
-			if (localUIData && isDataValid && fetchedData?.apiSchema) {
-				updateData<APISchemaItem>({
+			if (localUIData && isDataValid) {
+				updateData<APIApplicationItem>({
 					dataToUpdate: {
-						description: localUIData.description,
-						name: localUIData.name,
+						applicationStatus: {key: 'published'},
 					},
+					method: 'PATCH',
 					onError: (error: string) => {
 						openToast({
 							message: error,
 							type: 'danger',
 						});
 					},
-					onSuccess: () => {
+					onSuccess: (responseJSON: APIApplicationItem) => {
+						setFetchedData((previous) => ({
+							...previous,
+							apiApplication: responseJSON,
+						}));
+						setStatus(responseJSON.applicationStatus.key);
+						setTitle(responseJSON.title);
 						openToast({
 							message: successMessage,
 							type: 'success',
 						});
-						fetchAPISchema();
 					},
-					url: fetchedData.apiSchema.actions.update.href,
+					url: apiURLPaths.applications + currentAPIApplicationId,
 				});
 			}
 		},
@@ -164,44 +209,8 @@ export default function EditAPISchema({
 		[localUIData]
 	);
 
-	const handlePublish = ({successMessage}: {successMessage: string}) => {
-		const isDataValid = validateData();
-		if (localUIData && isDataValid) {
-			updateData<APIApplicationItem>({
-				dataToUpdate: {
-					applicationStatus: {key: 'published'},
-				},
-				onError: (error: string) => {
-					openToast({
-						message: error,
-						type: 'danger',
-					});
-				},
-				onSuccess: (responseJSON: APIApplicationItem) => {
-					setFetchedData((previous) => ({
-						...previous,
-						apiApplication: responseJSON,
-					}));
-					setStatus(responseJSON.applicationStatus.key);
-					setTitle(responseJSON.title);
-					openToast({
-						message: successMessage,
-						type: 'success',
-					});
-				},
-				url: apiURLPaths.applications + currentAPIApplicationId,
-			});
-		}
-	};
-
-	const handleCancel = () => {
-		if (
-			fetchedData?.apiSchema &&
-			hasDataChanged({
-				fetchedEntityData: fetchedData.apiSchema,
-				localUIData,
-			})
-		) {
+	const handleCancel = useCallback(() => {
+		if (isDataUnsaved) {
 			openModal({
 				center: true,
 				contentComponent: ({closeModal}: {closeModal: voidReturn}) =>
@@ -221,26 +230,80 @@ export default function EditAPISchema({
 		else {
 			setMainSchemaNav('list');
 		}
-	};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [fetchedSchemaData, isDataUnsaved, localUIData, resetLocalUIData]);
+
+	const handleUpdate = useCallback(
+		({successMessage}: {successMessage: string}) => {
+			const isDataValid = validateData();
+
+			if (
+				localUIData?.schemaProperties &&
+				isDataValid &&
+				fetchedSchemaData.apiSchema
+			) {
+				updateData<APISchemaItem>({
+					dataToUpdate: {
+						description: localUIData.description,
+						name: localUIData.name,
+						...(localUIData.schemaProperties.length && {
+							apiSchemaToAPIProperties: localUIData.schemaProperties.map(
+								(property) => ({
+									...(!!property.description && {
+										description: property.description,
+									}),
+									name: property.name,
+									objectFieldERC: property.objectFieldERC,
+									r_apiSchemaToAPIProperties_c_apiSchemaId:
+										property.r_apiSchemaToAPIProperties_c_apiSchemaId,
+									...(property.objectRelationshipNames && {
+										objectRelationshipNames:
+											property.objectRelationshipNames,
+									}),
+								})
+							),
+						}),
+						...(!localUIData.schemaProperties.length && {
+							apiSchemaToAPIProperties: [],
+						}),
+						mainObjectDefinitionERC:
+							localUIData.mainObjectDefinitionERC,
+					},
+					method: localUIData.schemaProperties.length
+						? 'PATCH'
+						: 'PUT',
+					onError: (error: string) => {
+						openToast({
+							message: error,
+							type: 'danger',
+						});
+					},
+					onSuccess: () => {
+						openToast({
+							message: successMessage,
+							type: 'success',
+						});
+						fetchAPISchema();
+						fetchAPISchemaProperties();
+						setIsDataUnsaved(false);
+					},
+					url: fetchedSchemaData.apiSchema.actions.update.href,
+				});
+			}
+		},
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[localUIData]
+	);
 
 	useEffect(() => {
 		setHideManagementButtons(false);
-
 		fetchAPISchema();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
-		if (fetchedData.apiSchema) {
-			setIsDataUnsaved(
-				hasDataChanged({
-					fetchedEntityData: fetchedData.apiSchema,
-					localUIData,
-				})
-			);
-		}
-
 		setManagementButtonsProps({
 			cancel: {onClick: handleCancel, visible: true},
 			publish: {
@@ -281,55 +344,158 @@ export default function EditAPISchema({
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [localUIData]);
+	}, [isDataUnsaved, localUIData]);
+
+	useEffect(() => {
+		setIsDataUnsaved(
+			!!(
+				fetchedSchemaData.apiSchema &&
+				(hasDataChanged({
+					fetchedEntityData: fetchedSchemaData.apiSchema,
+					localUIData: {
+						description: localUIData.description,
+						mainObjectDefinitionERC:
+							localUIData.mainObjectDefinitionERC,
+						name: localUIData.name,
+					},
+				}) ||
+					(fetchedSchemaData.schemaProperties &&
+						localUIData.schemaProperties &&
+						hasPropertiesDataChanged({
+							fetchedPropertiesData:
+								fetchedSchemaData.schemaProperties,
+							propertiesUIData: localUIData.schemaProperties,
+						})))
+			)
+		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [fetchedSchemaData, localUIData]);
 
 	return (
-		<div className="container-fluid container-fluid-max-xl mt-3">
-			<ClayBreadcrumb
-				className="api-builder-navigation-breadcrum"
-				items={[
-					{
-						label: Liferay.Language.get('schemas'),
-						onClick: () => handleCancel(),
-					},
-					{
-						active: true,
-						label: fetchedData.apiSchema?.name ?? localUIData.name,
-					},
-				]}
-			/>
+		<EditSchemaContext.Provider
+			value={{
+				apiSchemaId: schemaId,
+				fetchedSchemaData,
+				objectDefinitionBasePath:
+					'/o/object-admin/v1.0/object-definitions/by-external-reference-code/',
+				setFetchedSchemaData,
+			}}
+		>
+			<div className="main-container">
+				<div className="edit-schema">
+					<div className="container-fluid container-fluid-max-xl edit-schema-child mt-3">
+						<ClayBreadcrumb
+							className="api-builder-navigation-breadcrumb"
+							items={[
+								{
+									label: Liferay.Language.get('schemas'),
+									onClick: () => {
+										handleCancel();
+									},
+								},
+								{
+									active: true,
+									label:
+										fetchedData.apiSchema?.name ??
+										localUIData.name,
+								},
+							]}
+						/>
 
-			<ClayCard className="mt-3 pt-2">
-				<ClayTabs
-					active={activeTab}
-					className="mt-3"
-					onActiveChange={setActiveTab}
-				>
-					<ClayTabs.Item
-						innerProps={{
-							'aria-controls': 'tabpanel-1',
-						}}
-					>
-						{Liferay.Language.get('info')}
-					</ClayTabs.Item>
-				</ClayTabs>
+						<ClayCard className="mt-3 pt-2">
+							<ClayTabs
+								active={activeTab}
+								className="mt-3"
+								fade
+								onActiveChange={setActiveTab}
+							>
+								<ClayTabs.Item
+									innerProps={{
+										'aria-controls': 'tabpanel-1',
+									}}
+								>
+									{Liferay.Language.get('info')}
+								</ClayTabs.Item>
 
-				<ClayTabs.Content>
-					<ClayTabs.TabPane
-						aria-label={Liferay.Language.get('information-tab')}
-						className="info-tab"
-					>
-						<ClayCard.Body>
-							<BaseAPISchemaFields
-								data={localUIData}
-								disableObjectSelect
-								displayError={displayError}
-								setData={setLocalUIData}
-							/>
-						</ClayCard.Body>
-					</ClayTabs.TabPane>
-				</ClayTabs.Content>
-			</ClayCard>
-		</div>
+								<ClayTabs.Item
+									innerProps={{
+										'aria-controls': 'tabpanel-2',
+									}}
+								>
+									{Liferay.Language.get('properties')}
+								</ClayTabs.Item>
+							</ClayTabs>
+
+							<ClayTabs.Content activeIndex={activeTab} fade>
+								{activeTab === 0 && (
+									<ClayTabs.TabPane
+										aria-label={Liferay.Language.get(
+											'information-tab'
+										)}
+										className="schema-tabs"
+									>
+										<ClayCard.Body>
+											<div className="schema-fields-card-body">
+												<BaseAPISchemaFields
+													data={localUIData}
+													disableObjectSelect
+													displayError={displayError}
+													setData={setLocalUIData}
+												/>
+											</div>
+										</ClayCard.Body>
+									</ClayTabs.TabPane>
+								)}
+
+								{activeTab === 1 && (
+									<ClayTabs.TabPane
+										aria-label={Liferay.Language.get(
+											'properties-tab'
+										)}
+										className="schema-tabs"
+									>
+										<ClayCard.Body>
+											<div className="schema-properties-card-body">
+												{fetchedSchemaData.apiSchema &&
+													fetchedSchemaData.objectDefinitions && (
+														<EditAPISchemaProperties
+															fetchedSchemaData={
+																fetchedSchemaData
+															}
+															schemaId={schemaId}
+															schemaUIData={
+																localUIData
+															}
+															setFetchedSchemaData={
+																setFetchedSchemaData
+															}
+															setSchemaUIData={
+																setLocalUIData
+															}
+														/>
+													)}
+											</div>
+										</ClayCard.Body>
+									</ClayTabs.TabPane>
+								)}
+							</ClayTabs.Content>
+						</ClayCard>
+					</div>
+
+					{activeTab === 1 && (
+						<Sidebar
+							mainObjectDefinitionERC={
+								localUIData.mainObjectDefinitionERC
+							}
+							objectDefinitions={
+								fetchedSchemaData.objectDefinitions
+							}
+							schemaUIData={localUIData}
+							setSchemaUIData={setLocalUIData}
+						/>
+					)}
+				</div>
+			</div>
+		</EditSchemaContext.Provider>
 	);
 }

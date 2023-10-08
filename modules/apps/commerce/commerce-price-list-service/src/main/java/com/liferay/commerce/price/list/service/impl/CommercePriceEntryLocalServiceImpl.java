@@ -94,7 +94,6 @@ import org.osgi.service.component.annotations.Reference;
 public class CommercePriceEntryLocalServiceImpl
 	extends CommercePriceEntryLocalServiceBaseImpl {
 
-	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommercePriceEntry addCommercePriceEntry(
 			String externalReferenceCode, long cProductId,
@@ -356,10 +355,17 @@ public class CommercePriceEntryLocalServiceImpl
 
 	@Override
 	public void deleteCommercePriceEntries(
-		String cpInstanceUuid, BigDecimal quantity, String unitOfMeasureKey) {
+			String cpInstanceUuid, BigDecimal quantity, String unitOfMeasureKey)
+		throws PortalException {
 
-		commercePriceEntryPersistence.removeByC_Q_U(
-			cpInstanceUuid, quantity, unitOfMeasureKey);
+		List<CommercePriceEntry> commercePriceEntries =
+			commercePriceEntryPersistence.findByC_Q_U(
+				cpInstanceUuid, quantity, unitOfMeasureKey);
+
+		for (CommercePriceEntry commercePriceEntry : commercePriceEntries) {
+			commercePriceEntryLocalService.deleteCommercePriceEntry(
+				commercePriceEntry);
+		}
 	}
 
 	@Indexable(type = IndexableType.DELETE)
@@ -563,6 +569,9 @@ public class CommercePriceEntryLocalServiceImpl
 					}
 				).and(
 					CommercePriceListTable.INSTANCE.type.eq(priceListType)
+				).and(
+					CommercePriceListTable.INSTANCE.catalogBasePriceList.eq(
+						true)
 				)
 			));
 

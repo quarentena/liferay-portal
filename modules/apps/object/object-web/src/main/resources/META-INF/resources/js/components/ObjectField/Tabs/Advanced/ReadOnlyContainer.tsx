@@ -8,10 +8,13 @@ import {
 	ExpressionBuilder,
 	SidebarCategory,
 } from '@liferay/object-js-components-web';
+import classNames from 'classnames';
 import React from 'react';
 
 interface ReadOnlyContainerProps {
 	disabled?: boolean;
+	modelBuilder?: boolean;
+	onSubmit?: (values?: Partial<ObjectField>) => void;
 	readOnlySidebarElements: SidebarCategory[];
 	requiredField: boolean;
 	setValues: (value: Partial<ObjectField>) => void;
@@ -20,6 +23,8 @@ interface ReadOnlyContainerProps {
 
 export function ReadOnlyContainer({
 	disabled,
+	modelBuilder = false,
+	onSubmit,
 	readOnlySidebarElements,
 	requiredField,
 	setValues,
@@ -36,10 +41,24 @@ export function ReadOnlyContainer({
 	};
 
 	return (
-		<>
+		<div
+			className={classNames({
+				'lfr-objects__edit-object-field-card-content': !modelBuilder,
+				'lfr-objects__edit-object-field-model-builder-panel': modelBuilder,
+			})}
+		>
 			{values.readOnly && (
 				<>
-					<ClayRadioGroup defaultValue={values?.readOnly}>
+					<ClayRadioGroup
+						defaultValue={values?.readOnly}
+						onBlur={(event) => {
+							event.stopPropagation();
+
+							if (onSubmit) {
+								onSubmit();
+							}
+						}}
+					>
 						<ClayRadio
 							disabled={disabled}
 							label={Liferay.Language.get('true')}
@@ -68,6 +87,13 @@ export function ReadOnlyContainer({
 								'use-expressions-to-create-a-condition'
 							)}
 							label={Liferay.Language.get('expression-builder')}
+							onBlur={(event) => {
+								event.stopPropagation();
+
+								if (onSubmit) {
+									onSubmit();
+								}
+							}}
 							onChange={({target: {value}}) => {
 								setValues({
 									readOnlyConditionExpression: value,
@@ -87,6 +113,13 @@ export function ReadOnlyContainer({
 											setValues({
 												readOnlyConditionExpression: script,
 											});
+
+											if (onSubmit) {
+												onSubmit({
+													...values,
+													readOnlyConditionExpression: script,
+												});
+											}
 										},
 										placeholder: `<#-- ${Liferay.Language.get(
 											'create-the-condition-of-the-read-only-state-using-expression-builder'
@@ -107,6 +140,6 @@ export function ReadOnlyContainer({
 					)}
 				</>
 			)}
-		</>
+		</div>
 	);
 }

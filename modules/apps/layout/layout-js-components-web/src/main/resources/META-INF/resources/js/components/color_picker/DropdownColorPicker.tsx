@@ -139,10 +139,10 @@ export function DropdownColorPicker({
 
 	return (
 		<div
-			className={classNames(
-				'flex-grow-1 flex-shrink-0 layout__dropdown-color-picker',
-				{'ml-2': !showSelector}
-			)}
+			className={classNames('layout__dropdown-color-picker', {
+				'flex-grow-1': showSelector && label,
+				'flex-shrink-0 ml-2': !(showSelector && label),
+			})}
 		>
 			{showSelector && label ? (
 				<ClayButton
@@ -153,30 +153,28 @@ export function DropdownColorPicker({
 					ref={triggerElementRef}
 					size={small ? 'sm' : undefined}
 				>
-					<span className="c-inner" tabIndex={-1}>
+					<span
+						className={classNames(
+							'layout__dropdown-color-picker__selector-splotch rounded-circle',
+							{'lfr-portal-tooltip': fieldLabel}
+						)}
+						data-title={fieldLabel}
+						style={{background: `${value}`}}
+					/>
+
+					<span className="text-truncate">{label}</span>
+
+					{inherited ? (
 						<span
-							className={classNames(
-								'layout__dropdown-color-picker__selector-splotch rounded-circle',
-								{'lfr-portal-tooltip': fieldLabel}
-							)}
-							data-title={fieldLabel}
-							style={{background: `${value}`}}
-						/>
-
-						<span className="text-truncate">{label}</span>
-
-						{inherited ? (
-							<span
-								className="inherited"
-								title={Liferay.Language.get('inherited-value')}
-							></span>
-						) : null}
-					</span>
+							className="inherited"
+							title={Liferay.Language.get('inherited-value')}
+						></span>
+					) : null}
 				</ClayButton>
 			) : (
 				<ClayButtonWithIcon
 					aria-label={Liferay.Language.get('value-from-stylebook')}
-					className="border-0 flex-shrink-0"
+					className="border-0"
 					displayType="secondary"
 					onClick={() => onSetActive(!active)}
 					ref={triggerElementRef}

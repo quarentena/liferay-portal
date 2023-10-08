@@ -25,25 +25,6 @@ definition {
 		}
 	}
 
-	tearDown {
-		var testLiferayVirtualInstance = PropsUtil.get("test.liferay.virtual.instance");
-
-		if (${testLiferayVirtualInstance} == "true") {
-			PortalInstances.tearDownCP();
-		}
-		else {
-			JSONGroup.deleteGroupByName(groupName = "Test Site Name");
-		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		JSONOrganization.deleteOrganizationByName(
-			organizationName = "Organization Name",
-			parentOrganizationName = "Parent Organization Name");
-
-		JSONOrganization.deleteOrganizationByName(organizationName = "Parent Organization Name");
-	}
-
 	@description = "This is a test for LPS-187282. The segment designer could add a segment based on organization category criteria."
 	@priority = 5
 	test AddSegmentByOrganizationCategory {
@@ -3367,6 +3348,71 @@ definition {
 			AssertElementPresent(
 				locator1 = "Segmentation#CRITERION_VIEW_MODE",
 				propertyValue = "Test Group Name");
+		}
+	}
+
+	@description = "This is a test for LPS-94651. The draggable area should be default and the already existent conditions not disabled until one item from the properties sidebar is selected."
+	@priority = 3
+	test ViewDraggableAreaWhenDraggingPropertyItem {
+		task ("Given a segment designer accesses to the segment entry editor") {
+			LexiconEntry.gotoAdd();
+
+			WaitForPageLoad();
+		}
+
+		task ("When the segment designer drags a property item") {
+			DragOver.dragOver(
+				key_propertyOption = "User",
+				locator1 = "Segmentation#ADD_FIELD_TYPE_VISIBLE",
+				locator2 = "Segmentation#ADD_FIELD_TYPE_VISIBLE");
+		}
+
+		task ("Then the segment designer could see the draggable area") {
+			AssertVisible(locator1 = "Segmentation#EMPTY_DROP_ZONE_DASHED");
+		}
+
+		task ("When the segment designer drops the property item in draggable area") {
+			DragAndDrop.javaScriptDragAndDropToObject(
+				key_propertyOption = "User",
+				locator1 = "Segmentation#ADD_FIELD_TYPE_VISIBLE",
+				locator2 = "Segmentation#ADD_FIELD_POSITION");
+
+			AssertElementPresent(
+				locator1 = "Segmentation#CONDITIONS_PROPERTY_NAME",
+				propertyName = "User");
+		}
+
+		task ("Then the segment designer cannot see the draggable area") {
+			AssertElementNotPresent(locator1 = "Segmentation#EMPTY_DROP_ZONE_DASHED");
+		}
+
+		task ("When the segment designer drags a property item from another section") {
+			Segmentation.gotoSidebar(fieldType = "Organization");
+
+			DragOver.dragOver(
+				key_propertyOption = "Country",
+				locator1 = "Segmentation#ADD_FIELD_TYPE_VISIBLE",
+				locator2 = "Segmentation#ADD_FIELD_TYPE_VISIBLE");
+		}
+
+		task ("Then the segment designer could see the draggable area") {
+			AssertVisible(locator1 = "Segmentation#EMPTY_DROP_ZONE_DASHED");
+		}
+
+		task ("When the segment designer drops the property item in draggable area") {
+			DragAndDrop.javaScriptDragAndDropToObject(
+				indexNumber = 2,
+				key_propertyOption = "Country",
+				locator1 = "Segmentation#ADD_FIELD_TYPE_VISIBLE",
+				locator2 = "Segmentation#ADD_FIELD_POSITION_N");
+
+			AssertElementPresent(
+				locator1 = "Segmentation#CONDITIONS_PROPERTY_NAME",
+				propertyName = "Country");
+		}
+
+		task ("Then the segment designer cannot see the draggable area") {
+			AssertElementNotPresent(locator1 = "Segmentation#EMPTY_DROP_ZONE_DASHED");
 		}
 	}
 

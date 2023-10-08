@@ -14,10 +14,12 @@ import SearchBuilder from '~/common/core/SearchBuilder';
 import NotificationQueueService from '~/common/services/actions/notificationAction';
 import {
 	HIGH_PRIORITY_CONTACT_CATEGORIES,
-	addHighPriorityContactsList,
-	associateContactRole,
-	removeContactRole,
-	removeHighPriorityContactsList,
+	actLiferayContact,
+	actRaysourceContact,
+	associateContactRoleLiferay,
+	associateContactRoleRaysource,
+	removeContactRoleLiferay,
+	removeContactRoleRaysource,
 } from '~/routes/customer-portal/utils/getHighPriorityContacts';
 import {useOnboarding} from '~/routes/onboarding/context';
 import {
@@ -78,14 +80,10 @@ const SetupDXPCloudPage = ({
 	const sessionId =
 		customerPortalContext?.[0].sessionId ||
 		onboardingContext?.[0].sessionId;
-	const [
-		addHighPriorityContactList,
-		setAddHighPriorityContactList,
-	] = useState([]);
-	const [
-		removeHighPriorityContactList,
-		setRemoveHighPriorityContactList,
-	] = useState([]);
+	const [addHighPriorityContact, setAddHighPriorityContact] = useState([]);
+	const [removeHighPriorityContact, setRemoveHighPriorityContact] = useState(
+		[]
+	);
 	const [isMultiSelectEmpty, setIsMultiSelectEmpty] = useState(false);
 
 	const [step, setStep] = useState(1);
@@ -191,28 +189,34 @@ const SetupDXPCloudPage = ({
 
 		if (!alreadySubmitted && dxp) {
 			try {
-				await Promise.all(
-					removeHighPriorityContactList?.map(async (item) => {
-						removeContactRole(
-							item,
-							project,
-							sessionId,
-							provisioningServerAPI
-						);
-					})
-				);
-
-				await Promise.all(
-					addHighPriorityContactList?.map(async (item) => {
-						return associateContactRole(
-							item,
-							project,
-							sessionId,
-							provisioningServerAPI
-						);
-					})
-				);
-
+				if (featureFlags.includes('LPS-159127')) {
+					await actRaysourceContact(
+						removeContactRoleRaysource,
+						removeHighPriorityContact,
+						project,
+						sessionId,
+						provisioningServerAPI
+					);
+					await actRaysourceContact(
+						associateContactRoleRaysource,
+						addHighPriorityContact,
+						project,
+						sessionId,
+						provisioningServerAPI
+					);
+					await actLiferayContact(
+						addHighPriorityContact,
+						associateContactRoleLiferay,
+						project,
+						client
+					);
+					await actLiferayContact(
+						removeHighPriorityContact,
+						removeContactRoleLiferay,
+						project,
+						client
+					);
+				}
 				const {
 					data: addDXPCloudEnvironmentResponse,
 				} = await client.mutate({
@@ -279,26 +283,6 @@ const SetupDXPCloudPage = ({
 						},
 					});
 
-					await Promise.all(
-						removeHighPriorityContactList?.map((item) => {
-							return removeHighPriorityContactsList(
-								client,
-								item,
-								project
-							);
-						})
-					);
-
-					await Promise.all(
-						addHighPriorityContactList?.map((item) => {
-							return addHighPriorityContactsList(
-								client,
-								item,
-								project
-							);
-						})
-					);
-
 					if (featureFlags.includes('LPS-187767')) {
 						const notificationTemplateService = new NotificationQueueService(
 							client
@@ -346,19 +330,11 @@ const SetupDXPCloudPage = ({
 		}
 	};
 
-	const addHighPriorityContacts = (contactList) => {
-		const contactsList = contactList.map((item) => item);
-		setAddHighPriorityContactList(contactsList);
-	};
-	const removeHighPriorityContacts = (contactList) => {
-		const contactsList = contactList.map(({objectId}) => objectId);
-		setRemoveHighPriorityContactList(contactsList);
-	};
 	const updateMultiSelectEmpty = (error) => {
 		setIsMultiSelectEmpty(error);
 	};
 
-	return (
+	return featureFlags.includes('LPS-159127') ? (
 		<Layout
 			className="pt-1 px-3"
 			footerProps={{
@@ -560,15 +536,183 @@ const SetupDXPCloudPage = ({
 			{step === 2 && (
 				<div>
 					<SetupHighPriorityContactForm
-						addContactList={addHighPriorityContacts}
+						addContactList={setAddHighPriorityContact}
 						disableSubmit={updateMultiSelectEmpty}
 						filter={
 							HIGH_PRIORITY_CONTACT_CATEGORIES.criticalIncident
 						}
-						removedContactList={removeHighPriorityContacts}
+						removedContactList={setRemoveHighPriorityContact}
 					/>
 				</div>
 			)}
+		</Layout>
+	) : (
+		<Layout
+			className="pt-1 px-3"
+			footerProps={{
+				leftButton: (
+					<Button borderless onClick={() => handlePage()}>
+						{leftButton}
+					</Button>
+				),
+				middleButton: (
+					<Button
+						disabled={baseButtonDisabled}
+						displayType="primary"
+						onClick={() => handleSubmit()}
+					>
+						{i18n.translate('submit')}
+					</Button>
+				),
+			}}
+			headerProps={{
+				helper: i18n.translate(
+					'we-ll-need-a-few-details-to-finish-building-your-lxc-sm-environment'
+				),
+				title: i18n.translate('set-up-lxc-sm'),
+			}}
+		>
+			<FieldArray
+				name="dxp.admins"
+				render={({pop, push}) => (
+					<>
+						<div className="d-flex justify-content-between mb-2 pb-1 pl-3">
+							<div className="mr-4 pr-2">
+								<label>{i18n.translate('project-name')}</label>
+
+								<p className="lxc-sm-project-name text-neutral-6 text-paragraph-lg">
+									<strong>
+										{project.name.length >
+										MAXIMUM_NUMBER_OF_CHARACTERS
+											? project.name.substring(
+													0,
+													MAXIMUM_NUMBER_OF_CHARACTERS
+											  ) + '...'
+											: project.name}
+									</strong>
+								</p>
+							</div>
+
+							<div className="flex-fill">
+								<label>
+									{i18n.translate('liferay-dxp-version')}
+								</label>
+
+								<div className="position-relative">
+									<ClayIcon
+										className="select-icon"
+										symbol="caret-bottom"
+									/>
+
+									<ClaySelect
+										className="bg-neutral-1 border-0 font-weight-bold mr-2 pr-6"
+										onChange={({target}) => {
+											setSelectedVersion(target.value);
+										}}
+										value={selectedVersion}
+									>
+										{dxpVersions.map((version) => (
+											<ClaySelect.Option
+												className="font-weight-bold options"
+												key={version.key}
+												label={version.name}
+											/>
+										))}
+									</ClaySelect>
+								</div>
+							</div>
+						</div>
+						<ClayForm.Group className="mb-0">
+							<ClayForm.Group className="mb-0 pb-1">
+								<Input
+									groupStyle="pb-1"
+									helper={i18n.translate(
+										'lowercase-letters-and-numbers-only-the-project-id-cannot-be-changed'
+									)}
+									label={i18n.translate('project-id')}
+									name="dxp.projectId"
+									required
+									type="text"
+									validations={[
+										(value) => isLowercaseAndNumbers(value),
+									]}
+								/>
+
+								<Select
+									groupStyle="mb-0"
+									label={i18n.translate(
+										'primary-data-center-region'
+									)}
+									name="dxp.dataCenterRegion"
+									options={dXPCDataCenterRegions.map(
+										(option) => ({
+											...option,
+											disabled:
+												option.value ===
+												values.dxp
+													.disasterDataCenterRegion,
+										})
+									)}
+									required
+								/>
+
+								{!!hasDisasterRecovery && (
+									<Select
+										groupStyle="mb-0 pt-2"
+										id="disasterRecovery"
+										label="Disaster Recovery Data Center Region"
+										name="dxp.disasterDataCenterRegion"
+										options={dXPCDataCenterRegions.map(
+											(option) => ({
+												...option,
+												disabled:
+													option.value ===
+													values.dxp.dataCenterRegion,
+											})
+										)}
+										required
+									/>
+								)}
+							</ClayForm.Group>
+
+							{values.dxp.admins.map((admin, index) => (
+								<AdminInputs
+									admin={admin}
+									id={index}
+									key={index}
+								/>
+							))}
+						</ClayForm.Group>
+						{values?.dxp?.admins?.length >
+							INITIAL_SETUP_ADMIN_COUNT && (
+							<Button
+								className="ml-3 my-2 text-brandy-secondary"
+								displayType="secondary"
+								onClick={() => {
+									pop();
+									setBaseButtonDisabled(false);
+								}}
+								prependIcon="hr"
+								small
+							>
+								{i18n.translate('remove-this-admin')}
+							</Button>
+						)}
+						<Button
+							className="btn-outline-primary cp-btn-add-lxc-sm ml-3 my-2 rounded-xs"
+							disabled={baseButtonDisabled}
+							onClick={() => {
+								push(getInitialDXPAdmin(values?.dxp?.admins));
+								setBaseButtonDisabled(true);
+							}}
+							prependIcon="plus"
+							small
+						>
+							{i18n.translate('add-another-admin')}
+						</Button>
+					</>
+				)}
+			/>
 		</Layout>
 	);
 };

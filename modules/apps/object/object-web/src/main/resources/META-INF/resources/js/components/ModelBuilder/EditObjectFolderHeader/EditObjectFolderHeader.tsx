@@ -9,11 +9,13 @@ import {ClayTooltipProvider} from '@clayui/tooltip';
 import classNames from 'classnames';
 import React from 'react';
 
+import {useObjectFolderContext} from '../ModelBuilderContext/objectFolderContext';
+
 import './EditObjectFolderHeader.scss';
 
-import {sub} from 'frontend-js-web';
+import {getLocalizableLabel} from '@liferay/object-js-components-web';
 
-import {useObjectFolderContext} from '../ModelBuilderContext/objectFolderContext';
+import {defaultLanguageId} from '../../../utils/constants';
 
 interface EditObjectFolderHeaderProps {
 	hasDraftObjectDefinitions: boolean;
@@ -34,20 +36,30 @@ export default function EditObjectFolderHeader({
 				<div className="lfr-objects__model-builder-header-object-folder-info">
 					<div
 						className={classNames(
-							'lfr-objects__model-builder-header-object-folder-info-name',
+							'lfr-objects__model-builder-header-object-folder-info-label',
 							{
-								'lfr-objects__model-builder-header-object-folder-info-name-changes-saved': showChangesSaved,
+								'lfr-objects__model-builder-header-object-folder-info-label-changes-saved': showChangesSaved,
 							}
 						)}
 					>
 						<ClayTooltipProvider>
 							<span
 								title={
-									Liferay.Language.get('folder-name') +
-									`: ${selectedObjectFolder.name}`
+									Liferay.Language.get(
+										'object-folder-label'
+									) +
+									`: ${getLocalizableLabel(
+										defaultLanguageId,
+										selectedObjectFolder.label,
+										selectedObjectFolder.name
+									)}`
 								}
 							>
-								{selectedObjectFolder.name}
+								{getLocalizableLabel(
+									defaultLanguageId,
+									selectedObjectFolder.label,
+									selectedObjectFolder.name
+								)}
 							</span>
 						</ClayTooltipProvider>
 					</div>
@@ -117,27 +129,18 @@ export default function EditObjectFolderHeader({
 				)}
 
 				<div className="lfr-objects__model-builder-header-buttons-container">
-					<ClayButtonWithIcon
-						aria-label={Liferay.Language.get('toggle-sidebars')}
-						displayType="secondary"
-						symbol="view"
-						title={Liferay.Language.get('toggle-sidebars')}
-					/>
-
-					<ClayButton displayType="secondary">
-						{sub(
-							Liferay.Language.get('x-folder'),
-							Liferay.Language.get('create-new')
-						)}
-					</ClayButton>
-
-					<ClayButton displayType="secondary">
-						{Liferay.Language.get('export')}
-					</ClayButton>
-
 					<ClayButton
+						aria-labelledby={Liferay.Language.get('publish')}
 						disabled={!hasDraftObjectDefinitions}
 						displayType="primary"
+						onClick={() => {
+							setShowModal(
+								(previousState: ModelBuilderModals) => ({
+									...previousState,
+									publishObjectDefinitions: true,
+								})
+							);
+						}}
 					>
 						{Liferay.Language.get('publish')}
 					</ClayButton>

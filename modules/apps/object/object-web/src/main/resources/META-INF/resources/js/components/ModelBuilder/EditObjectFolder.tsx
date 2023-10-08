@@ -3,14 +3,16 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import {API, getLocalizableLabel} from '@liferay/object-js-components-web';
 import React, {useEffect, useState} from 'react';
+import {FlowElement, useStore} from 'react-flow-renderer';
 
 import {KeyValuePair} from '../ObjectDetails/EditObjectDetails';
 import {ModalAddObjectDefinition} from '../ViewObjectDefinitions/ModalAddObjectDefinition';
 import {ModalEditObjectFolder} from '../ViewObjectDefinitions/ModalEditObjectFolder';
+import {getUpdatedModelBuilderStructurePayload} from '../ViewObjectDefinitions/objectDefinitionUtil';
 import Diagram from './Diagram/Diagram';
 import EditObjectFolderHeader from './EditObjectFolderHeader/EditObjectFolderHeader';
+import {ModalPublishObjectDefinitions} from './EditObjectFolderHeader/ModalPublishObjectDefinitions';
 import LeftSidebar from './LeftSidebar/LeftSidebar';
 import {useObjectFolderContext} from './ModelBuilderContext/objectFolderContext';
 import {TYPES} from './ModelBuilderContext/typesEnum';
@@ -18,151 +20,75 @@ import {RightSideBar} from './RightSidebar/index';
 
 interface EditObjectFolder {
 	companyKeyValuePairs: KeyValuePair[];
-	objectFolderName: string;
 	objectRelationshipDeletionTypes: LabelValueObject[];
 	siteKeyValuePairs: KeyValuePair[];
 }
+
 export default function EditObjectFolder({
 	companyKeyValuePairs,
-	objectFolderName,
 	objectRelationshipDeletionTypes,
 	siteKeyValuePairs,
 }: EditObjectFolder) {
 	const [
-		{objectDefinitionsStorageTypes, rightSidebarType, selectedObjectFolder},
+		{
+			elements,
+			objectDefinitionsStorageTypes,
+			objectFolderName,
+			rightSidebarType,
+			selectedObjectFolder,
+		},
 		dispatch,
 	] = useObjectFolderContext();
 
+	const store = useStore();
+
+	const {nodes} = store.getState();
+
 	const [showModal, setShowModal] = useState<ModelBuilderModals>({
 		addObjectDefinition: false,
+		addObjectField: false,
 		addObjectFolder: false,
 		addObjectRelationship: false,
 		deleteObjectDefinition: false,
 		deleteObjectFolder: false,
+		deleteObjectRelationship: false,
 		editObjectDefinitionExternalReferenceCode: false,
 		editObjectFolder: false,
 		moveObjectDefinition: false,
+		publishObjectDefinitions: false,
 		redirectToEditObjectDefinitionDetails: false,
 	});
 
 	useEffect(() => {
-		const makeFetch = async () => {
-			const objectFolders = await API.getAllObjectFolders();
+		dispatch({
+			payload: {
+				isLoadingObjectFolder: true,
+			},
+			type: TYPES.SET_LOADING_OBJECT_FOLDER,
+		});
 
-			const currentObjectFolder = objectFolders.find(
-				(objectFolder) => objectFolder.name === objectFolderName
-			) as ObjectFolder;
-
-			const objectFoldersWithObjectDefinitions: ObjectFolder[] = await Promise.all(
-				objectFolders.map(async (objectFolder) => {
-					const objectFolderWithObjectDefinitions: ObjectDefinitionNodeData[] = [];
-
-					const objectDefinitionsFilteredByObjectFolder = await API.getObjectDefinitions(
-						`filter=objectFolderExternalReferenceCode eq '${objectFolder.externalReferenceCode}'`
-					);
-
-					const linkedObjectDefinitions: ObjectDefinition[] = [];
-
-					await Promise.all(
-						objectFolder.objectFolderItems
-							.filter(
-								(objectFolderItem) =>
-									objectFolderItem.linkedObjectDefinition
-							)
-							.map(async (objectFolderItem) => {
-								linkedObjectDefinitions.push(
-									await API.getObjectDefinitionByExternalReferenceCode(
-										objectFolderItem.objectDefinitionExternalReferenceCode
-									)
-								);
-							})
-					);
-
-					const updateObjectFolderObjectDefinitions = ({
-						linkedObjectDefinition,
-						objectDefinitions,
-					}: {
-						linkedObjectDefinition: boolean;
-						objectDefinitions: ObjectDefinition[];
-					}) => {
-						objectDefinitions.forEach((objectDefinition) => {
-							const objectFolderItem = objectFolder.objectFolderItems.find(
-								(objectFolderItem) =>
-									objectFolderItem.objectDefinitionExternalReferenceCode ===
-									objectDefinition.externalReferenceCode
-							);
-
-							if (objectFolderItem) {
-								objectFolderWithObjectDefinitions.push({
-									...objectDefinition,
-									hasObjectDefinitionDeleteResourcePermission: !!objectDefinition
-										.actions.delete,
-									hasObjectDefinitionManagePermissionsResourcePermission: !!objectDefinition
-										.actions.permissions,
-									hasObjectDefinitionUpdateResourcePermission: !!objectDefinition
-										.actions.update,
-									hasObjectDefinitionViewResourcePermission: !!objectDefinition
-										.actions.get,
-									hasSelfObjectRelationships: false,
-									linkedObjectDefinition,
-									objectFields: objectDefinition.objectFields.map(
-										({
-											businessType,
-											externalReferenceCode,
-											label,
-											name,
-											required,
-										}) =>
-											({
-												businessType,
-												externalReferenceCode,
-												label: getLocalizableLabel(
-													objectDefinition.defaultLanguageId,
-													label,
-													name
-												),
-												name,
-												primaryKey: name === 'id',
-												required,
-												selected: false,
-											} as ObjectFieldNode)
-									),
-									selected: false,
-								});
-							}
-						});
-					};
-
-					updateObjectFolderObjectDefinitions({
-						linkedObjectDefinition: false,
-						objectDefinitions: objectDefinitionsFilteredByObjectFolder,
-					});
-
-					updateObjectFolderObjectDefinitions({
-						linkedObjectDefinition: true,
-						objectDefinitions: linkedObjectDefinitions,
-					});
-
-					return {
-						...objectFolder,
-						objectDefinitions: objectFolderWithObjectDefinitions,
-					};
-				})
+		const updateModelBuilderStructure = async () => {
+			const payload = await getUpdatedModelBuilderStructurePayload(
+				objectFolderName
 			);
 
 			dispatch({
+				payload,
+				type: TYPES.UPDATE_MODEL_BUILDER_STRUCTURE,
+			});
+
+			dispatch({
 				payload: {
-					objectFolders: objectFoldersWithObjectDefinitions,
-					selectedObjectFolder: currentObjectFolder,
+					isLoadingObjectFolder: false,
 				},
-				type: TYPES.CREATE_MODEL_BUILDER_STRUCTURE,
+				type: TYPES.SET_LOADING_OBJECT_FOLDER,
 			});
 		};
 
-		makeFetch();
+		updateModelBuilderStructure();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [objectFolderName]);
 
 	return (
 		<>
@@ -184,6 +110,7 @@ export default function EditObjectFolder({
 						dispatch({
 							payload: {
 								newObjectDefinition,
+								objectDefinitionNodes: nodes,
 								selectedObjectFolderName:
 									selectedObjectFolder.name,
 							},
@@ -211,16 +138,31 @@ export default function EditObjectFolder({
 				/>
 			)}
 
+			{showModal.publishObjectDefinitions && (
+				<ModalPublishObjectDefinitions
+					disableAutoClose={false}
+					dispatch={dispatch}
+					elements={elements}
+					handleOnClose={() => {
+						setShowModal((previousState) => ({
+							...previousState,
+							publishObjectDefinitions: false,
+						}));
+					}}
+				/>
+			)}
+
 			<EditObjectFolderHeader
-				hasDraftObjectDefinitions={false}
+				hasDraftObjectDefinitions={elements.some(
+					(element) =>
+						(element as FlowElement<ObjectDefinitionNodeData>).data
+							?.status?.code === 2
+				)}
 				selectedObjectFolder={selectedObjectFolder}
 				setShowModal={setShowModal}
 			/>
 			<div className="lfr-objects__model-builder-diagram-container">
-				<LeftSidebar
-					selectedObjectFolderName={selectedObjectFolder.name}
-					setShowModal={setShowModal}
-				/>
+				<LeftSidebar setShowModal={setShowModal} />
 
 				<Diagram setShowModal={setShowModal} />
 
@@ -232,6 +174,10 @@ export default function EditObjectFolder({
 							companyKeyValuePairs={companyKeyValuePairs}
 							siteKeyValuePairs={siteKeyValuePairs}
 						/>
+					)}
+
+					{rightSidebarType === 'objectFieldDetails' && (
+						<RightSideBar.ObjectFieldDetails />
 					)}
 
 					{rightSidebarType === 'objectRelationshipDetails' && (

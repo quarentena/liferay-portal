@@ -183,29 +183,29 @@ export default function FragmentList({
 									) : null}
 								</span>
 
-								<div className="page-audit__fragment__buttons">
-									<ClayButton
-										aria-label={sub(
-											Liferay.Language.get('select-x'),
-											name
-										)}
-										className="select-fragment-button"
-										displayType="unstyled"
-										onBlur={removeHighlightFromFragment}
-										onClick={() => {
-											selectFragment(fragment);
+								<ClayButton
+									aria-label={sub(
+										Liferay.Language.get('select-x'),
+										name
+									)}
+									className="select-fragment-button"
+									displayType="unstyled"
+									onBlur={removeHighlightFromFragment}
+									onClick={() => {
+										selectFragment(fragment);
 
-											removeHighlightFromFragment();
-										}}
-										onFocus={() =>
-											highlightFragment({
-												itemId,
-												name,
-												position,
-											})
-										}
-									/>
+										removeHighlightFromFragment();
+									}}
+									onFocus={() =>
+										highlightFragment({
+											itemId,
+											name,
+											position,
+										})
+									}
+								/>
 
+								<div className="p-2 page-audit__fragment__buttons">
 									<ClayButtonWithIcon
 										aria-label={sub(
 											Liferay.Language.get(

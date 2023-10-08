@@ -88,8 +88,11 @@ interface ModelBuilderModals
 		| 'deletionNotAllowed'
 		| 'unbindFromRootObjectDefinition'
 	> {
+	addObjectField: boolean;
 	addObjectRelationship: boolean;
+	deleteObjectRelationship: boolean;
 	editObjectDefinitionExternalReferenceCode: boolean;
+	publishObjectDefinitions: boolean;
 	redirectToEditObjectDefinitionDetails: boolean;
 }
 
@@ -129,6 +132,7 @@ interface ObjectAction {
 	objectDefinitionsRelationshipsURL: string;
 	parameters: ObjectActionParameters;
 	script?: string;
+	system: boolean;
 }
 
 interface ObjectActionParameters {
@@ -195,13 +199,13 @@ interface ObjectDefinitionNodeData
 	hasObjectDefinitionManagePermissionsResourcePermission: boolean;
 	hasObjectDefinitionUpdateResourcePermission: boolean;
 	hasObjectDefinitionViewResourcePermission: boolean;
-	hasSelfObjectRelationships: boolean;
 	linkedObjectDefinition: boolean;
-	objectFields: ObjectFieldNode[];
+	objectFields: ObjectFieldNodeRow[];
 	selected: boolean;
 }
 
 interface ObjectEntry {
+	actions: Actions;
 	creator: {
 		additionalName: string;
 		contentType: string;
@@ -286,7 +290,7 @@ type ObjectFieldFilterSetting = {
 		| string;
 };
 
-interface ObjectFieldNode extends Partial<ObjectField> {
+interface ObjectFieldNodeRow extends Partial<ObjectField> {
 	primaryKey: boolean;
 	required: boolean;
 	selected: boolean;
@@ -369,7 +373,7 @@ interface ObjectFolderItem {
 
 interface ObjectRelationship {
 	deletionType: string;
-	edge: boolean;
+	edge?: boolean;
 	id: number;
 	label: LocalizedValue<string>;
 	name: string;
@@ -380,6 +384,7 @@ interface ObjectRelationship {
 	readonly objectDefinitionName2: string;
 	parameterObjectFieldName?: string;
 	reverse: boolean;
+	system?: boolean;
 	type: ObjectRelationshipType;
 }
 
@@ -405,6 +410,36 @@ interface ObjectValidation {
 	}[];
 	outputType?: string;
 	script: string;
+	system?: boolean;
+}
+
+type ObjectWebLearnResources = {
+	'object-web': {
+		general: {
+			[key: string]: {
+				message: string;
+				url: string;
+			};
+		};
+	};
+};
+
+interface PickListItem {
+	externalReferenceCode: string;
+	id: number;
+	key: string;
+	name: string;
+	name_i18n: LocalizedValue<string>;
+}
+
+interface PickList {
+	actions: Actions;
+	externalReferenceCode: string;
+	id: number;
+	key: string;
+	listTypeEntries: PickListItem[];
+	name: string;
+	name_i18n: LocalizedValue<string>;
 }
 
 type ObjectValidationType = {
@@ -430,6 +465,7 @@ type TFilterOperators = {
 
 interface ViewObjectDefinitionsModals {
 	addObjectDefinition: boolean;
+	addObjectField: boolean;
 	addObjectFolder: boolean;
 	bindToRootObjectDefinition: boolean;
 	deleteObjectDefinition: boolean;

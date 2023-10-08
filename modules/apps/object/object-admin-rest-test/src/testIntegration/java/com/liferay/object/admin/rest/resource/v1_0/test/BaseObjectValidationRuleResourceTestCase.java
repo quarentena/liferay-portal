@@ -181,6 +181,7 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 
 		objectValidationRule.setEngine(regex);
 		objectValidationRule.setEngineLabel(regex);
+		objectValidationRule.setExternalReferenceCode(regex);
 		objectValidationRule.setObjectDefinitionExternalReferenceCode(regex);
 		objectValidationRule.setScript(regex);
 
@@ -192,6 +193,8 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 
 		Assert.assertEquals(regex, objectValidationRule.getEngine());
 		Assert.assertEquals(regex, objectValidationRule.getEngineLabel());
+		Assert.assertEquals(
+			regex, objectValidationRule.getExternalReferenceCode());
 		Assert.assertEquals(
 			regex,
 			objectValidationRule.getObjectDefinitionExternalReferenceCode());
@@ -1249,6 +1252,16 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals(
+					"externalReferenceCode", additionalAssertFieldName)) {
+
+				if (objectValidationRule.getExternalReferenceCode() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("name", additionalAssertFieldName)) {
 				if (objectValidationRule.getName() == null) {
 					valid = false;
@@ -1303,6 +1316,14 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 
 			if (Objects.equals("script", additionalAssertFieldName)) {
 				if (objectValidationRule.getScript() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("system", additionalAssertFieldName)) {
+				if (objectValidationRule.getSystem() == null) {
 					valid = false;
 				}
 
@@ -1507,6 +1528,19 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals(
+					"externalReferenceCode", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						objectValidationRule1.getExternalReferenceCode(),
+						objectValidationRule2.getExternalReferenceCode())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("id", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						objectValidationRule1.getId(),
@@ -1588,6 +1622,17 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 				if (!Objects.deepEquals(
 						objectValidationRule1.getScript(),
 						objectValidationRule2.getScript())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("system", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						objectValidationRule1.getSystem(),
+						objectValidationRule2.getSystem())) {
 
 					return false;
 				}
@@ -1874,6 +1919,52 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("externalReferenceCode")) {
+			Object object = objectValidationRule.getExternalReferenceCode();
+
+			String value = String.valueOf(object);
+
+			if (operator.equals("contains")) {
+				sb = new StringBundler();
+
+				sb.append("contains(");
+				sb.append(entityFieldName);
+				sb.append(",'");
+
+				if ((object != null) && (value.length() > 2)) {
+					sb.append(value.substring(1, value.length() - 1));
+				}
+				else {
+					sb.append(value);
+				}
+
+				sb.append("')");
+			}
+			else if (operator.equals("startswith")) {
+				sb = new StringBundler();
+
+				sb.append("startswith(");
+				sb.append(entityFieldName);
+				sb.append(",'");
+
+				if ((object != null) && (value.length() > 1)) {
+					sb.append(value.substring(0, value.length() - 1));
+				}
+				else {
+					sb.append(value);
+				}
+
+				sb.append("')");
+			}
+			else {
+				sb.append("'");
+				sb.append(value);
+				sb.append("'");
+			}
+
+			return sb.toString();
+		}
+
 		if (entityFieldName.equals("id")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -1992,6 +2083,11 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 			return sb.toString();
 		}
 
+		if (entityFieldName.equals("system")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		throw new IllegalArgumentException(
 			"Invalid entity field " + entityFieldName);
 	}
@@ -2044,11 +2140,14 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 				engine = StringUtil.toLowerCase(RandomTestUtil.randomString());
 				engineLabel = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
+				externalReferenceCode = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
 				id = RandomTestUtil.randomLong();
 				objectDefinitionExternalReferenceCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				objectDefinitionId = RandomTestUtil.randomLong();
 				script = StringUtil.toLowerCase(RandomTestUtil.randomString());
+				system = RandomTestUtil.randomBoolean();
 			}
 		};
 	}

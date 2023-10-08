@@ -69,6 +69,9 @@ public class ObjectValidationRuleDTOConverter
 					serviceBuilderObjectValidationRule.getEngine());
 				errorLabel = LocalizedMapUtil.getLanguageIdMap(
 					serviceBuilderObjectValidationRule.getErrorLabelMap());
+				externalReferenceCode =
+					serviceBuilderObjectValidationRule.
+						getExternalReferenceCode();
 				id =
 					serviceBuilderObjectValidationRule.
 						getObjectValidationRuleId();
@@ -78,21 +81,20 @@ public class ObjectValidationRuleDTOConverter
 					objectDefinition.getExternalReferenceCode();
 				objectDefinitionId =
 					serviceBuilderObjectValidationRule.getObjectDefinitionId();
-
-				if (FeatureFlagManagerUtil.isEnabled("LPS-187846")) {
-					objectValidationRuleSettings =
-						TransformUtil.transformToArray(
-							serviceBuilderObjectValidationRule.
-								getObjectValidationRuleSettings(),
-							objectValidationRuleSetting ->
-								_toObjectValidationRuleSetting(
-									objectValidationRuleSetting),
-							ObjectValidationRuleSetting.class);
-					outputType = ObjectValidationRule.OutputType.create(
-						serviceBuilderObjectValidationRule.getOutputType());
-				}
-
 				script = serviceBuilderObjectValidationRule.getScript();
+				system = serviceBuilderObjectValidationRule.getSystem();
+
+				setObjectValidationRuleSettings(
+					() -> TransformUtil.transformToArray(
+						serviceBuilderObjectValidationRule.
+							getObjectValidationRuleSettings(),
+						objectValidationRuleSetting ->
+							_toObjectValidationRuleSetting(
+								objectValidationRuleSetting),
+						ObjectValidationRuleSetting.class));
+				setOutputType(
+					() -> ObjectValidationRule.OutputType.create(
+						serviceBuilderObjectValidationRule.getOutputType()));
 			}
 		};
 	}

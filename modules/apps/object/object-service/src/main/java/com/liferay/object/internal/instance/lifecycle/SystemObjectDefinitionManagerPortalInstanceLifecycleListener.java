@@ -19,7 +19,7 @@ import com.liferay.object.internal.related.models.SystemObjectMtoMObjectRelatedM
 import com.liferay.object.internal.rest.context.path.RESTContextPathResolverImpl;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectFolder;
-import com.liferay.object.related.models.ObjectRelatedModelsProvider;
+import com.liferay.object.related.models.ObjectRelatedModelsProviderRegistrarHelper;
 import com.liferay.object.related.models.ObjectRelatedModelsProviderRegistry;
 import com.liferay.object.rest.context.path.RESTContextPathResolver;
 import com.liferay.object.scope.ObjectScopeProviderRegistry;
@@ -169,7 +169,7 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 					systemObjectDefinitionManager.getVersion())) {
 
 				ObjectFolder objectFolder =
-					_objectFolderLocalService.addOrGetUncategorizedObjectFolder(
+					_objectFolderLocalService.getOrAddUncategorizedObjectFolder(
 						companyId);
 
 				objectDefinition =
@@ -206,25 +206,6 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 				HashMapDictionaryBuilder.<String, Object>put(
 					"class.name", objectDefinition.getClassName()
 				).build());
-			_bundleContext.registerService(
-				ObjectRelatedModelsProvider.class,
-				new SystemObject1toMObjectRelatedModelsProviderImpl(
-					objectDefinition, _objectDefinitionLocalService,
-					_objectEntryLocalService, _objectFieldLocalService,
-					_objectRelationshipLocalService,
-					_persistedModelLocalServiceRegistry,
-					systemObjectDefinitionManager,
-					_systemObjectDefinitionManagerRegistry),
-				null);
-			_bundleContext.registerService(
-				ObjectRelatedModelsProvider.class,
-				new SystemObjectMtoMObjectRelatedModelsProviderImpl(
-					objectDefinition, _objectDefinitionLocalService,
-					_objectFieldLocalService, _objectRelationshipLocalService,
-					_persistedModelLocalServiceRegistry,
-					systemObjectDefinitionManager,
-					_systemObjectDefinitionManagerRegistry),
-				null);
 
 			JaxRsApplicationDescriptor jaxRsApplicationDescriptor =
 				systemObjectDefinitionManager.getJaxRsApplicationDescriptor();
@@ -239,6 +220,24 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 				HashMapDictionaryBuilder.<String, Object>put(
 					"model.class.name", objectDefinition.getClassName()
 				).build());
+
+			_objectRelatedModelsProviderRegistrarHelper.register(
+				_bundleContext, objectDefinition,
+				new SystemObjectMtoMObjectRelatedModelsProviderImpl(
+					objectDefinition, _objectDefinitionLocalService,
+					_objectFieldLocalService, _objectRelationshipLocalService,
+					_persistedModelLocalServiceRegistry,
+					systemObjectDefinitionManager,
+					_systemObjectDefinitionManagerRegistry));
+			_objectRelatedModelsProviderRegistrarHelper.register(
+				_bundleContext, objectDefinition,
+				new SystemObject1toMObjectRelatedModelsProviderImpl(
+					objectDefinition, _objectDefinitionLocalService,
+					_objectEntryLocalService, _objectFieldLocalService,
+					_objectRelationshipLocalService,
+					_persistedModelLocalServiceRegistry,
+					systemObjectDefinitionManager,
+					_systemObjectDefinitionManagerRegistry));
 		}
 		catch (PortalException portalException) {
 			_log.error(portalException);
@@ -283,6 +282,10 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 
 	@Reference
 	private ObjectFolderLocalService _objectFolderLocalService;
+
+	@Reference
+	private ObjectRelatedModelsProviderRegistrarHelper
+		_objectRelatedModelsProviderRegistrarHelper;
 
 	@Reference
 	private ObjectRelatedModelsProviderRegistry

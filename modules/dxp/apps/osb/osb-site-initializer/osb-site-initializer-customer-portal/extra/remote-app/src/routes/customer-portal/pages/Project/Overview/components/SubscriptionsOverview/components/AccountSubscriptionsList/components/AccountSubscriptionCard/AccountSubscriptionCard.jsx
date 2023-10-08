@@ -79,6 +79,10 @@ const AccountSubscriptionCard = ({
 		);
 
 		if (isPurchasedAndProvisioned) {
+			if (PRODUCT_DISPLAY_EXCEPTION.blankProducts.includes(productName)) {
+				return DisplayOnCard.Blank;
+			}
+
 			return PRODUCT_DISPLAY_EXCEPTION.purchasedProduct.includes(
 				productName
 			)
@@ -87,7 +91,10 @@ const AccountSubscriptionCard = ({
 		}
 
 		if (isPurchased) {
-			if (subscriptionType === 'Liferay Experience Cloud') {
+			if (
+				subscriptionType === 'Liferay Experience Cloud' ||
+				subscriptionType === 'Other'
+			) {
 				return PRODUCT_DISPLAY_EXCEPTION.blankProducts.includes(
 					productName
 				)
@@ -135,6 +142,13 @@ const AccountSubscriptionCard = ({
 		selectedAccountSubscriptionGroup?.name,
 		accountSubscription?.name
 	);
+
+	const isPurchased = SUBSCRIPTION_TYPES.Purchased.includes(
+		selectedAccountSubscriptionGroup?.name
+	);
+
+	const accountSubscriptionGroupName =
+		accountSubscription?.name === 'Designated Contact' || isPurchased;
 
 	return (
 		<ClayCard
@@ -223,7 +237,9 @@ const AccountSubscriptionCard = ({
 					{keysProvisionedContent && (
 						<div className="cp-account-subscription-card-info-bottom mb-0">
 							<p className="title-info-bottom">{`${i18n.translate(
-								'keys-provisioned'
+								accountSubscriptionGroupName
+									? 'purchased'
+									: 'keys-provisioned'
 							)}`}</p>
 
 							<p className="description-info-bottom">

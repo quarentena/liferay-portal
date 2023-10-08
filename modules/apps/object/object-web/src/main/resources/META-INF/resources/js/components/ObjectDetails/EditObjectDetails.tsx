@@ -13,17 +13,17 @@ import {
 import React, {useEffect, useState} from 'react';
 
 import ObjectManagementToolbar from '../ObjectManagementToolbar';
+import {AccountRestrictionContainer} from './AccountRestrictionContainer';
 import {ConfigurationContainer} from './ConfigurationContainer';
 import {EntryDisplayContainer} from './EntryDisplayContainer';
+import {ExternalDataSourceContainer} from './ExternalDataSourceContainer';
 import {ObjectDataContainer} from './ObjectDataContainer';
 import {ScopeContainer} from './ScopeContainer';
 import Sheet from './Sheet';
+import {TranslationsContainer} from './TranslationsContainer';
 import {useObjectDetailsForm} from './useObjectDetailsForm';
 
 import './ObjectDetails.scss';
-import {AccountRestrictionContainer} from './AccountRestrictionContainer';
-import {ExternalDataSourceContainer} from './ExternalDataSourceContainer';
-import {TranslationsContainer} from './TranslationsContainer';
 
 export type KeyValuePair = {
 	key: string;
@@ -115,11 +115,6 @@ export default function EditObjectDetails({
 		const validationErrors = handleValidate();
 
 		if (!Object.keys(validationErrors).length) {
-			delete values.objectRelationships;
-			delete values.objectActions;
-			delete values.objectLayouts;
-			delete values.objectViews;
-
 			let objectDefinition = values;
 
 			if (values.accountEntryRestricted) {
@@ -320,9 +315,7 @@ export default function EditObjectDetails({
 						</ClayPanel.Body>
 					</ClayPanel>
 
-					{(Liferay.FeatureFlags['LPS-167253']
-						? values.modifiable
-						: !values.system) && (
+					{values.modifiable && (
 						<ClayPanel
 							collapsable
 							defaultExpanded
@@ -362,21 +355,19 @@ export default function EditObjectDetails({
 						</ClayPanel.Body>
 					</ClayPanel>
 
-					{Liferay.FeatureFlags['LPS-172017'] && (
-						<ClayPanel
-							collapsable
-							defaultExpanded
-							displayTitle={Liferay.Language.get('translations')}
-							displayType="unstyled"
-						>
-							<ClayPanel.Body>
-								<TranslationsContainer
-									setValues={setValues}
-									values={values}
-								/>
-							</ClayPanel.Body>
-						</ClayPanel>
-					)}
+					<ClayPanel
+						collapsable
+						defaultExpanded
+						displayTitle={Liferay.Language.get('translations')}
+						displayType="unstyled"
+					>
+						<ClayPanel.Body>
+							<TranslationsContainer
+								setValues={setValues}
+								values={values}
+							/>
+						</ClayPanel.Body>
+					</ClayPanel>
 				</Sheet>
 			</div>
 		</>

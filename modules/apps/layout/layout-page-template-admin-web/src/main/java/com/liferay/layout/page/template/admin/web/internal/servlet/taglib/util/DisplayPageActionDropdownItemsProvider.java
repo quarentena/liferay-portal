@@ -97,6 +97,11 @@ public class DisplayPageActionDropdownItemsProvider {
 			dropdownGroupItem -> {
 				dropdownGroupItem.setDropdownItems(
 					DropdownItemListBuilder.add(
+						() ->
+							FeatureFlagManagerUtil.isEnabled("LPS-195263") &&
+							hasUpdatePermission,
+						_getChangeContentTypeActionUnsafeConsumer()
+					).add(
 						() -> hasUpdatePermission,
 						_getUpdateLayoutPageTemplateEntryPreviewActionUnsafeConsumer()
 					).add(
@@ -174,6 +179,16 @@ public class DisplayPageActionDropdownItemsProvider {
 	}
 
 	private UnsafeConsumer<DropdownItem, Exception>
+		_getChangeContentTypeActionUnsafeConsumer() {
+
+		return dropdownItem -> {
+			dropdownItem.putData("action", "changeContentType");
+			dropdownItem.setLabel(
+				LanguageUtil.get(_httpServletRequest, "change-content-type"));
+		};
+	}
+
+	private UnsafeConsumer<DropdownItem, Exception>
 		_getConfigureDisplayPageActionUnsafeConsumer() {
 
 		String currentURL = PortalUtil.getCurrentURL(_httpServletRequest);
@@ -223,6 +238,7 @@ public class DisplayPageActionDropdownItemsProvider {
 					"layoutPageTemplateEntryId",
 					_layoutPageTemplateEntry.getLayoutPageTemplateEntryId()
 				).buildString());
+			dropdownItem.setDisabled(_layoutPageTemplateEntry.isDraft());
 			dropdownItem.setIcon("copy");
 			dropdownItem.setLabel(
 				LanguageUtil.get(_httpServletRequest, "make-a-copy"));
@@ -330,7 +346,8 @@ public class DisplayPageActionDropdownItemsProvider {
 				HttpComponentsUtil.addParameters(
 					PortalUtil.getLayoutFullURL(_draftLayout, _themeDisplay),
 					"p_l_back_url", _themeDisplay.getURLCurrent(),
-					"p_l_back_url_title", portletDisplay.getTitle(), "p_l_mode",
+					"p_l_back_url_title",
+					portletDisplay.getPortletDisplayName(), "p_l_mode",
 					Constants.EDIT));
 			dropdownItem.setIcon("pencil");
 			dropdownItem.setLabel(

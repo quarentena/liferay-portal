@@ -85,7 +85,6 @@ public interface CommercePriceEntryLocalService
 	public CommercePriceEntry addCommercePriceEntry(
 		CommercePriceEntry commercePriceEntry);
 
-	@Indexable(type = IndexableType.REINDEX)
 	public CommercePriceEntry addCommercePriceEntry(
 			String externalReferenceCode, long cProductId,
 			String cpInstanceUuid, long commercePriceListId, BigDecimal price,
@@ -148,7 +147,8 @@ public interface CommercePriceEntryLocalService
 		throws PortalException;
 
 	public void deleteCommercePriceEntries(
-		String cpInstanceUuid, BigDecimal quantity, String unitOfMeasureKey);
+			String cpInstanceUuid, BigDecimal quantity, String unitOfMeasureKey)
+		throws PortalException;
 
 	/**
 	 * Deletes the commerce price entry from the database. Also notifies the appropriate model listeners.

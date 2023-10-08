@@ -1051,6 +1051,12 @@ components:
                     format: uri
                     readOnly: true
                     type: string
+                userGroupBriefs:
+                    description:
+                        A list of userGroups information.
+                    items:
+                        $ref: "#/components/schemas/UserGroupBrief"
+                    type: array
             type: object
         CreatorStatistics:
             # @review
@@ -2314,6 +2320,12 @@ components:
                         The last time the article's content or metadata changed.
                     format: date-time
                     readOnly: true
+                    type: string
+                datePublished:
+                    # @review
+                    description:
+                        The article's scheduled publication date.
+                    format: date-time
                     type: string
                 description:
                     description:
@@ -5348,6 +5360,22 @@ components:
                     # @review
                     description:
                         The localized submission of URL type.
+            type: object
+        UserGroupBrief:
+            description:
+                The author's user groups information.
+            properties:
+                id:
+                    description:
+                        The ID of the user group.
+                    format: int64
+                    readOnly: true
+                    type: integer
+                name:
+                    description:
+                        The name of the user group.
+                    readOnly: true
+                    type: string
             type: object
         UtilityPageTemplate:
             description:

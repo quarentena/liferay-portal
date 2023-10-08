@@ -5,6 +5,7 @@
 
 package com.liferay.layout.content.page.editor.web.internal.portlet.action;
 
+import com.liferay.layout.constants.LayoutTypeSettingsConstants;
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorPortletKeys;
 import com.liferay.layout.content.page.editor.web.internal.util.layout.structure.LayoutStructureUtil;
 import com.liferay.layout.helper.LayoutCopyHelper;
@@ -25,7 +26,7 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
-import java.util.Date;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -91,6 +92,23 @@ public class PublishLayoutPageTemplateEntryMVCActionCommand
 		MultiSessionMessages.add(actionRequest, key);
 	}
 
+	private String _copySEOTypeSettingsUnicodeProperties(
+		UnicodeProperties previousLayouTypeSettingsUnicodeProperties,
+		UnicodeProperties layouTypeSettingsUnicodeProperties) {
+
+		for (Map.Entry<String, String> entry :
+				previousLayouTypeSettingsUnicodeProperties.entrySet()) {
+
+			String key = entry.getKey();
+
+			if (key.startsWith("mapped-") || key.startsWith("sitemap-")) {
+				layouTypeSettingsUnicodeProperties.put(key, entry.getValue());
+			}
+		}
+
+		return layouTypeSettingsUnicodeProperties.toString();
+	}
+
 	private LayoutPageTemplateEntry _publishLayoutPageTemplateEntry(
 			Layout draftLayout, Layout layout)
 		throws Exception {
@@ -98,17 +116,23 @@ public class PublishLayoutPageTemplateEntryMVCActionCommand
 		LayoutStructureUtil.deleteMarkedForDeletionItems(
 			draftLayout.getGroupId(), draftLayout.getPlid());
 
+		UnicodeProperties previousLayouTypeSettingsUnicodeProperties =
+			layout.getTypeSettingsProperties();
+
 		_layoutCopyHelper.copyLayoutContent(draftLayout, layout);
 
 		draftLayout = _layoutLocalService.fetchLayout(draftLayout.getPlid());
 
-		UnicodeProperties typeSettingsUnicodeProperties =
+		UnicodeProperties draftLayoutypeSettingsUnicodeProperties =
 			draftLayout.getTypeSettingsProperties();
 
-		typeSettingsUnicodeProperties.put("published", Boolean.TRUE.toString());
-		typeSettingsUnicodeProperties.remove("designConfigurationModified");
+		draftLayoutypeSettingsUnicodeProperties.remove(
+			LayoutTypeSettingsConstants.KEY_DESIGN_CONFIGURATION_MODIFIED);
+		draftLayoutypeSettingsUnicodeProperties.put(
+			LayoutTypeSettingsConstants.KEY_PUBLISHED, Boolean.TRUE.toString());
 
-		draftLayout.setTypeSettingsProperties(typeSettingsUnicodeProperties);
+		draftLayout.setTypeSettingsProperties(
+			draftLayoutypeSettingsUnicodeProperties);
 
 		draftLayout.setStatus(WorkflowConstants.STATUS_APPROVED);
 
@@ -122,9 +146,13 @@ public class PublishLayoutPageTemplateEntryMVCActionCommand
 			layoutPageTemplateEntry.getLayoutPageTemplateEntryId(),
 			WorkflowConstants.STATUS_APPROVED);
 
+		layout = _layoutLocalService.fetchLayout(layout.getPlid());
+
 		_layoutLocalService.updateLayout(
 			layout.getGroupId(), layout.isPrivateLayout(), layout.getLayoutId(),
-			new Date());
+			_copySEOTypeSettingsUnicodeProperties(
+				previousLayouTypeSettingsUnicodeProperties,
+				layout.getTypeSettingsProperties()));
 
 		return layoutPageTemplateEntry;
 	}

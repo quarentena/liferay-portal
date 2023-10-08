@@ -5,6 +5,7 @@
 
 package com.liferay.headless.builder.instance.lifecycle.test;
 
+import com.liferay.headless.builder.application.APIApplication;
 import com.liferay.headless.builder.test.BaseTestCase;
 import com.liferay.headless.builder.util.APIApplicationTestUtil;
 import com.liferay.object.model.ObjectEntry;
@@ -34,7 +35,7 @@ import org.osgi.util.promise.Promise;
 /**
  * @author Carlos Correa
  */
-@FeatureFlags({"LPS-167253", "LPS-184413", "LPS-186757"})
+@FeatureFlags("LPS-178642")
 public class APIApplicationPublisherPortalInstanceLifecycleListenerTest
 	extends BaseTestCase {
 
@@ -111,9 +112,12 @@ public class APIApplicationPublisherPortalInstanceLifecycleListenerTest
 						"path",
 						StringPool.FORWARD_SLASH + RandomTestUtil.randomString()
 					).put(
-						"retrieveType", "collection"
+						"retrieveType",
+						APIApplication.Endpoint.RetrieveType.COLLECTION.
+							getValue()
 					).put(
-						"scope", "company"
+						"scope",
+						APIApplication.Endpoint.Scope.COMPANY.getValue()
 					))
 			).put(
 				"apiApplicationToAPISchemas",

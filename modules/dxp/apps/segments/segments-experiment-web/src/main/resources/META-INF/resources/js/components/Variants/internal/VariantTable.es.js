@@ -102,14 +102,18 @@ function VariantTable({
 						)}
 
 						{experiment.status.value === STATUS_DRAFT && (
-							<ClayTable.Cell className="sr-only">
-								{Liferay.Language.get('traffic')}
+							<ClayTable.Cell>
+								<span className="sr-only">
+									{Liferay.Language.get('traffic')}
+								</span>
 							</ClayTable.Cell>
 						)}
 
 						{publishable && (
-							<ClayTable.Cell className="sr-only">
-								{Liferay.Language.get('actions')}
+							<ClayTable.Cell>
+								<span className="sr-only">
+									{Liferay.Language.get('actions')}
+								</span>
 							</ClayTable.Cell>
 						)}
 					</ClayTable.Row>
@@ -144,15 +148,15 @@ function VariantTable({
 											)
 										}
 									>
-										{winner && (
-											<ClayIcon
-												className="mr-1 text-success"
-												symbol="check-circle-full"
-											/>
-										)}
-
 										{control ? (
 											<span className="align-items-center d-flex">
+												{winner && (
+													<ClayIcon
+														className="mr-1 text-success"
+														symbol="check-circle-full"
+													/>
+												)}
+
 												{name}
 
 												<ClayIcon
@@ -269,6 +273,7 @@ function VariantTable({
 									<ClayTable.Cell>
 										<ClayButton
 											borderless
+											data-testid={`publish-button-${name}`}
 											data-title={Liferay.Language.get(
 												'publish'
 											)}

@@ -5,8 +5,6 @@
 
 package com.liferay.headless.builder.internal.model.listener;
 
-import com.liferay.headless.builder.application.APIApplication;
-import com.liferay.headless.builder.application.provider.APIApplicationProvider;
 import com.liferay.headless.builder.application.publisher.APIApplicationPublisher;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
@@ -231,16 +229,9 @@ public class APIApplicationPublisherObjectEntryModelListener
 							apiApplicationObjectEntry.getCompanyId());
 					}
 					else {
-						APIApplication apiApplication =
-							_apiApplicationProvider.fetchAPIApplication(
-								(String)values.get("baseURL"),
-								apiApplicationObjectEntry.getCompanyId());
-
-						if (apiApplication == null) {
-							return null;
-						}
-
-						_apiApplicationPublisher.publish(apiApplication);
+						_apiApplicationPublisher.publish(
+							(String)values.get("baseURL"),
+							apiApplicationObjectEntry.getCompanyId());
 					}
 				}
 
@@ -250,9 +241,6 @@ public class APIApplicationPublisherObjectEntryModelListener
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		APIApplicationPublisherObjectEntryModelListener.class);
-
-	@Reference
-	private APIApplicationProvider _apiApplicationProvider;
 
 	@Reference
 	private APIApplicationPublisher _apiApplicationPublisher;

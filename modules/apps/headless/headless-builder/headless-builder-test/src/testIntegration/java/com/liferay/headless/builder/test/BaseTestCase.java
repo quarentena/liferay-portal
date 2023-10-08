@@ -14,6 +14,8 @@ import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
+import java.io.File;
+
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -43,7 +45,7 @@ public abstract class BaseTestCase {
 	@Before
 	public void setUp() throws Exception {
 
-		// TODO Delete the bundle deployment when the FF LPS-184413 is removed
+		// TODO Delete the bundle deployment when the FF LPS-178642 is removed
 
 		Bundle testBundle = FrameworkUtil.getBundle(BaseTestCase.class);
 
@@ -53,6 +55,14 @@ public abstract class BaseTestCase {
 			if (Objects.equals(
 					bundle.getSymbolicName(),
 					"com.liferay.headless.builder.impl")) {
+
+				File processedFile = bundle.getDataFile(
+					".com.liferay.headless.builder.internal.batch.headless." +
+						"builder.batch.engine.data.json.0.processed");
+
+				if ((processedFile != null) && processedFile.exists()) {
+					processedFile.delete();
+				}
 
 				CompletableFuture<Void> completableFuture =
 					_batchEngineUnitProcessor.processBatchEngineUnits(

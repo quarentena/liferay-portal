@@ -10,6 +10,7 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.VerticalCard;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItemListBuilder;
+import com.liferay.layout.constants.LayoutTypeSettingsConstants;
 import com.liferay.layout.page.template.admin.web.internal.security.permission.resource.LayoutPageTemplateEntryPermission;
 import com.liferay.layout.page.template.admin.web.internal.servlet.taglib.util.MasterLayoutActionDropdownItemsProvider;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
@@ -108,8 +109,8 @@ public class MasterLayoutVerticalCard
 				PortalUtil.getLayoutFullURL(
 					layout.fetchDraftLayout(), _themeDisplay),
 				"p_l_back_url", _themeDisplay.getURLCurrent(),
-				"p_l_back_url_title", portletDisplay.getTitle(), "p_l_mode",
-				Constants.EDIT);
+				"p_l_back_url_title", portletDisplay.getPortletDisplayName(),
+				"p_l_mode", Constants.EDIT);
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
@@ -153,7 +154,8 @@ public class MasterLayoutVerticalCard
 		}
 
 		if (!GetterUtil.getBoolean(
-				draftLayout.getTypeSettingsProperty("published"))) {
+				draftLayout.getTypeSettingsProperty(
+					LayoutTypeSettingsConstants.KEY_PUBLISHED))) {
 
 			return LabelItemListBuilder.add(
 				labelItem -> labelItem.setStatus(WorkflowConstants.STATUS_DRAFT)

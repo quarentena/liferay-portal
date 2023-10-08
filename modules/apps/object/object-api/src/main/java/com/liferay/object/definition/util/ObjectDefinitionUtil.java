@@ -9,6 +9,7 @@ import com.liferay.batch.engine.unit.BatchEngineUnitThreadLocal;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PortalRunMode;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.util.PortalInstances;
 
 import java.util.Map;
 import java.util.Objects;
@@ -31,7 +32,7 @@ public class ObjectDefinitionUtil {
 	public static boolean isAllowedModifiableSystemObjectDefinitionName(
 		String name) {
 
-		if (PortalRunMode.isTestMode() && Objects.equals(name, "Test")) {
+		if (PortalRunMode.isTestMode() && StringUtil.startsWith(name, "Test")) {
 			return true;
 		}
 
@@ -52,7 +53,9 @@ public class ObjectDefinitionUtil {
 	}
 
 	public static boolean isInvokerBundleAllowed() {
-		if (PortalRunMode.isTestMode()) {
+		if (PortalInstances.isCurrentCompanyInDeletionProcess() ||
+			PortalRunMode.isTestMode()) {
+
 			return true;
 		}
 
@@ -104,6 +107,9 @@ public class ObjectDefinitionUtil {
 			"Bookmark", "/bookmarks"
 		).put(
 			"FDSAction", "/data-set-manager/actions"
+		).put(
+			"FDSClientExtensionFilter",
+			"/data-set-manager/client-extension-filters"
 		).put(
 			"FDSDateFilter", "/data-set-manager/date-filters"
 		).put(

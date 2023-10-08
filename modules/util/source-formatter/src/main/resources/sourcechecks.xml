@@ -613,10 +613,6 @@
 			<category name="Upgrade" />
 			<description name="Replace setGroupPermissions and setGuestPermissions by new implementation" />
 		</check>
-		<check name="JavaUpgradeOnAfterUpdateParameterCheck">
-			<category name="Upgrade" />
-			<description name="Add new parameter in method onAfterUpdate for classes extending the BaseModelListener" />
-		</check>
 		<check name="MethodCallsOrderCheck">
 			<category name="Styling" />
 			<description name="Sorts method calls for certain object (for example, `put` calls in `java.util.HashMap`)." />
@@ -974,6 +970,10 @@
 		<check name="JSONStylingCheck">
 			<category name="Styling" />
 			<description name="Applies rules to enforce consistency in code style." />
+		</check>
+		<check name="JSONUpgradeLiferayThemePackageJSONCheck">
+			<category name="Upgrade" />
+			<description name="Upgrade the `package.json` of a Liferay Theme to make it compatible with Liferay 7.4" />
 		</check>
 		<check name="JSONValidationCheck">
 			<category name="Bug Prevention" />
@@ -1356,7 +1356,6 @@
 		<check name="PoshiPauseUsageCheck">
 			<category name="Performance" />
 			<description name="Finds missing comment with JIRA project when using `Pause`." />
-			<property name="enabled" value="false" />
 		</check>
 		<check name="PoshiSmokeTestCheck">
 			<category name="Bug Prevention" />
@@ -1626,6 +1625,11 @@
 			<description name="Replaces with `compileInclude` the configuration attribute for dependencies in `build.gradle` that are listed at `Include-Resource` property at `bnd.bnd` associated file." />
 			<weight>2</weight>
 		</check>
+		<check name="UpgradeJavaAccountPortletKeysCheck">
+			<category name="Upgrade" />
+			<description name="Replace constants of CommerceAccountPortletKeys by constants of AccountPortletKeys" />
+			<weight>2</weight>
+		</check>
 		<check name="UpgradeJavaAddAddressMethodCheck">
 			<category name="Upgrade" />
 			<description name="Fill the new parameter of the method 'addAddress' of AddressLocalService, AddressLocalServiceUtil, AddressService and AddressServiceUtil" />
@@ -1651,6 +1655,14 @@
 			<category name="Upgrade" />
 			<description name="Replaces methods referring to class `AssetEntryAssetCategory` in class `AssetCategoryLocalService` with equivalent methods in class `AssetEntryAssetCategoryRelLocalService`." />
 		</check>
+		<check name="UpgradeJavaBaseModelListenerCheck">
+			<category name="Upgrade" />
+			<description name="Add parameter in the onAfterUpdate and onBeforeUpdate methods of the BaseModelListener class" />
+		</check>
+		<check name="UpgradeJavaBasePanelAppExtendedClassesCheck">
+			<category name="Upgrade" />
+			<description name="Replace the setPortlet method with getPortlet" />
+		</check>
 		<check name="UpgradeJavaCaptchaUtilCheck">
 			<category name="Upgrade" />
 			<description name="Replaces the usages of `CaptchaUti.serveImage(resourceRequest, resourceResponse)` with `CaptchaUti.serveImage(httpServletRequest, httpServletResponse)`" />
@@ -1669,6 +1681,10 @@
 			<category name="Upgrade" />
 			<description name="Replaces the old methods of class `CommerceCountryService` with the new equivalents in the `CountryService` class." />
 			<weight>1</weight>
+		</check>
+		<check name="UpgradeJavaCommerceOrderItemServicesCheck">
+			<category name="Upgrade" />
+			<description name="Fill the new parameters of the method `addCommerceOrderItem` and `deleteCommerceOrderItems` of `CommerceOrderItemLocalService`, `CommerceOrderItemLocalServiceUtil`, `CommerceOrderItemService` and `CommerceOrderItemServiceUtil` classes" />
 		</check>
 		<check name="UpgradeJavaCommerceRegionCheck">
 			<category name="Upgrade" />
@@ -1705,6 +1721,15 @@
 			<description name="Reorder parameters in the getItems and getItemsCount methods of the FDSDataProvider interface" />
 			<weight>1</weight>
 		</check>
+		<check name="UpgradeJavaFetchAssetCategoryByExternalReferenceCodeCheck">
+			<category name="Upgrade" />
+			<description name="Adds a message about the breaking change made on method `fetchAssetCategoryByExternalReferenceCode` of `AssetCategoryLocalService` and `AssetCategoryLocalServiceUtil` classes." />
+		</check>
+		<check name="UpgradeJavaGetFDSTableSchemaParameterCheck">
+			<category name="Upgrade" />
+			<description name="Fill the new parameter of the method 'getFDSTableSchema' of 'FDSTableSchema'" />
+			<weight>1</weight>
+		</check>
 		<check name="UpgradeJavaGetFileMethodCheck">
 			<category name="Upgrade" />
 			<description name="Run code migration of method from 'getFile' to 'getFileAsStream', and include a method 'FileUtil.createTempFile'" />
@@ -1718,6 +1743,10 @@
 			<category name="Upgrade" />
 			<description name="Replace getLayoutDisplayPageProvider by getLayoutDisplayPageProviderByClassName" />
 			<weight>2</weight>
+		</check>
+		<check name="UpgradeJavaGetLeftCategoryIdMethodCheck">
+			<category name="Upgrade" />
+			<description name="Replace the AssetCategory's method `getLeftCategoryId` by `getCategoryId` " />
 		</check>
 		<check name="UpgradeJavaIndexerCheck">
 			<category name="Upgrade" />
@@ -1794,6 +1823,10 @@
 		<check name="UpgradeSCSSMixinsCheck">
 			<category name="Upgrade" />
 			<description name="Replace outdated mixins (e.g. media-query, respond-to, etc.)" />
+		</check>
+		<check name="UpgradeSCSSNodeSassPatternsCheck">
+			<category name="Upgrade" />
+			<description name="Run code migration of Dart Sass deprecated patterns (e.g., the division operation using the '/' character, the interpolation syntax, etc.)" />
 		</check>
 		<check name="UpgradeSetResultsSetTotalMethodCheck">
 			<category name="Upgrade" />

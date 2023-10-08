@@ -8,7 +8,9 @@ definition {
 	setUp {
 		TestCase.setUpPortalInstance();
 
-		User.firstLoginPG();
+		task ("Given signed into portal as admin") {
+			User.firstLoginPG();
+		}
 	}
 
 	tearDown {

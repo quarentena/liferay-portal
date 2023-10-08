@@ -32,7 +32,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 /**
  * @author Sergio Jiménez del Coso
  */
-@FeatureFlags({"LPS-167253", "LPS-184413", "LPS-186757"})
+@FeatureFlags("LPS-178642")
 public class APIPropertyRelevantObjectEntryModelListenerTest
 	extends BaseTestCase {
 
@@ -224,6 +224,95 @@ public class APIPropertyRelevantObjectEntryModelListenerTest
 			JSONUtil.putAll(
 				JSONUtil.put("externalReferenceCode", externalReferenceCode1),
 				JSONUtil.put("externalReferenceCode", externalReferenceCode2)
+			).toString(),
+			apiPropertiesJSONArray.toString(), JSONCompareMode.LENIENT);
+	}
+
+	@Test
+	public void testRemoveAPIProperty() throws Exception {
+		JSONObject apiApplicationJSONObject = HTTPTestUtil.invokeToJSONObject(
+			JSONUtil.put(
+				"applicationStatus", "published"
+			).put(
+				"baseURL", StringUtil.toLowerCase(RandomTestUtil.randomString())
+			).put(
+				"title", RandomTestUtil.randomString()
+			).toString(),
+			"headless-builder/applications", Http.Method.POST);
+
+		String externalReferenceCode1 = RandomTestUtil.randomString();
+		String externalReferenceCode2 = RandomTestUtil.randomString();
+
+		JSONObject apiSchemaJSONObject = HTTPTestUtil.invokeToJSONObject(
+			JSONUtil.put(
+				"apiSchemaToAPIProperties",
+				JSONUtil.putAll(
+					JSONUtil.put(
+						"description", RandomTestUtil.randomString()
+					).put(
+						"externalReferenceCode", externalReferenceCode1
+					).put(
+						"name", RandomTestUtil.randomString()
+					).put(
+						"objectFieldERC",
+						_objectField1.getExternalReferenceCode()
+					),
+					JSONUtil.put(
+						"description", RandomTestUtil.randomString()
+					).put(
+						"externalReferenceCode", externalReferenceCode2
+					).put(
+						"name", RandomTestUtil.randomString()
+					).put(
+						"objectFieldERC",
+						_objectField2.getExternalReferenceCode()
+					))
+			).put(
+				"mainObjectDefinitionERC",
+				_objectDefinition.getExternalReferenceCode()
+			).put(
+				"name", RandomTestUtil.randomString()
+			).put(
+				"r_apiApplicationToAPISchemas_c_apiApplicationId",
+				apiApplicationJSONObject.getLong("id")
+			).toString(),
+			"headless-builder/schemas", Http.Method.POST);
+
+		apiSchemaJSONObject = HTTPTestUtil.invokeToJSONObject(
+			JSONUtil.put(
+				"apiSchemaToAPIProperties",
+				JSONUtil.put(
+					JSONUtil.put(
+						"description", RandomTestUtil.randomString()
+					).put(
+						"externalReferenceCode", externalReferenceCode1
+					).put(
+						"name", RandomTestUtil.randomString()
+					).put(
+						"objectFieldERC",
+						_objectField1.getExternalReferenceCode()
+					))
+			).put(
+				"mainObjectDefinitionERC",
+				_objectDefinition.getExternalReferenceCode()
+			).put(
+				"name", RandomTestUtil.randomString()
+			).put(
+				"r_apiApplicationToAPISchemas_c_apiApplicationId",
+				apiApplicationJSONObject.getLong("id")
+			).toString(),
+			"headless-builder/schemas/by-external-reference-code/" +
+				apiSchemaJSONObject.getString("externalReferenceCode"),
+			Http.Method.PUT);
+
+		JSONArray apiPropertiesJSONArray = apiSchemaJSONObject.getJSONArray(
+			"apiSchemaToAPIProperties");
+
+		Assert.assertEquals(1, apiPropertiesJSONArray.length());
+
+		JSONAssert.assertEquals(
+			JSONUtil.putAll(
+				JSONUtil.put("externalReferenceCode", externalReferenceCode1)
 			).toString(),
 			apiPropertiesJSONArray.toString(), JSONCompareMode.LENIENT);
 	}

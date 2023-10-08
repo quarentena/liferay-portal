@@ -174,9 +174,10 @@ export default function SelfObjectRelationshipEdge({
 										onClick={() => {
 											dispatch({
 												payload: {
-													edges,
-													nodes,
-													selectedObjectRelationshipId: selfObjectRelationship.id.toString(),
+													objectDefinitionNodes: nodes,
+													objectRelationshipEdges: edges,
+													selectedObjectRelationshipId:
+														selfObjectRelationship.id,
 												},
 												type:
 													TYPES.SET_SELECTED_OBJECT_RELATIONSHIP_EDGE,
@@ -219,9 +220,9 @@ export default function SelfObjectRelationshipEdge({
 					onClick={() => {
 						dispatch({
 							payload: {
-								edges,
-								nodes,
-								selectedObjectRelationshipId: objectRelationshipId.toString(),
+								objectDefinitionNodes: nodes,
+								objectRelationshipEdges: edges,
+								selectedObjectRelationshipId: objectRelationshipId,
 							},
 							type: TYPES.SET_SELECTED_OBJECT_RELATIONSHIP_EDGE,
 						});

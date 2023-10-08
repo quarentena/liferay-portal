@@ -244,6 +244,53 @@ definition {
 		}
 	}
 
+	@description = "This is a test for LPS-194374. Using Keyboard navigation it is possible to access and use the Language Selector."
+	@priority = 3
+	test ChangeLocaleViaKeyboard {
+		task ("Given a page creator has a content page") {
+			JSONLayout.addPublicLayout(
+				groupName = ${randomSiteName},
+				layoutName = "Test Page Name",
+				type = "content");
+		}
+
+		task ("When the page creator accesses to the page editor") {
+			ContentPagesNavigator.openEditContentPage(
+				pageName = "Test Page Name",
+				siteName = ${randomSiteName});
+		}
+
+		task ("Then the page creator could change the locale via keyboard") {
+			KeyPress(
+				locator1 = "PageEditor#EXPERIENCE_SELECTOR",
+				value1 = "\TAB");
+
+			KeyPress(
+				locator1 = "//button[contains(@aria-haspopup,'listbox')][.//*[name()='svg'][contains(@class,'lexicon-icon-en-us')]]",
+				value1 = "\ENTER");
+
+			KeyPress(
+				locator1 = "//button[contains(@aria-haspopup,'listbox')][.//*[name()='svg'][contains(@class,'lexicon-icon-en-us')]]",
+				value1 = "\DOWN");
+
+			KeyPress(
+				locator1 = "//button[contains(@aria-haspopup,'listbox')][.//*[name()='svg'][contains(@class,'lexicon-icon-en-us')]]",
+				value1 = "\DOWN");
+
+			KeyPress(
+				locator1 = "//button[contains(@aria-haspopup,'listbox')][.//*[name()='svg'][contains(@class,'lexicon-icon-en-us')]]",
+				value1 = "\DOWN");
+
+			KeyPress(
+				locator1 = "//button[contains(@aria-haspopup,'listbox')][.//*[name()='svg'][contains(@class,'lexicon-icon-en-us')]]",
+				value1 = "\ENTER");
+
+			AssertVisible(
+				key_currentLocale = StringUtil.lowerCase("zh-CN"),
+				locator1 = "Button#TRANSLATIONS_LOCALIZATION");
+		}
+	}
+
 	@description = "This is a test for LPS-194375. Using Keyboard navigation it is possible to access and use the Page Editor filter."
 	@priority = 3
 	test FilterDisplayedAssetsViaKeyboard {
@@ -293,18 +340,15 @@ definition {
 				value1 = "\ENTER");
 
 			KeyPress(
-				key_menuItem = "All Content",
-				locator1 = "MenuItem#ANY_MENU_ITEM",
+				locator1 = "PageEditor#PAGE_CONTENTS_CONTENT_FILTER_TOGGLE",
 				value1 = "\DOWN");
 
 			KeyPress(
-				key_menuItem = "Web Content Article",
-				locator1 = "MenuItem#ANY_MENU_ITEM",
+				locator1 = "PageEditor#PAGE_CONTENTS_CONTENT_FILTER_TOGGLE",
 				value1 = "\DOWN");
 
 			KeyPress(
-				key_menuItem = "Inline Text",
-				locator1 = "MenuItem#ANY_MENU_ITEM",
+				locator1 = "PageEditor#PAGE_CONTENTS_CONTENT_FILTER_TOGGLE",
 				value1 = "\ENTER");
 
 			AssertTextEquals(
@@ -329,13 +373,11 @@ definition {
 				value1 = "\ENTER");
 
 			KeyPress(
-				key_menuItem = "Inline Text",
-				locator1 = "MenuItem#ANY_MENU_ITEM",
+				locator1 = "PageEditor#PAGE_CONTENTS_CONTENT_FILTER_TOGGLE",
 				value1 = "\UP");
 
 			KeyPress(
-				key_menuItem = "Web Content Article",
-				locator1 = "MenuItem#ANY_MENU_ITEM",
+				locator1 = "PageEditor#PAGE_CONTENTS_CONTENT_FILTER_TOGGLE",
 				value1 = "\ENTER");
 
 			AssertTextEquals(
@@ -360,20 +402,16 @@ definition {
 				value1 = "\ENTER");
 
 			KeyPress(
-				key_menuItem = "Web Content Article",
-				locator1 = "MenuItem#ANY_MENU_ITEM",
+				locator1 = "PageEditor#PAGE_CONTENTS_CONTENT_FILTER_TOGGLE",
 				value1 = "\UP");
 
 			KeyPress(
-				key_menuItem = "All Content",
-				locator1 = "MenuItem#ANY_MENU_ITEM",
+				locator1 = "PageEditor#PAGE_CONTENTS_CONTENT_FILTER_TOGGLE",
 				value1 = "\ENTER");
 
 			AssertTextEquals(
 				locator1 = "PageEditor#PAGE_CONTENTS_CONTENT_FILTER_TOGGLE",
-				value1 = "Web Content Article");
-
-			PageEditor.selectContentFilter(filter = "All Content");
+				value1 = "All Content");
 
 			for (var itemName : list "Heading Example,Web Content Title") {
 				AssertVisible(

@@ -1,7 +1,7 @@
 @component-name = "portal-headless"
 definition {
 
-	property custom.properties = "feature.flag.LPS-184413=true${line.separator}feature.flag.LPS-167253=true${line.separator}feature.flag.LPS-178642=true${line.separator}feature.flag.LPS-186757=true";
+	property custom.properties = "feature.flag.LPS-167253=true${line.separator}feature.flag.LPS-178642=true";
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.component.names = "Object";
@@ -10,7 +10,7 @@ definition {
 	setUp {
 		TestCase.setUpPortalInstance();
 
-		User.firstLoginUI();
+		User.firstLoginPG();
 	}
 
 	tearDown {
@@ -165,12 +165,15 @@ definition {
 		}
 
 		task ("When I create an endpoint with id of API application and path not start with '/'") {
+			var applicationId = JSONPathUtil.getIdValue(response = ${response});
+
 			ApplicationsMenu.gotoPortlet(
 				category = "Object",
 				panel = "Control Panel",
 				portlet = "API Endpoints");
 
 			APIBuilderUI.createAPIEndpoint(
+				applicationId = ${applicationId},
 				name = "testEndpoint",
 				path = "testEndpoint");
 		}

@@ -9,10 +9,12 @@ import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.constants.LockedLayoutType;
 import com.liferay.layout.manager.LayoutLockManager;
 import com.liferay.layout.model.LockedLayout;
+import com.liferay.layout.model.LockedLayoutOrder;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntryTable;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalService;
+import com.liferay.layout.util.comparator.LayoutNameComparator;
 import com.liferay.layout.utility.page.kernel.LayoutUtilityPageEntryViewRenderer;
 import com.liferay.layout.utility.page.kernel.LayoutUtilityPageEntryViewRendererRegistryUtil;
 import com.liferay.layout.utility.page.model.LayoutUtilityPageEntry;
@@ -23,6 +25,9 @@ import com.liferay.petra.sql.dsl.DSLFunctionFactoryUtil;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.base.BaseTable;
 import com.liferay.petra.sql.dsl.expression.Predicate;
+import com.liferay.petra.sql.dsl.query.LimitStep;
+import com.liferay.petra.sql.dsl.query.OrderByStep;
+import com.liferay.petra.sql.dsl.query.sort.OrderByExpression;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.LockedLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -149,7 +154,8 @@ public class LayoutLockManagerImpl implements LayoutLockManager {
 
 	@Override
 	public List<LockedLayout> getLockedLayouts(
-		long companyId, long groupId, LockedLayoutType lockedLayoutType) {
+		long companyId, long groupId, LockedLayoutOrder lockedLayoutOrder,
+		LockedLayoutType lockedLayoutType) {
 
 		List<Object[]> results = _layoutLocalService.dslQuery(
 			DSLQueryFactoryUtil.select(
@@ -181,12 +187,11 @@ public class LayoutLockManagerImpl implements LayoutLockManager {
 						groupId, lockedLayoutType)
 				).where(
 					_getWherePredicate(groupId, lockedLayoutType)
-				).orderBy(
-					orderByStep -> orderByStep.orderBy(
-						LockTable.INSTANCE.createDate.descending())
 				).as(
 					"LockedLayoutsTable", LockedLayoutsTable.INSTANCE
 				)
+			).orderBy(
+				orderByStep -> _getLimitStep(lockedLayoutOrder, orderByStep)
 			));
 
 		List<LockedLayout> lockedLayouts = new ArrayList<>();
@@ -495,6 +500,60 @@ public class LayoutLockManagerImpl implements LayoutLockManager {
 		}
 
 		return layoutUtilityPageEntryViewRenderer.getLabel(locale);
+	}
+
+	private LimitStep _getLimitStep(
+		LockedLayoutOrder lockedLayoutOrder, OrderByStep orderByStep) {
+
+		if (lockedLayoutOrder == null) {
+			return orderByStep.orderBy(
+				LockedLayoutsTable.INSTANCE.createDateColumn.descending());
+		}
+
+		if (Objects.equals(
+				lockedLayoutOrder.getLockedLayoutOrderType(),
+				LockedLayoutOrder.LockedLayoutOrderType.NAME)) {
+
+			return orderByStep.orderBy(
+				LockedLayoutsTable.INSTANCE,
+				new LayoutNameComparator(
+					lockedLayoutOrder.isAscending(),
+					lockedLayoutOrder.getLocale()));
+		}
+
+		return orderByStep.orderBy(_getOrderByExpression(lockedLayoutOrder));
+	}
+
+	private OrderByExpression _getOrderByExpression(
+		LockedLayoutOrder lockedLayoutOrder) {
+
+		if (Objects.equals(
+				lockedLayoutOrder.getLockedLayoutOrderType(),
+				LockedLayoutOrder.LockedLayoutOrderType.LAST_AUTOSAVE)) {
+
+			if (lockedLayoutOrder.isAscending()) {
+				return LockedLayoutsTable.INSTANCE.createDateColumn.ascending();
+			}
+
+			return LockedLayoutsTable.INSTANCE.createDateColumn.descending();
+		}
+
+		if (Objects.equals(
+				lockedLayoutOrder.getLockedLayoutOrderType(),
+				LockedLayoutOrder.LockedLayoutOrderType.USER)) {
+
+			if (lockedLayoutOrder.isAscending()) {
+				return LockedLayoutsTable.INSTANCE.userNameColumn.ascending();
+			}
+
+			return LockedLayoutsTable.INSTANCE.userNameColumn.descending();
+		}
+
+		if (lockedLayoutOrder.isAscending()) {
+			return LockedLayoutsTable.INSTANCE.createDateColumn.ascending();
+		}
+
+		return LockedLayoutsTable.INSTANCE.createDateColumn.descending();
 	}
 
 	private Predicate _getWherePredicate(

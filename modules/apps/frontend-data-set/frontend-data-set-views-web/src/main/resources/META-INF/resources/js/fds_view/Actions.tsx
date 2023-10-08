@@ -11,14 +11,15 @@ import {fetch, openModal} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import {API_URL, OBJECT_RELATIONSHIP} from '../Constants';
-import {IFDSViewSectionInterface} from '../FDSView';
-import ItemActionForm from '../actions/ItemActionForm';
+import {IFDSViewSectionProps} from '../FDSView';
 import OrderableTable from '../components/OrderableTable';
 import openDefaultFailureToast from '../utils/openDefaultFailureToast';
 import openDefaultSuccessToast from '../utils/openDefaultSuccessToast';
+import ItemActionForm from './actions/ItemActionForm';
 
 const SECTIONS = {
 	ACTIONS: 'actions',
+	EDIT_ITEM_ACTION: 'edit-item-action',
 	NEW_ITEM_ACTION: 'new-item-action',
 };
 
@@ -30,20 +31,59 @@ interface IFDSAction {
 			method: string;
 		};
 	};
+	confirmationMessage: string;
+	confirmationMessageType: string;
+	confirmationMessage_i18n: {
+		[key: string]: string;
+	};
 	icon: string;
 	id: number;
+	label: string;
+	label_i18n: {
+		[key: string]: string;
+	};
+	permissionKey: string;
 	type: string;
 	url: string;
 }
 
-const noop = () => {};
-
-const Actions = ({fdsView, namespace, spritemap}: IFDSViewSectionInterface) => {
+const Actions = ({fdsView, namespace, spritemap}: IFDSViewSectionProps) => {
 	const [activeSection, setActiveSection] = useState(SECTIONS.ACTIONS);
 	const [activeTab, setActiveTab] = useState(0);
 	const [fdsActions, setFDSActions] = useState<Array<IFDSAction>>([]);
 	const [loading, setLoading] = useState(true);
-	const [newActionsOrder, setNewActionsOrder] = useState<string>('');
+	const [initialActionFormValues, setInitialActionFormValues] = useState<
+		IFDSAction
+	>();
+
+	const getBreadcrumbItems = () => {
+		const breadcrumbItems: React.ComponentProps<
+			typeof ClayBreadcrumb
+		>['items'] = [
+			{
+				active: activeSection === SECTIONS.ACTIONS,
+				label: Liferay.Language.get('actions'),
+				onClick: () => setActiveSection(SECTIONS.ACTIONS),
+			},
+		];
+
+		if (activeSection === SECTIONS.NEW_ITEM_ACTION) {
+			breadcrumbItems.push({
+				active: true,
+				label: Liferay.Language.get('new-item-action'),
+				onClick: () => setActiveSection(SECTIONS.NEW_ITEM_ACTION),
+			});
+		}
+
+		if (activeSection === SECTIONS.EDIT_ITEM_ACTION) {
+			breadcrumbItems.push({
+				active: true,
+				label: initialActionFormValues?.label || '',
+			});
+		}
+
+		return breadcrumbItems;
+	};
 
 	const loadFDSActions = async () => {
 		setLoading(true);
@@ -128,12 +168,22 @@ const Actions = ({fdsView, namespace, spritemap}: IFDSViewSectionInterface) => {
 		});
 	};
 
-	const updateFDSActionsOrder = async () => {
+	const handleEdit = ({item}: {item: IFDSAction}) => {
+		setInitialActionFormValues(item);
+
+		setActiveSection(SECTIONS.EDIT_ITEM_ACTION);
+	};
+
+	const updateFDSActionsOrder = async ({
+		fdsActionsOrder,
+	}: {
+		fdsActionsOrder: string;
+	}) => {
 		const response = await fetch(
 			`${API_URL.FDS_VIEWS}/by-external-reference-code/${fdsView.externalReferenceCode}`,
 			{
 				body: JSON.stringify({
-					fdsActionsOrder: newActionsOrder,
+					fdsActionsOrder,
 				}),
 				headers: {
 					'Accept': 'application/json',
@@ -151,12 +201,13 @@ const Actions = ({fdsView, namespace, spritemap}: IFDSViewSectionInterface) => {
 
 		const responseJSON = await response.json();
 
-		const fdsFiltersOrder = responseJSON?.fdsActionsOrder;
+		const storedFDSActionsOrder = responseJSON?.fdsActionsOrder;
 
-		if (fdsFiltersOrder && fdsFiltersOrder === newActionsOrder) {
+		if (
+			storedFDSActionsOrder &&
+			storedFDSActionsOrder === fdsActionsOrder
+		) {
 			openDefaultSuccessToast();
-
-			setNewActionsOrder('');
 		}
 		else {
 			openDefaultFailureToast();
@@ -175,22 +226,7 @@ const Actions = ({fdsView, namespace, spritemap}: IFDSViewSectionInterface) => {
 
 	return (
 		<ClayLayout.ContainerFluid>
-			<ClayBreadcrumb
-				className="my-2"
-				items={[
-					{
-						active: activeSection === SECTIONS.ACTIONS,
-						label: Liferay.Language.get('actions'),
-						onClick: () => setActiveSection(SECTIONS.ACTIONS),
-					},
-					{
-						active: activeSection === SECTIONS.NEW_ITEM_ACTION,
-						label: Liferay.Language.get('new-item-action'),
-						onClick: () =>
-							setActiveSection(SECTIONS.NEW_ITEM_ACTION),
-					},
-				]}
-			/>
+			<ClayBreadcrumb className="my-2" items={getBreadcrumbItems()} />
 
 			<ClayLayout.ContainerFluid className="bg-white mb-4 p-0 rounded-sm">
 				{activeSection === SECTIONS.ACTIONS && (
@@ -207,9 +243,11 @@ const Actions = ({fdsView, namespace, spritemap}: IFDSViewSectionInterface) => {
 								{Liferay.Language.get('item-actions')}
 							</ClayTabs.Item>
 
-							<ClayTabs.Item>
-								{Liferay.Language.get('creation-actions')}
-							</ClayTabs.Item>
+							{Liferay.FeatureFlags['LPS-194395'] && (
+								<ClayTabs.Item>
+									{Liferay.Language.get('creation-actions')}
+								</ClayTabs.Item>
+							)}
 						</ClayTabs>
 
 						<ClayTabs.Content active={activeTab} fade>
@@ -220,6 +258,11 @@ const Actions = ({fdsView, namespace, spritemap}: IFDSViewSectionInterface) => {
 							>
 								<OrderableTable
 									actions={[
+										{
+											icon: 'pencil',
+											label: Liferay.Language.get('edit'),
+											onClick: handleEdit,
+										},
 										{
 											icon: 'trash',
 											label: Liferay.Language.get(
@@ -266,19 +309,15 @@ const Actions = ({fdsView, namespace, spritemap}: IFDSViewSectionInterface) => {
 									noItemsTitle={Liferay.Language.get(
 										'no-actions-were-created'
 									)}
-									onCancelButtonClick={noop}
 									onOrderChange={({
-										orderedItems,
+										order,
 									}: {
-										orderedItems: IFDSAction[];
+										order: string;
 									}) => {
-										setNewActionsOrder(
-											orderedItems
-												.map((filter) => filter.id)
-												.join(',')
-										);
+										updateFDSActionsOrder({
+											fdsActionsOrder: order,
+										});
 									}}
-									onSaveButtonClick={updateFDSActionsOrder}
 								/>
 							</ClayTabs.TabPane>
 
@@ -304,9 +343,23 @@ const Actions = ({fdsView, namespace, spritemap}: IFDSViewSectionInterface) => {
 						spritemap={spritemap}
 					/>
 				)}
+
+				{activeSection === SECTIONS.EDIT_ITEM_ACTION && (
+					<ItemActionForm
+						editing
+						fdsView={fdsView}
+						initialValues={initialActionFormValues}
+						loadFDSActions={loadFDSActions}
+						namespace={namespace}
+						sections={SECTIONS}
+						setActiveSection={setActiveSection}
+						spritemap={spritemap}
+					/>
+				)}
 			</ClayLayout.ContainerFluid>
 		</ClayLayout.ContainerFluid>
 	);
 };
 
+export {IFDSAction};
 export default Actions;

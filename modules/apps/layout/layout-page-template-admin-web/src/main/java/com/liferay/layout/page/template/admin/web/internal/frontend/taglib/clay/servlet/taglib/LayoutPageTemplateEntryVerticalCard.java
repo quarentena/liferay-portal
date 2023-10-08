@@ -9,6 +9,7 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.BaseVerticalCard;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItemListBuilder;
+import com.liferay.layout.constants.LayoutTypeSettingsConstants;
 import com.liferay.layout.page.template.admin.web.internal.security.permission.resource.LayoutPageTemplateEntryPermission;
 import com.liferay.layout.page.template.admin.web.internal.servlet.taglib.util.LayoutPageTemplateEntryActionDropdownItemsProvider;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
@@ -105,7 +106,8 @@ public class LayoutPageTemplateEntryVerticalCard extends BaseVerticalCard {
 				return HttpComponentsUtil.addParameters(
 					layoutPrototypeGroup.getDisplayURL(themeDisplay, true),
 					"p_l_back_url", themeDisplay.getURLCurrent(),
-					"p_l_back_url_title", portletDisplay.getTitle());
+					"p_l_back_url_title",
+					portletDisplay.getPortletDisplayName());
 			}
 
 			return HttpComponentsUtil.addParameters(
@@ -160,7 +162,8 @@ public class LayoutPageTemplateEntryVerticalCard extends BaseVerticalCard {
 		}
 
 		if (!GetterUtil.getBoolean(
-				draftLayout.getTypeSettingsProperty("published"))) {
+				draftLayout.getTypeSettingsProperty(
+					LayoutTypeSettingsConstants.KEY_PUBLISHED))) {
 
 			return LabelItemListBuilder.add(
 				labelItem -> labelItem.setStatus(WorkflowConstants.STATUS_DRAFT)

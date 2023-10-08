@@ -1,5 +1,50 @@
 # Poshi Runner Change Log
 
+## 1.0.471
+
+### Core
+
+* [POSHI-561](https://liferay.atlassian.net/browse/POSHI-561) - Clean up usage of "value" and "locator" to specific methods for more clear usage.
+* [POSHI-633](https://liferay.atlassian.net/browse/POSHI-633) - Add validation values of internal Poshi properties
+
+### Gradle
+
+* [POSHI-614](https://liferay.atlassian.net/browse/POSHI-614) - Create gradle task to run PoshiReportGenerator
+
+### Script
+
+* [POSHI-549](https://liferay.atlassian.net/browse/POSHI-549) - Skip file regeneration and possibly validation for poshi resource jar files
+
+### Validation
+
+* [POSHI-646](https://liferay.atlassian.net/browse/POSHI-646) - Investigate failure in com.liferay.poshi.core.script.PoshiScriptParserTest
+
+### WebDriver
+
+* [POSHI-639](https://liferay.atlassian.net/browse/POSHI-639) - As a tester, I want to configure AssertAccessible() to catch serious and critical levels only.
+
+## 1.0.468
+
+### Gradle
+
+* [POSHI-627](https://liferay.atlassian.net/browse/POSHI-627) - Investigate Failure in com.liferay.poshi.runner.resources.PoshiResourcesMasterTest
+
+### Other
+
+* [LPS-194477](https://liferay.atlassian.net/browse/LPS-194477) - [SF] source-formatter.properties  key should follow root source-formatter file
+
+### Utils
+
+* [POSHI-643](https://liferay.atlassian.net/browse/POSHI-643) - Replacement of secret parameters in osgi config test depdendencies
+
+### Validation
+
+* [POSHI-642](https://liferay.atlassian.net/browse/POSHI-642) - Allow isset/equals conditions to work in functions
+
+### WebDriver
+
+* [POSHI-639](https://liferay.atlassian.net/browse/POSHI-639) - As a tester, I want to configure AssertAccessible() to catch serious and critical levels only.
+
 ## 1.0.466
 
 ### Core

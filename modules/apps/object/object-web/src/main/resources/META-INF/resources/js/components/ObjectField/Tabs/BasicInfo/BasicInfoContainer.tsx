@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
+import classNames from 'classnames';
 import {InputLocalized} from 'frontend-js-components-web';
 import React from 'react';
 
@@ -14,15 +15,20 @@ import {AttachmentProperties} from './AttachmentProperties';
 import {AggregationFilters} from './BasicInfoTab';
 import {MaxLengthProperties} from './MaxLengthProperties';
 
+import '../../EditObjectFieldContent.scss';
+
 interface BasicInfoContainerProps {
 	creationLanguageId2?: Liferay.Language.Locale;
 	errors: ObjectFieldErrors;
 	handleChange: React.ChangeEventHandler<HTMLInputElement>;
 	isApproved: boolean;
+	modelBuilder?: boolean;
+	objectDefinition: Partial<ObjectDefinition>;
 	objectDefinitionExternalReferenceCode: string;
+	objectDefinitionName: string;
 	objectFieldTypes: ObjectFieldType[];
-	objectName: string;
 	objectRelationshipId: number;
+	onSubmit?: () => void;
 	readOnly: boolean;
 	setAggregationFilters: (values: AggregationFilters[]) => void;
 	setObjectDefinitionExternalReferenceCode2: (value: string) => void;
@@ -35,10 +41,13 @@ export function BasicInfoContainer({
 	errors,
 	handleChange,
 	isApproved,
+	modelBuilder = false,
+	objectDefinition,
 	objectDefinitionExternalReferenceCode,
+	objectDefinitionName,
 	objectFieldTypes,
-	objectName,
 	objectRelationshipId,
+	onSubmit,
 	readOnly,
 	setAggregationFilters,
 	setObjectDefinitionExternalReferenceCode2,
@@ -60,12 +69,24 @@ export function BasicInfoContainer({
 		});
 
 	return (
-		<>
+		<div
+			className={classNames({
+				'lfr-objects__edit-object-field-card-content': !modelBuilder,
+				'lfr-objects__edit-object-field-model-builder-panel': modelBuilder,
+			})}
+		>
 			<InputLocalized
 				disableFlag={readOnly}
 				disabled={readOnly}
 				error={errors.label}
 				label={Liferay.Language.get('label')}
+				onBlur={(event) => {
+					event.stopPropagation();
+
+					if (onSubmit) {
+						onSubmit();
+					}
+				}}
 				onChange={(label) => setValues({label})}
 				required
 				translations={values.label as LocalizedValue<string>}
@@ -76,18 +97,22 @@ export function BasicInfoContainer({
 					creationLanguageId2 as Liferay.Language.Locale
 				}
 				disabled={disableFieldFormBase}
-				editingField
+				editingObjectField
 				errors={errors}
 				handleChange={handleChange}
+				objectDefinition={objectDefinition}
 				objectDefinitionExternalReferenceCode={
 					objectDefinitionExternalReferenceCode
 				}
+				objectDefinitionName={objectDefinitionName}
 				objectField={values}
 				objectFieldTypes={objectFieldTypes}
-				objectName={objectName}
 				objectRelationshipId={objectRelationshipId}
 				onAggregationFilterChange={setAggregationFilters}
-				onRelationshipChange={setObjectDefinitionExternalReferenceCode2}
+				onObjectRelationshipChange={
+					setObjectDefinitionExternalReferenceCode2
+				}
+				onSubmit={onSubmit}
 				setValues={setValues}
 			>
 				{values.businessType === 'Attachment' && (
@@ -97,6 +122,7 @@ export function BasicInfoContainer({
 							values.objectFieldSettings as ObjectFieldSetting[]
 						}
 						onSettingsChange={handleSettingsChange}
+						onSubmit={onSubmit}
 					/>
 				)}
 
@@ -111,10 +137,11 @@ export function BasicInfoContainer({
 							values.objectFieldSettings as ObjectFieldSetting[]
 						}
 						onSettingsChange={handleSettingsChange}
+						onSubmit={onSubmit}
 						setValues={setValues}
 					/>
 				)}
 			</ObjectFieldFormBase>
-		</>
+		</div>
 	);
 }

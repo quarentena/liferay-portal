@@ -13,7 +13,9 @@ import com.liferay.commerce.product.exception.CPInstanceUnitOfMeasureSkuExceptio
 import com.liferay.commerce.product.exception.DuplicateCPInstanceUnitOfMeasureKeyException;
 import com.liferay.commerce.product.model.CPInstanceUnitOfMeasure;
 import com.liferay.commerce.product.service.base.CPInstanceUnitOfMeasureLocalServiceBaseImpl;
+import com.liferay.commerce.product.util.comparator.CPInstanceUnitOfMeasurePriorityComparator;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.model.User;
@@ -134,11 +136,20 @@ public class CPInstanceUnitOfMeasureLocalServiceImpl
 			companyId, key, sku, null);
 	}
 
+	public CPInstanceUnitOfMeasure fetchPrimaryCPInstanceUnitOfMeasure(
+		long cpInstanceId) {
+
+		return cpInstanceUnitOfMeasurePersistence.fetchByC_P_First(
+			cpInstanceId, true, null);
+	}
+
 	@Override
 	public List<CPInstanceUnitOfMeasure> getActiveCPInstanceUnitOfMeasures(
 		long cpInstanceId) {
 
-		return cpInstanceUnitOfMeasurePersistence.findByC_A(cpInstanceId, true);
+		return cpInstanceUnitOfMeasurePersistence.findByC_A(
+			cpInstanceId, true, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			new CPInstanceUnitOfMeasurePriorityComparator());
 	}
 
 	@Override

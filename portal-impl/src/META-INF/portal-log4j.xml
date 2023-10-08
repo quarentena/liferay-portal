@@ -63,7 +63,6 @@
 		<Logger level="ERROR" name="com.liferay.portal.deploy.hot.PluginPackageHotDeployListener" />
 		<Logger level="ERROR" name="com.liferay.portal.deploy.hot.ThemeHotDeployListener" />
 		<Logger level="ERROR" name="com.liferay.portal.deploy.hot.ThemeLoaderHotDeployListener" />
-		<Logger level="ERROR" name="com.liferay.portal.editor" />
 		<Logger level="ERROR" name="com.liferay.portal.events.EventsProcessor" />
 		<Logger level="ERROR" name="com.liferay.portal.events.GarbageCollectorAction" />
 		<Logger level="ERROR" name="com.liferay.portal.events.GlobalStartupAction" />
@@ -225,6 +224,7 @@
 		<Logger level="ERROR" name="org.hibernate.util.JDBCExceptionReporter" />
 		<Logger level="ERROR" name="org.jabsorb" />
 		<Logger level="ERROR" name="org.jgroups" />
+		<Logger level="ERROR" name="org.mariadb.jdbc.message.server.ErrorPacket" />
 		<Logger level="ERROR" name="org.openid4java" />
 		<Logger level="INFO" name="org.pdfbox" />
 		<Logger level="INFO" name="org.portletbridge" />

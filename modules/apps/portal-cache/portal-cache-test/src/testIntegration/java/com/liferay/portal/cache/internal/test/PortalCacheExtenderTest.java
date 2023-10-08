@@ -12,15 +12,18 @@ import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 import java.lang.management.ManagementFactory;
 
@@ -64,24 +67,72 @@ public class PortalCacheExtenderTest {
 	}
 
 	@Test
-	public void testRecreateMultiVmConfig() throws Exception {
-		_multiVmXML = _generateXMLContent(12, _CACHE_NAME_MULTI, 1001, 51);
+	public void testFinderCacheConfigAfterUpdateEntityCacheConfig()
+		throws Exception {
 
-		for (int i = 10; i <= 12; i++) {
-			_multiVmXML = StringUtil.replace(
-				_multiVmXML, _CACHE_NAME_MULTI + i,
-				_PREFIX_CACHE_NAME_FINDER + _CACHE_NAME_MULTI + (i - 1));
-		}
-
-		_multiVmXML = StringUtil.replaceFirst(
-			_multiVmXML, _CACHE_NAME_MULTI + "9",
-			_PREFIX_CACHE_NAME_ENTITY + _CACHE_NAME_MULTI + "9");
+		_multiVmXML = _generateXMLContent(
+			1,
+			new String[] {_CACHE_NAME_MULTI_ENTITY, _CACHE_NAME_MULTI_FINDER},
+			1001, 51);
 
 		_bundle = _installBundle(_BUNDLE_SYMBOLIC_NAME, _multiVmXML, null);
 
 		_assertCacheConfig(
 			PortalCacheManagerNames.MULTI_VM, 1001,
-			_PREFIX_CACHE_NAME_FINDER + _CACHE_NAME_MULTI + "9", 51L);
+			_CACHE_NAME_MULTI_ENTITY + "1", 51L);
+		_assertCacheConfig(
+			PortalCacheManagerNames.MULTI_VM, 1001,
+			_CACHE_NAME_MULTI_FINDER + "1", 51L);
+
+		_multiVMPortalCacheManager.getPortalCache(
+			_CACHE_NAME_MULTI_FINDER + "1");
+
+		Bundle overridingBundle = null;
+
+		String multiVmXMLUpdated = _generateXMLContent(
+			1, new String[] {_CACHE_NAME_MULTI_ENTITY}, 2001, 101);
+
+		try {
+			overridingBundle = _installBundle(
+				_BUNDLE_SYMBOLIC_NAME.concat(".updated"), multiVmXMLUpdated,
+				null);
+
+			_assertCacheConfig(
+				PortalCacheManagerNames.MULTI_VM, 2001,
+				_CACHE_NAME_MULTI_ENTITY + "1", 101L);
+			_assertCacheConfig(
+				PortalCacheManagerNames.MULTI_VM, 1001,
+				_CACHE_NAME_MULTI_FINDER + "1", 51L);
+		}
+		finally {
+			if ((overridingBundle != null) &&
+				(overridingBundle.getState() != Bundle.UNINSTALLED)) {
+
+				overridingBundle.uninstall();
+			}
+		}
+	}
+
+	@Test
+	public void testRecreateMultiVmConfig() throws Exception {
+		_multiVmXML = _generateXMLContent(
+			12, new String[] {_CACHE_NAME_MULTI}, 1001, 51);
+
+		for (int i = 10; i <= 12; i++) {
+			_multiVmXML = StringUtil.replace(
+				_multiVmXML, _CACHE_NAME_MULTI + i,
+				_CACHE_NAME_MULTI_FINDER + (i - 1));
+		}
+
+		_multiVmXML = StringUtil.replaceFirst(
+			_multiVmXML, _CACHE_NAME_MULTI + "9",
+			_CACHE_NAME_MULTI_ENTITY + "9");
+
+		_bundle = _installBundle(_BUNDLE_SYMBOLIC_NAME, _multiVmXML, null);
+
+		_assertCacheConfig(
+			PortalCacheManagerNames.MULTI_VM, 1001,
+			_CACHE_NAME_MULTI_FINDER + "9", 51L);
 
 		Bundle overridingBundle = null;
 
@@ -91,7 +142,7 @@ public class PortalCacheExtenderTest {
 
 			_assertCacheConfig(
 				PortalCacheManagerNames.MULTI_VM, 1001,
-				_PREFIX_CACHE_NAME_FINDER + _CACHE_NAME_MULTI + "9", 51L);
+				_CACHE_NAME_MULTI_FINDER + "9", 51L);
 		}
 		finally {
 			if ((overridingBundle != null) &&
@@ -104,8 +155,10 @@ public class PortalCacheExtenderTest {
 
 	@Test
 	public void testUpdateConfig() throws Exception {
-		_multiVmXML = _generateXMLContent(1, _CACHE_NAME_MULTI, 1001, 51);
-		_singleVmXML = _generateXMLContent(1, _CACHE_NAME_SINGLE, 1001, 51);
+		_multiVmXML = _generateXMLContent(
+			1, new String[] {_CACHE_NAME_MULTI}, 1001, 51);
+		_singleVmXML = _generateXMLContent(
+			1, new String[] {_CACHE_NAME_SINGLE}, 1001, 51);
 
 		_bundle = _installBundle(
 			_BUNDLE_SYMBOLIC_NAME, _multiVmXML, _singleVmXML);
@@ -120,9 +173,9 @@ public class PortalCacheExtenderTest {
 		Bundle overridingBundle = null;
 
 		String multiVmXMLUpdated = _generateXMLContent(
-			1, _CACHE_NAME_MULTI, 2001, 101);
+			1, new String[] {_CACHE_NAME_MULTI}, 2001, 101);
 		String singleVmXMLUpdated = _generateXMLContent(
-			1, _CACHE_NAME_SINGLE, 2001, 101);
+			1, new String[] {_CACHE_NAME_SINGLE}, 2001, 101);
 
 		try {
 			overridingBundle = _installBundle(
@@ -201,7 +254,7 @@ public class PortalCacheExtenderTest {
 	}
 
 	private String _generateXMLContent(
-		int cacheEntries, String cacheName, int maxElementsInMemory,
+		int cacheEntries, String[] cacheNames, int maxElementsInMemory,
 		int timeToIdleSeconds) {
 
 		StringBundler sb = new StringBundler();
@@ -212,13 +265,15 @@ public class PortalCacheExtenderTest {
 		sb.append("http://www.ehcache.org/ehcache.xsd\">");
 
 		for (int i = 1; i <= cacheEntries; i++) {
-			sb.append("<cache maxElementsInMemory=\"");
-			sb.append(maxElementsInMemory);
-			sb.append("\" name=\"");
-			sb.append(cacheName + i);
-			sb.append("\" timeToIdleSeconds=\"");
-			sb.append(timeToIdleSeconds);
-			sb.append("\"> </cache>");
+			for (String cacheName : cacheNames) {
+				sb.append("<cache maxElementsInMemory=\"");
+				sb.append(maxElementsInMemory);
+				sb.append("\" name=\"");
+				sb.append(cacheName + i);
+				sb.append("\" timeToIdleSeconds=\"");
+				sb.append(timeToIdleSeconds);
+				sb.append("\"> </cache>");
+			}
 		}
 
 		sb.append("\" </ehcache>");
@@ -307,16 +362,22 @@ public class PortalCacheExtenderTest {
 
 	private static final String _CACHE_NAME_MULTI = "test.cache.multi";
 
+	private static final String _CACHE_NAME_MULTI_ENTITY =
+		EntityCache.class.getName() + StringPool.PERIOD + _CACHE_NAME_MULTI;
+
+	private static final String _CACHE_NAME_MULTI_FINDER =
+		FinderCache.class.getName() + StringPool.PERIOD + _CACHE_NAME_MULTI;
+
 	private static final String _CACHE_NAME_SINGLE = "test.cache.single";
-
-	private static final String _PREFIX_CACHE_NAME_ENTITY =
-		EntityCache.class.getName() + StringPool.PERIOD;
-
-	private static final String _PREFIX_CACHE_NAME_FINDER =
-		FinderCache.class.getName() + StringPool.PERIOD;
 
 	private static Bundle _bundle;
 	private static String _multiVmXML;
 	private static String _singleVmXML;
+
+	@Inject(
+		filter = "component.name=com.liferay.portal.cache.ehcache.internal.MultiVMEhcachePortalCacheManager"
+	)
+	private PortalCacheManager<? extends Serializable, ? extends Serializable>
+		_multiVMPortalCacheManager;
 
 }

@@ -13,14 +13,15 @@ import com.liferay.commerce.price.list.model.CommercePriceEntry;
 import com.liferay.commerce.price.list.model.CommercePriceList;
 import com.liferay.commerce.price.list.service.CommercePriceEntryLocalService;
 import com.liferay.commerce.price.list.service.CommercePriceListLocalService;
-import com.liferay.commerce.price.list.test.util.CommercePriceEntryTestUtil;
-import com.liferay.commerce.price.list.test.util.CommercePriceListTestUtil;
 import com.liferay.commerce.product.exception.NoSuchCPInstanceException;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CPInstanceUnitOfMeasure;
 import com.liferay.commerce.product.model.CommerceCatalog;
+import com.liferay.commerce.product.service.CPInstanceLocalService;
 import com.liferay.commerce.product.service.CommerceCatalogLocalServiceUtil;
 import com.liferay.commerce.product.test.util.CPTestUtil;
+import com.liferay.commerce.test.util.price.list.CommercePriceEntryTestUtil;
+import com.liferay.commerce.test.util.price.list.CommercePriceListTestUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
@@ -940,7 +941,10 @@ public class CommercePriceEntryLocalServiceTest {
 			CommercePriceEntry commercePriceEntry)
 		throws Exception {
 
-		CPInstance actualCPInstance = commercePriceEntry.getCPInstance();
+		CPInstance actualCPInstance =
+			_cpInstanceLocalService.fetchCProductInstance(
+				commercePriceEntry.getCProductId(),
+				commercePriceEntry.getCPInstanceUuid());
 
 		Assert.assertThat(
 			cpInstance.getCPInstanceId(),
@@ -964,6 +968,9 @@ public class CommercePriceEntryLocalServiceTest {
 
 	@Inject
 	private CommercePriceListLocalService _commercePriceListLocalService;
+
+	@Inject
+	private CPInstanceLocalService _cpInstanceLocalService;
 
 	private Group _group;
 

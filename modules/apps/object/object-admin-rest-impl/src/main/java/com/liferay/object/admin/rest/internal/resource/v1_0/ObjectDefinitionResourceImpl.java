@@ -34,10 +34,12 @@ import com.liferay.object.constants.ObjectConstants;
 import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.constants.ObjectRelationshipConstants;
 import com.liferay.object.definition.util.ObjectDefinitionUtil;
-import com.liferay.object.exception.ObjectDefinitionEnableLocalizationException;
 import com.liferay.object.exception.ObjectDefinitionStorageTypeException;
+import com.liferay.object.model.ObjectActionModel;
 import com.liferay.object.model.ObjectFieldModel;
 import com.liferay.object.model.ObjectFolder;
+import com.liferay.object.model.ObjectRelationshipModel;
+import com.liferay.object.model.ObjectValidationRuleModel;
 import com.liferay.object.service.ObjectActionLocalService;
 import com.liferay.object.service.ObjectActionService;
 import com.liferay.object.service.ObjectDefinitionLocalService;
@@ -232,20 +234,8 @@ public class ObjectDefinitionResourceImpl
 			ObjectDefinition objectDefinition)
 		throws Exception {
 
-		if (Validator.isNotNull(objectDefinition.getEnableLocalization()) &&
-			!FeatureFlagManagerUtil.isEnabled("LPS-172017")) {
-
-			throw new ObjectDefinitionEnableLocalizationException();
-		}
-
 		if (Validator.isNotNull(objectDefinition.getEnableObjectEntryDraft()) &&
 			!FeatureFlagManagerUtil.isEnabled("LPS-181663")) {
-
-			throw new UnsupportedOperationException();
-		}
-
-		if (Validator.isNotNull(objectDefinition.getModifiable()) &&
-			!FeatureFlagManagerUtil.isEnabled("LPS-167253")) {
 
 			throw new UnsupportedOperationException();
 		}
@@ -268,9 +258,7 @@ public class ObjectDefinitionResourceImpl
 		com.liferay.object.model.ObjectDefinition
 			serviceBuilderObjectDefinition;
 
-		if (GetterUtil.getBoolean(objectDefinition.getSystem()) &&
-			FeatureFlagManagerUtil.isEnabled("LPS-167253")) {
-
+		if (GetterUtil.getBoolean(objectDefinition.getSystem())) {
 			serviceBuilderObjectDefinition =
 				_objectDefinitionService.addSystemObjectDefinition(
 					objectDefinition.getExternalReferenceCode(),
@@ -399,8 +387,7 @@ public class ObjectDefinitionResourceImpl
 
 		Status status = objectDefinition.getStatus();
 
-		if (FeatureFlagManagerUtil.isEnabled("LPS-167253") &&
-			(status != null) &&
+		if ((status != null) &&
 			(status.getCode() == WorkflowConstants.STATUS_APPROVED)) {
 
 			postObjectDefinitionPublish(
@@ -426,9 +413,7 @@ public class ObjectDefinitionResourceImpl
 				_objectDefinitionService.getObjectDefinition(
 					objectDefinitionId);
 
-		if (GetterUtil.getBoolean(serviceBuilderObjectDefinition.getSystem()) &&
-			FeatureFlagManagerUtil.isEnabled("LPS-167253")) {
-
+		if (GetterUtil.getBoolean(serviceBuilderObjectDefinition.getSystem())) {
 			return _toObjectDefinition(
 				_objectDefinitionService.publishSystemObjectDefinition(
 					objectDefinitionId));
@@ -448,12 +433,6 @@ public class ObjectDefinitionResourceImpl
 
 		if (Validator.isNotNull(objectDefinition.getEnableObjectEntryDraft()) &&
 			!FeatureFlagManagerUtil.isEnabled("LPS-181663")) {
-
-			throw new UnsupportedOperationException();
-		}
-
-		if (Validator.isNotNull(objectDefinition.getModifiable()) &&
-			!FeatureFlagManagerUtil.isEnabled("LPS-167253")) {
 
 			throw new UnsupportedOperationException();
 		}
@@ -551,30 +530,79 @@ public class ObjectDefinitionResourceImpl
 					objectDefinition.getScope());
 		}
 
+		List<ObjectAction> objectActions = ListUtil.fromArray(
+			objectDefinition.getObjectActions());
 		List<ObjectField> objectFields = ListUtil.fromArray(
 			objectDefinition.getObjectFields());
+		List<ObjectRelationship> objectRelationships = ListUtil.fromArray(
+			objectDefinition.getObjectRelationships());
+		List<ObjectValidationRule> objectValidationRules = ListUtil.fromArray(
+			objectDefinition.getObjectValidationRules());
 
+		List<com.liferay.object.model.ObjectAction>
+			serviceBuilderObjectActions = new ArrayList<>(
+				_objectActionLocalService.getObjectActions(objectDefinitionId));
 		List<com.liferay.object.model.ObjectField> serviceBuilderObjectFields =
 			new ArrayList<>(
 				_objectFieldLocalService.getObjectFields(objectDefinitionId));
+		List<com.liferay.object.model.ObjectRelationship>
+			serviceBuilderObjectRelationships = new ArrayList<>(
+				_objectRelationshipLocalService.getObjectRelationships(
+					objectDefinitionId));
+		List<com.liferay.object.model.ObjectValidationRule>
+			serviceBuilderObjectValidationRules = new ArrayList<>(
+				_objectValidationRuleLocalService.getObjectValidationRules(
+					objectDefinitionId));
 
 		if (serviceBuilderObjectDefinition.isModifiable() &&
 			serviceBuilderObjectDefinition.isSystem() &&
 			ObjectDefinitionUtil.isInvokerBundleAllowed()) {
 
+			objectActions.removeIf(
+				objectAction -> !GetterUtil.getBoolean(
+					objectAction.getSystem()));
 			objectFields.removeIf(
 				objectField -> !GetterUtil.getBoolean(objectField.getSystem()));
+			objectRelationships.removeIf(
+				objectRelationship -> !GetterUtil.getBoolean(
+					objectRelationship.getSystem()));
+			objectValidationRules.removeIf(
+				objectValidationRule -> !GetterUtil.getBoolean(
+					objectValidationRule.getSystem()));
 
+			serviceBuilderObjectActions.removeIf(
+				serviceBuilderObjectAction ->
+					!serviceBuilderObjectAction.isSystem());
 			serviceBuilderObjectFields.removeIf(
 				serviceBuilderObjectField ->
 					serviceBuilderObjectField.isMetadata() ||
 					!serviceBuilderObjectField.isSystem());
+			serviceBuilderObjectRelationships.removeIf(
+				serviceBuilderObjectRelationship ->
+					!serviceBuilderObjectRelationship.isSystem());
+			serviceBuilderObjectValidationRules.removeIf(
+				serviceBuilderObjectValidationRule ->
+					!serviceBuilderObjectValidationRule.isSystem());
 		}
 		else {
+			objectActions.removeIf(
+				objectAction -> GetterUtil.getBoolean(
+					objectAction.getSystem()));
 			objectFields.removeIf(
 				objectField -> GetterUtil.getBoolean(objectField.getSystem()));
+			objectRelationships.removeIf(
+				objectRelationship -> GetterUtil.getBoolean(
+					objectRelationship.getSystem()));
+			objectValidationRules.removeIf(
+				objectValidationRule -> GetterUtil.getBoolean(
+					objectValidationRule.getSystem()));
 
+			serviceBuilderObjectActions.removeIf(ObjectActionModel::isSystem);
 			serviceBuilderObjectFields.removeIf(ObjectFieldModel::isSystem);
+			serviceBuilderObjectRelationships.removeIf(
+				ObjectRelationshipModel::isSystem);
+			serviceBuilderObjectValidationRules.removeIf(
+				ObjectValidationRuleModel::isSystem);
 		}
 
 		for (ObjectField objectField : objectFields) {
@@ -622,10 +650,16 @@ public class ObjectDefinitionResourceImpl
 				serviceBuilderObjectField);
 		}
 
-		ObjectAction[] objectActions = objectDefinition.getObjectActions();
+		Set<String> deleteObjectActionsERCs = SetUtil.asymmetricDifference(
+			transform(
+				serviceBuilderObjectActions,
+				ObjectActionModel::getExternalReferenceCode),
+			transform(objectActions, ObjectAction::getExternalReferenceCode));
 
-		if (objectActions != null) {
-			_objectActionLocalService.deleteObjectActions(objectDefinitionId);
+		for (String deleteObjectActionsERC : deleteObjectActionsERCs) {
+			_objectActionLocalService.deleteObjectAction(
+				_objectActionLocalService.fetchObjectAction(
+					deleteObjectActionsERC, objectDefinitionId));
 		}
 
 		ObjectLayout[] objectLayouts = objectDefinition.getObjectLayouts();
@@ -634,19 +668,46 @@ public class ObjectDefinitionResourceImpl
 			_objectLayoutLocalService.deleteObjectLayouts(objectDefinitionId);
 		}
 
-		ObjectRelationship[] objectRelationships =
-			objectDefinition.getObjectRelationships();
-
 		Set<String> accountEntryRestrictedObjectRelationshipsNames =
 			_getAccountEntryRestrictedObjectRelationshipsNames(
 				serviceBuilderObjectDefinition, objectRelationships);
 
-		ObjectValidationRule[] objectValidationRules =
-			objectDefinition.getObjectValidationRules();
+		Set<String> deleteObjectRelationshipsNames =
+			SetUtil.asymmetricDifference(
+				transform(
+					serviceBuilderObjectRelationships,
+					com.liferay.object.model.ObjectRelationship::getName),
+				transform(objectRelationships, ObjectRelationship::getName));
 
-		if (objectValidationRules != null) {
-			_objectValidationRuleLocalService.deleteObjectValidationRules(
-				objectDefinitionId);
+		for (String deleteObjectRelationshipsName :
+				deleteObjectRelationshipsNames) {
+
+			com.liferay.object.model.ObjectRelationship
+				serviceBuilderObjectRelationship =
+					_objectRelationshipLocalService.
+						fetchObjectRelationshipByObjectDefinitionId(
+							objectDefinitionId, deleteObjectRelationshipsName);
+
+			_objectRelationshipLocalService.deleteObjectRelationship(
+				serviceBuilderObjectRelationship.getObjectRelationshipId());
+		}
+
+		Set<String> deleteObjectValidationRulesERCs =
+			SetUtil.asymmetricDifference(
+				transform(
+					serviceBuilderObjectValidationRules,
+					com.liferay.object.model.ObjectValidationRule::
+						getExternalReferenceCode),
+				transform(
+					objectValidationRules,
+					ObjectValidationRule::getExternalReferenceCode));
+
+		for (String deleteObjectValidationRulesERC :
+				deleteObjectValidationRulesERCs) {
+
+			_objectValidationRuleLocalService.deleteObjectValidationRule(
+				_objectValidationRuleLocalService.fetchObjectValidationRule(
+					deleteObjectValidationRulesERC, objectDefinitionId));
 		}
 
 		ObjectView[] objectViews = objectDefinition.getObjectViews();
@@ -656,9 +717,12 @@ public class ObjectDefinitionResourceImpl
 		}
 
 		_addObjectDefinitionResources(
-			accountEntryRestrictedObjectRelationshipsNames, objectActions,
-			objectDefinitionId, objectLayouts, objectRelationships,
-			objectValidationRules, objectViews);
+			accountEntryRestrictedObjectRelationshipsNames,
+			objectActions.toArray(new ObjectAction[0]), objectDefinitionId,
+			objectLayouts,
+			objectRelationships.toArray(new ObjectRelationship[0]),
+			objectValidationRules.toArray(new ObjectValidationRule[0]),
+			objectViews);
 
 		return _toObjectDefinition(serviceBuilderObjectDefinition);
 	}
@@ -719,6 +783,20 @@ public class ObjectDefinitionResourceImpl
 			).build();
 
 			for (ObjectAction objectAction : objectActions) {
+				com.liferay.object.model.ObjectAction
+					serviceBuilderObjectAction =
+						_objectActionLocalService.fetchObjectAction(
+							objectAction.getExternalReferenceCode(),
+							objectDefinitionId);
+
+				if (serviceBuilderObjectAction != null) {
+					objectActionResource.putObjectAction(
+						serviceBuilderObjectAction.getObjectActionId(),
+						objectAction);
+
+					continue;
+				}
+
 				objectActionResource.postObjectDefinitionObjectAction(
 					objectDefinitionId, objectAction);
 			}
@@ -739,29 +817,6 @@ public class ObjectDefinitionResourceImpl
 		}
 
 		if (objectRelationships != null) {
-			Set<String> deleteObjectRelationshipsNames =
-				SetUtil.asymmetricDifference(
-					transform(
-						_objectRelationshipLocalService.getObjectRelationships(
-							objectDefinitionId),
-						com.liferay.object.model.ObjectRelationship::getName),
-					transformToList(
-						objectRelationships, ObjectRelationship::getName));
-
-			for (String deleteObjectRelationshipsName :
-					deleteObjectRelationshipsNames) {
-
-				com.liferay.object.model.ObjectRelationship
-					serviceBuilderObjectRelationship =
-						_objectRelationshipLocalService.
-							fetchObjectRelationshipByObjectDefinitionId(
-								objectDefinitionId,
-								deleteObjectRelationshipsName);
-
-				_objectRelationshipLocalService.deleteObjectRelationship(
-					serviceBuilderObjectRelationship.getObjectRelationshipId());
-			}
-
 			ObjectRelationshipResource.Builder builder =
 				_objectRelationshipResourceFactory.create();
 
@@ -814,6 +869,22 @@ public class ObjectDefinitionResourceImpl
 			for (ObjectValidationRule objectValidationRule :
 					objectValidationRules) {
 
+				com.liferay.object.model.ObjectValidationRule
+					serviceBuilderObjectValidationRule =
+						_objectValidationRuleLocalService.
+							fetchObjectValidationRule(
+								objectValidationRule.getExternalReferenceCode(),
+								objectDefinitionId);
+
+				if (serviceBuilderObjectValidationRule != null) {
+					objectValidationRuleResource.putObjectValidationRule(
+						serviceBuilderObjectValidationRule.
+							getObjectValidationRuleId(),
+						objectValidationRule);
+
+					continue;
+				}
+
 				objectValidationRuleResource.
 					postObjectDefinitionObjectValidationRule(
 						objectDefinitionId, objectValidationRule);
@@ -837,7 +908,7 @@ public class ObjectDefinitionResourceImpl
 
 	private Set<String> _getAccountEntryRestrictedObjectRelationshipsNames(
 		com.liferay.object.model.ObjectDefinition objectDefinition1,
-		ObjectRelationship[] objectRelationships) {
+		List<ObjectRelationship> objectRelationships) {
 
 		if ((objectDefinition1 == null) ||
 			!objectDefinition1.isUnmodifiableSystemObject() ||
@@ -965,7 +1036,7 @@ public class ObjectDefinitionResourceImpl
 				).put(
 					"delete",
 					() -> {
-						if (objectDefinition.isUnmodifiableSystemObject()) {
+						if (objectDefinition.isSystem()) {
 							return null;
 						}
 
@@ -1000,7 +1071,10 @@ public class ObjectDefinitionResourceImpl
 				).put(
 					"unbind",
 					() -> {
-						if (objectDefinition.getRootObjectDefinitionId() == 0) {
+						if ((objectDefinition.getRootObjectDefinitionId() ==
+								0) ||
+							objectDefinition.isApproved()) {
+
 							return null;
 						}
 
@@ -1032,11 +1106,7 @@ public class ObjectDefinitionResourceImpl
 				enableCategorization =
 					objectDefinition.getEnableCategorization();
 				enableComments = objectDefinition.getEnableComments();
-
-				if (FeatureFlagManagerUtil.isEnabled("LPS-172017")) {
-					enableLocalization =
-						objectDefinition.getEnableLocalization();
-				}
+				enableLocalization = objectDefinition.getEnableLocalization();
 
 				if (FeatureFlagManagerUtil.isEnabled("LPS-181663")) {
 					enableObjectEntryDraft =
@@ -1050,11 +1120,7 @@ public class ObjectDefinitionResourceImpl
 				id = objectDefinition.getObjectDefinitionId();
 				label = LocalizedMapUtil.getLanguageIdMap(
 					objectDefinition.getLabelMap());
-
-				if (FeatureFlagManagerUtil.isEnabled("LPS-167253")) {
-					modifiable = objectDefinition.getModifiable();
-				}
-
+				modifiable = objectDefinition.getModifiable();
 				name = objectDefinition.getShortName();
 				objectActions = transformToArray(
 					_objectActionLocalService.getObjectActions(

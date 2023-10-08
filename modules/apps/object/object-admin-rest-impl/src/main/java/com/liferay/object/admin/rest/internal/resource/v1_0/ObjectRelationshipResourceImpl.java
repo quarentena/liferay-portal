@@ -14,6 +14,7 @@ import com.liferay.object.model.ObjectField;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.service.ObjectRelationshipService;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -175,6 +176,7 @@ public class ObjectRelationshipResourceImpl
 				objectRelationship.getDeletionTypeAsString(),
 				LocalizedMapUtil.getLocalizedMap(objectRelationship.getLabel()),
 				objectRelationship.getName(),
+				GetterUtil.getBoolean(objectRelationship.getSystem()),
 				objectRelationship.getTypeAsString()));
 	}
 
@@ -209,6 +211,7 @@ public class ObjectRelationshipResourceImpl
 				objectRelationship.getDeletionTypeAsString(),
 				LocalizedMapUtil.getLocalizedMap(objectRelationship.getLabel()),
 				objectRelationship.getName(),
+				GetterUtil.getBoolean(objectRelationship.getSystem()),
 				objectRelationship.getTypeAsString()));
 	}
 
@@ -216,6 +219,12 @@ public class ObjectRelationshipResourceImpl
 	public ObjectRelationship putObjectRelationship(
 			Long objectRelationshipId, ObjectRelationship objectRelationship)
 		throws Exception {
+
+		if (Validator.isNotNull(objectRelationship.getEdge()) &&
+			!FeatureFlagManagerUtil.isEnabled("LPS-187142")) {
+
+			throw new UnsupportedOperationException();
+		}
 
 		if (Validator.isNotNull(
 				objectRelationship.getParameterObjectFieldName())) {
@@ -243,7 +252,8 @@ public class ObjectRelationshipResourceImpl
 				objectRelationshipId,
 				GetterUtil.getLong(
 					objectRelationship.getParameterObjectFieldId()),
-				objectRelationship.getDeletionTypeAsString(), false,
+				objectRelationship.getDeletionTypeAsString(),
+				GetterUtil.getBoolean(objectRelationship.getEdge()),
 				LocalizedMapUtil.getLocalizedMap(
 					objectRelationship.getLabel())));
 	}
@@ -281,11 +291,17 @@ public class ObjectRelationshipResourceImpl
 				false,
 				HashMapBuilder.put(
 					"delete",
-					addAction(
-						ActionKeys.DELETE, "deleteObjectRelationship",
-						com.liferay.object.model.ObjectDefinition.class.
-							getName(),
-						objectRelationship.getObjectDefinitionId1())
+					() -> {
+						if (objectRelationship.isSystem()) {
+							return null;
+						}
+
+						return addAction(
+							ActionKeys.DELETE, "deleteObjectRelationship",
+							com.liferay.object.model.ObjectDefinition.class.
+								getName(),
+							objectRelationship.getObjectDefinitionId1());
+					}
 				).build(),
 				null, null, contextAcceptLanguage.getPreferredLocale(), null,
 				null),

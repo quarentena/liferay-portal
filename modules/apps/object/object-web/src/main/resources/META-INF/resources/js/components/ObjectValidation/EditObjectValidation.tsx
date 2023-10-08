@@ -23,7 +23,7 @@ import {
 
 interface EditObjectValidationProps {
 	creationLanguageId: Liferay.Language.Locale;
-	learnResources: object;
+	learnResources: ObjectWebLearnResources;
 	objectDefinitionId: number;
 	objectValidationRuleElements: SidebarCategory[];
 	objectValidationRuleId: number;
@@ -93,14 +93,17 @@ export default function EditObjectValidation({
 		}
 		catch (error) {
 			const {detail, message} = error as ErrorDetails;
-			const {fieldName, message: detailMessage} = JSON.parse(
-				detail as string
-			) as {
-				fieldName: keyof ObjectValidationErrors;
-				message: string;
-			};
 
-			setErrorMessage({[fieldName]: detailMessage});
+			if (detail) {
+				const {fieldName, message: detailMessage} = JSON.parse(
+					detail as string
+				) as {
+					fieldName: keyof ObjectValidationErrors;
+					message: string;
+				};
+
+				setErrorMessage({[fieldName]: detailMessage});
+			}
 
 			openToast({message, type: 'danger'});
 		}
@@ -131,38 +134,29 @@ export default function EditObjectValidation({
 				ObjectValidation
 			>(objectValidationRuleId);
 
-			if (Liferay.FeatureFlags['LPS-187846']) {
-				const newObjectValidation: ObjectValidation = {
-					...validationResponseJSON,
-					script:
-						validationResponseJSON.script === 'script_placeholder'
-							? ''
-							: validationResponseJSON.script,
-				};
+			const newObjectValidation: ObjectValidation = {
+				...validationResponseJSON,
+				script:
+					validationResponseJSON.script === 'script_placeholder'
+						? ''
+						: validationResponseJSON.script,
+			};
 
-				const fieldsResponseJSON = await API.getObjectDefinitionObjectFields(
-					objectDefinitionId
-				);
+			const fieldsResponseJSON = await API.getObjectDefinitionObjectFields(
+				objectDefinitionId
+			);
 
-				setObjectFields(
-					fieldsResponseJSON.filter((field) => !field.system)
-				);
-				setValues(newObjectValidation);
-			}
-			else {
-				setValues({
-					...validationResponseJSON,
-					script:
-						validationResponseJSON.script === 'script_placeholder'
-							? ''
-							: validationResponseJSON.script,
-				});
-			}
+			setObjectFields(
+				fieldsResponseJSON.filter((field) => !field.system)
+			);
+			setValues(newObjectValidation);
 		};
 
 		makeFetch();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [objectDefinitionId, objectValidationRuleId]);
+
+	const disabled = readOnly || !!values?.system;
 
 	return (
 		<SidePanelForm
@@ -192,7 +186,7 @@ export default function EditObjectValidation({
 							<Component
 								componentLabel={label}
 								creationLanguageId={creationLanguageId}
-								disabled={readOnly}
+								disabled={disabled}
 								errors={
 									Object.keys(errors).length !== 0
 										? errors

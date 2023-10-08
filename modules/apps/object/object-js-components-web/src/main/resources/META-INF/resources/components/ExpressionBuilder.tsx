@@ -24,6 +24,7 @@ export function ExpressionBuilder({
 	id,
 	label,
 	name,
+	onBlur,
 	onChange,
 	onInput,
 	onOpenModal,
@@ -51,6 +52,7 @@ export function ExpressionBuilder({
 						disabled={disabled}
 						id={id}
 						name={name}
+						onBlur={onBlur}
 						onChange={onChange}
 						onInput={onInput}
 						type={type}
@@ -168,6 +170,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 
 	return (
 		<ClayModal
+			center
 			className="lfr-objects__expression-builder-modal"
 			observer={observer}
 			size="lg"

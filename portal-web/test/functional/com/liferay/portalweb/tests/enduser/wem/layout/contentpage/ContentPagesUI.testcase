@@ -113,6 +113,15 @@ definition {
 		}
 	}
 
+	@description = "This is a test for LPS-188909. The portal version info shouldn't be shown on the Home page."
+	@priority = 4
+	test CannotViewPortalVersionInfoOnHomePage {
+		ContentPages.viewFragmentText(
+			fragmentName = "paragraph",
+			id = "element-text",
+			text = "Enjoy using the best DXP on Earth!");
+	}
+
 	@description = "This is a test for LPS-146373. The page creator could close the left sidebar panel via the times icon."
 	@priority = 4
 	test CloseLeftPageEditorSidebar {
@@ -136,9 +145,6 @@ definition {
 	@description = "This is a test for LPS-158746. Could add and remove fragment to Favorites session on content page in card view."
 	@priority = 3
 	test CouldAddAndRemoveFragmentInCardView {
-		property test.liferay.virtual.instance = "false";
-		property test.run.type = "single";
-
 		task ("Given go to edit content page") {
 			ContentPagesNavigator.openEditContentPage(
 				pageName = "Test Page Name",
@@ -220,8 +226,6 @@ definition {
 	@priority = 5
 	test CouldAddAndRemoveFragmentToFavoritesSessionAndWidgetToHighlightedSession {
 		property portal.release = "false";
-		property test.liferay.virtual.instance = "false";
-		property test.run.type = "single";
 
 		task ("When go to edit content page") {
 			ContentPagesNavigator.openEditContentPage(
@@ -343,8 +347,6 @@ definition {
 	@priority = 5
 	test CouldAddAndRemoveFragmentToFavoritesSessionAndWidgetToHighlightedSessionOnReleaseBundle {
 		property portal.upstream = "false";
-		property test.liferay.virtual.instance = "false";
-		property test.run.type = "single";
 
 		task ("When go to edit content page") {
 			ContentPagesNavigator.openEditContentPage(
@@ -723,9 +725,6 @@ definition {
 	@description = "This is a test for LPS-158746. The favorite fragment is hidden if it is not allowed on master page."
 	@priority = 3
 	test ViewFavoriteFragmentIsHiddenWhenItIsNotAllowedOnMasterPage {
-		property test.liferay.virtual.instance = "false";
-		property test.run.type = "single";
-
 		task ("Given go to edit content page") {
 			ContentPagesNavigator.openEditContentPage(
 				pageName = "Test Page Name",
@@ -847,8 +846,6 @@ definition {
 	@priority = 4
 	test ViewFavoritesListInDifferentUsers {
 		property custom.properties = "jsonws.web.service.paths.excludes=";
-		property test.liferay.virtual.instance = "false";
-		property test.run.type = "single";
 
 		task ("Given having 2 users") {
 			var userEmailAddress = StringUtil.randomString(8);
@@ -1145,19 +1142,6 @@ definition {
 
 			AssertElementNotPresent(locator1 = "PageEditor#ITEM_CONFIGURATION_SIDEBAR_OPEN");
 		}
-	}
-
-	@description = "This is a test for LPS-153650. The portal version info should be shown on the Home page."
-	@priority = 4
-	test ViewPortalVersionInfoOnHomePage {
-		takeScreenshot();
-
-		AssertTextMatches(
-			fragmentName = "paragraph",
-			id = "element-text",
-			index = 1,
-			locator1 = "Fragment#CONTRIBUTED_FRAGMENT_TEXT",
-			value1 = "Liferay Digital Experience Platform \/ \d+\.\d+\.\d{1,2} \([A-Z]\w+\)");
 	}
 
 }

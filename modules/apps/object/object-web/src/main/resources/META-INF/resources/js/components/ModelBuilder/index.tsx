@@ -14,38 +14,51 @@ interface CustomObjectFolderWrapperProps {
 	baseResourceURL: string;
 	companyKeyValuePairs: KeyValuePair[];
 	editObjectDefinitionURL: string;
+	filterOperators: TFilterOperators;
+	forbiddenChars: string[];
+	forbiddenLastChars: string[];
+	forbiddenNames: string[];
 	objectDefinitionPermissionsURL: string;
 	objectDefinitionsStorageTypes: LabelValueObject[];
 	objectRelationshipDeletionTypes: LabelValueObject[];
+	objectWebLearnResources: ObjectWebLearnResources;
 	siteKeyValuePairs: KeyValuePair[];
+	workflowStatusJSONArray: LabelValueObject[];
 }
 
 export default function CustomObjectFolderWrapper({
 	baseResourceURL,
 	companyKeyValuePairs,
 	editObjectDefinitionURL,
+	filterOperators,
+	forbiddenChars,
+	forbiddenLastChars,
+	forbiddenNames,
 	objectDefinitionPermissionsURL,
 	objectDefinitionsStorageTypes,
 	objectRelationshipDeletionTypes,
+	objectWebLearnResources,
 	siteKeyValuePairs,
+	workflowStatusJSONArray,
 }: CustomObjectFolderWrapperProps) {
-	const urlSearchParams = new URLSearchParams(window.location.search);
-
-	const objectFolderName = urlSearchParams.get('objectFolderName');
-
 	return (
 		<ReactFlowProvider>
 			<ObjectFolderContextProvider
 				value={{
 					baseResourceURL,
 					editObjectDefinitionURL,
+					filterOperators,
+					forbiddenChars,
+					forbiddenLastChars,
+					forbiddenNames,
 					objectDefinitionPermissionsURL,
 					objectDefinitionsStorageTypes,
+					objectWebLearnResources,
+					workflowStatusJSONArray,
 				}}
 			>
 				<EditObjectFolder
 					companyKeyValuePairs={companyKeyValuePairs}
-					objectFolderName={objectFolderName ?? ''}
 					objectRelationshipDeletionTypes={
 						objectRelationshipDeletionTypes
 					}

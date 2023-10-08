@@ -181,13 +181,13 @@ import com.liferay.portal.security.pwd.PwdToolkitUtil;
 import com.liferay.portal.security.pwd.RegExpToolkit;
 import com.liferay.portal.service.base.UserLocalServiceBaseImpl;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 import com.liferay.ratings.kernel.service.RatingsStatsLocalService;
 import com.liferay.social.kernel.model.SocialRelation;
 import com.liferay.social.kernel.service.SocialActivityLocalService;
 import com.liferay.social.kernel.service.SocialRequestLocalService;
 import com.liferay.social.kernel.service.persistence.SocialRelationPersistence;
 import com.liferay.users.admin.kernel.file.uploads.UserFileUploadsSettings;
-import com.liferay.users.admin.kernel.util.UsersAdminUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -4974,7 +4974,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		user.setPasswordUnencrypted(password1);
 		user.setPasswordEncrypted(true);
 		user.setPasswordReset(passwordReset);
-		user.setDigest(user.getDigest(password1));
 		user.setGraceLoginCount(0);
 
 		if (!silentUpdate) {
@@ -5052,7 +5051,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		user.setPasswordEncrypted(passwordEncrypted);
 		user.setPasswordReset(passwordReset);
 		user.setPasswordModifiedDate(passwordModifiedDate);
-		user.setDigest(user.getDigest(password));
 
 		user = userPersistence.update(user);
 
@@ -5146,10 +5144,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		screenName = getLogin(screenName);
 
 		validateScreenName(user.getCompanyId(), userId, screenName);
-
-		if (!StringUtil.equalsIgnoreCase(user.getScreenName(), screenName)) {
-			user.setDigest(StringPool.BLANK);
-		}
 
 		user.setScreenName(screenName);
 
@@ -5317,8 +5311,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				userId, newPassword1, newPassword2, passwordReset);
 
 			password = newPassword1;
-
-			user.setDigest(user.getDigest(password));
 		}
 
 		if (user.getContactId() <= 0) {
@@ -5339,8 +5331,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		if (screenNameModified) {
 			user.setScreenName(screenName);
-
-			user.setDigest(StringPool.BLANK);
 		}
 
 		boolean sendEmailAddressVerification = false;
@@ -5784,12 +5774,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		// Authenticate against the User_ table
 
-		boolean skipLiferayCheck = false;
-
 		if (authResult == Authenticator.SKIP_LIFERAY_CHECK) {
 			authResult = Authenticator.SUCCESS;
-
-			skipLiferayCheck = true;
 		}
 		else if ((authResult == Authenticator.SUCCESS) &&
 				 PropsValues.AUTH_PIPELINE_ENABLE_LIFERAY_CHECK) {
@@ -5834,27 +5820,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 					companyId, authType, login, user, headerMap, parameterMap);
 
 				throw portalException;
-			}
-
-			// Update digest
-
-			user = userPersistence.fetchByPrimaryKey(user.getUserId());
-
-			String digest = user.getDigest();
-
-			if (skipLiferayCheck ||
-				!PropsValues.AUTH_PIPELINE_ENABLE_LIFERAY_CHECK ||
-				Validator.isNull(digest)) {
-
-				String newDigest = user.getDigest(password);
-
-				if (!newDigest.equals(digest)) {
-					user = userPersistence.fetchByPrimaryKey(user.getUserId());
-
-					user.setDigest(newDigest);
-
-					user = userPersistence.update(user);
-				}
 			}
 		}
 
@@ -6038,10 +6003,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				user = userPersistence.update(user);
 			}
 			else {
-				user.setDigest(StringPool.BLANK);
-
-				user = userPersistence.update(user);
-
 				throw new PasswordExpiredException();
 			}
 		}
@@ -6553,7 +6514,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			return;
 		}
 
-		user.setDigest(StringPool.BLANK);
 		user.setEmailAddress(emailAddress);
 	}
 

@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  * @author Alejandro Tardín
  */
-@FeatureFlags({"LPS-167253", "LPS-184413", "LPS-186757"})
+@FeatureFlags("LPS-178642")
 public class APIApplicationProviderTest extends BaseTestCase {
 
 	@Test
@@ -45,9 +45,12 @@ public class APIApplicationProviderTest extends BaseTestCase {
 					).put(
 						"path", "/path"
 					).put(
-						"retrieveType", "collection"
+						"retrieveType",
+						APIApplication.Endpoint.RetrieveType.COLLECTION.
+							getValue()
 					).put(
-						"scope", "company"
+						"scope",
+						APIApplication.Endpoint.Scope.COMPANY.getValue()
 					))
 			).put(
 				"apiApplicationToAPISchemas",

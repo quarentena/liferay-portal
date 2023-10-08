@@ -14,6 +14,7 @@ import com.liferay.jethr0.testsuite.TestSuiteEntity;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,6 +49,10 @@ public interface JobEntity extends Entity {
 	public Set<BuildEntity> getBuildEntities();
 
 	public Set<GitBranchEntity> getGitBranchEntities();
+
+	public Set<BuildEntity> getInitialBuildEntities();
+
+	public List<JSONObject> getInitialBuildJSONObjects();
 
 	public Set<JenkinsCohortEntity> getJenkinsCohortEntities();
 
@@ -149,11 +154,9 @@ public interface JobEntity extends Entity {
 
 	public enum Type {
 
-		DEFAULT_JOB("defaultJob", "Default Job"),
-		MAINTENANCE_JOB("maintenanceJob", "Maintenance Job"),
-		PULL_REQUEST_JOB("pullRequestJob", "Pull Request Job"),
-		UPSTREAM_JOB("upstreamJob", "Upstream Job"),
-		VERIFICATION_JOB("verificationJob", "Verification Job");
+		DEFAULT("default", "Default"),
+		PORTAL_PULL_REQUEST("portalPullRequest", "Portal Pull Request"),
+		PORTAL_PULL_REQUEST_SF("portalPullRequestSF", "Portal Pull Request SF");
 
 		public static Type get(JSONObject jsonObject) {
 			return getByKey(jsonObject.getString("key"));

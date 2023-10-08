@@ -90,7 +90,7 @@ export function FragmentGeneralPanel({item}) {
 					let fields = fieldSet.fields;
 
 					if (
-						!Liferay.FeatureFlags['LPS-187846'] &&
+						!Liferay.FeatureFlags['LPS-181663'] &&
 						fragmentEntryLink.fragmentEntryKey ===
 							'INPUTS-submit-button'
 					) {
@@ -99,27 +99,25 @@ export function FragmentGeneralPanel({item}) {
 						);
 					}
 
-					{
-						return (
-							<div className="mb-1 panel-group-sm" key={index}>
-								<FieldSet
-									description={fieldSet.description}
-									fields={fields}
-									fragmentEntryLinks={
-										fragmentEntryLinksRef.current
-									}
-									isCustomStylesFieldSet
-									label={fieldSet.label}
-									languageId={languageId}
-									onValueSelect={onValueSelect}
-									selectedViewportSize={selectedViewportSize}
-									values={getFragmentConfigurationValues(
-										fragmentEntryLink
-									)}
-								/>
-							</div>
-						);
-					}
+					return (
+						<div className="mb-1 panel-group-sm" key={index}>
+							<FieldSet
+								description={fieldSet.description}
+								fields={fields}
+								fragmentEntryLinks={
+									fragmentEntryLinksRef.current
+								}
+								isCustomStylesFieldSet
+								label={fieldSet.label}
+								languageId={languageId}
+								onValueSelect={onValueSelect}
+								selectedViewportSize={selectedViewportSize}
+								values={getFragmentConfigurationValues(
+									fragmentEntryLink
+								)}
+							/>
+						</div>
+					);
 				})}
 
 			<CommonStyles

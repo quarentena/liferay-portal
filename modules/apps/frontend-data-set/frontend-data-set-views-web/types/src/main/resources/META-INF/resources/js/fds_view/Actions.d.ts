@@ -5,10 +5,35 @@
 
 /// <reference types="react" />
 
-import {IFDSViewSectionInterface} from '../FDSView';
+import {OBJECT_RELATIONSHIP} from '../Constants';
+import {IFDSViewSectionProps} from '../FDSView';
+interface IFDSAction {
+	[OBJECT_RELATIONSHIP.FDS_VIEW_FDS_ACTION]: any;
+	actions: {
+		delete: {
+			href: string;
+			method: string;
+		};
+	};
+	confirmationMessage: string;
+	confirmationMessageType: string;
+	confirmationMessage_i18n: {
+		[key: string]: string;
+	};
+	icon: string;
+	id: number;
+	label: string;
+	label_i18n: {
+		[key: string]: string;
+	};
+	permissionKey: string;
+	type: string;
+	url: string;
+}
 declare const Actions: ({
 	fdsView,
 	namespace,
 	spritemap,
-}: IFDSViewSectionInterface) => JSX.Element;
+}: IFDSViewSectionProps) => JSX.Element;
+export {IFDSAction};
 export default Actions;

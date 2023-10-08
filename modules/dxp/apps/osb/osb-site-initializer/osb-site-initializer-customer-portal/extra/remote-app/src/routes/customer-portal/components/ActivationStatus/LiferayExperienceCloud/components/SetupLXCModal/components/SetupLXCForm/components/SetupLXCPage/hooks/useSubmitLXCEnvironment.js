@@ -6,10 +6,12 @@
 import {useMutation} from '@apollo/client';
 import SearchBuilder from '~/common/core/SearchBuilder';
 import {
-	addHighPriorityContactsList,
-	associateContactRole,
-	removeContactRole,
-	removeHighPriorityContactsList,
+	actLiferayContact,
+	actRaysourceContact,
+	associateContactRoleLiferay,
+	associateContactRoleRaysource,
+	removeContactRoleLiferay,
+	removeContactRoleRaysource,
 } from '~/routes/customer-portal/utils/getHighPriorityContacts';
 import {useOnboarding} from '~/routes/onboarding/context';
 import NotificationQueueService from '../../../../../../../../../../../../../src/common/services/actions/notificationAction';
@@ -88,26 +90,34 @@ export default function useSubmitLXCEnvironment(
 			try {
 				handleLoadingSubmitButton(true);
 
-				await Promise.all(
-					removeHighPriorityContactList?.map(async (item) => {
-						removeContactRole(
-							item,
-							project,
-							sessionId,
-							provisioningServerAPI
-						);
-					})
-				);
-				await Promise.all(
-					addHighPriorityContactList?.map(async (item) => {
-						return associateContactRole(
-							item,
-							project,
-							sessionId,
-							provisioningServerAPI
-						);
-					})
-				);
+				if (featureFlags.includes('LPS-159127')) {
+					await actRaysourceContact(
+						removeContactRoleRaysource,
+						removeHighPriorityContactList,
+						project,
+						sessionId,
+						provisioningServerAPI
+					);
+					await actRaysourceContact(
+						associateContactRoleRaysource,
+						addHighPriorityContactList,
+						project,
+						sessionId,
+						provisioningServerAPI
+					);
+					await actLiferayContact(
+						addHighPriorityContactList,
+						associateContactRoleLiferay,
+						project,
+						client
+					);
+					await actLiferayContact(
+						removeHighPriorityContactList,
+						removeContactRoleLiferay,
+						project,
+						client
+					);
+				}
 				const {data} = await createLiferayExperienceCloudEnvironment({
 					variables: {
 						LiferayExperienceCloudEnvironment: {
@@ -158,25 +168,6 @@ export default function useSubmitLXCEnvironment(
 								});
 							}
 						)
-					);
-
-					await Promise.all(
-						removeHighPriorityContactList?.map((item) => {
-							return removeHighPriorityContactsList(
-								client,
-								item,
-								project
-							);
-						})
-					);
-					await Promise.all(
-						addHighPriorityContactList?.map((item) => {
-							return addHighPriorityContactsList(
-								client,
-								item,
-								project
-							);
-						})
 					);
 
 					if (featureFlags.includes('LPS-181031')) {
