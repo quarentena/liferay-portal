@@ -1,7 +1,7 @@
 {
   "fragmentCompositionDefinitionPath": "page-definition.json",
   "friendlyURL": "/new-report",
-  "name": "Agile Report Form",
+  "name": "New Agile Report",
   "description": "Agile Report Form",
   "private": false,
   "type": "content"

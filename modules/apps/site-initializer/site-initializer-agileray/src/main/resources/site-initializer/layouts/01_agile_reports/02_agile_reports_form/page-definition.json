@@ -2,258 +2,384 @@
   "pageElement": {
     "pageElements": [
       {
-        "definition":{
-          "indexed":true,
-          "layout":{
-            "align":"Center",
-            "contentDisplay":"FlexColumn",
-            "justify":"Center"
-          }
+        "definition": {
+            "indexed": true,
+            "layout": {
+                "align": "Center",
+                "contentDisplay": "FlexColumn",
+                "justify": "Center"
+            }
         },
-        "pageElements":[
-          {
-            "definition":{
-              "indexed":true,
-              "layout":{}
-            },
-            "pageElements":[
-              {
-                "definition":{
-                  "fragment":{
-                    "key":"BASIC_COMPONENT-heading"
-                  },
-                  "fragmentConfig":{
-                    "headingLevel":"h1"
-                  },
-                  "fragmentFields":[
-                    {
-                      "id":"element-text",
-                      "value":{
-                        "fragmentLink":{},
-                        "text":{
-                          "value_i18n":{
-                            "en_US":"New Agile Report"
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "fragmentStyle":{
-                    "marginBottom":"4"
-                  },
-                  "indexed":true
-                },
-                "type":"Fragment"
-              }
-            ],
-            "type":"Section"
-          },
-          {
-            "definition":{
-              "fragmentStyle":{
-                "width":"800px"
-              },
-              "indexed":true,
-              "layout":{}
-            },
-            "pageElements":[
-              {
-                "definition":{
-                  "formConfig":{
-                    "formReference":{
-                      "className":"com.liferay.object.model.ObjectDefinition#[$OBJECT_DEFINITION_ID:AgileReport$]",
-                      "classType":0
-                    }
-                  },
-                  "fragmentStyle":{
-                    "marginLeft":"2",
-                    "marginRight":"2"
-                  },
-                  "indexed":true,
-                  "layout":{}
-                },
-                "pageElements":[
-                  {
-                    "definition":{
-                      "fragment":{
-                        "key":"INPUTS-text-input"
-                      },
-                      "fragmentConfig":{
-                        "showCharactersCount":false,
-                        "placeholder":"",
-                        "inputFieldId":"ObjectField_jiraAPIToken"
-                      },
-                      "fragmentFields":[],
-                      "fragmentStyle":{
-                        "marginTop":"1"
-                      },
-                      "indexed":true
-                    },
-                    "type":"Fragment"
-                  },
-                  {
-                    "definition":{
-                      "fragment":{
-                        "key":"INPUTS-numeric-input"
-                      },
-                      "fragmentConfig":{
-                        "placeholder":"",
-                        "inputFieldId":"ObjectField_jiraFilterId"
-                      },
-                      "fragmentFields":[],
-                      "fragmentStyle":{
-                        "marginTop":"1"
-                      },
-                      "indexed":true
-                    },
-                    "type":"Fragment"
-                  },
-                  {
-                    "definition":{
-                      "fragment":{
-                        "key":"INPUTS-text-input"
-                      },
-                      "fragmentConfig":{
-                        "showCharactersCount":false,
-                        "placeholder":"",
-                        "inputFieldId":"ObjectField_jiraInstanceURL"
-                      },
-                      "fragmentFields":[],
-                      "fragmentStyle":{
-                        "marginTop":"1"
-                      },
-                      "indexed":true
-                    },
-                    "type":"Fragment"
-                  },
-                  {
-                    "definition":{
-                      "fragment":{
-                        "key":"INPUTS-text-input"
-                      },
-                      "fragmentConfig":{
-                        "showCharactersCount":false,
-                        "placeholder":"",
-                        "inputFieldId":"ObjectField_jiraUser"
-                      },
-                      "fragmentFields":[],
-                      "indexed":true
-                    },
-                    "type":"Fragment"
-                  },
-                  {
-                    "definition":{
-                      "fragment":{
-                        "key":"INPUTS-select-from-list"
-                      },
-                      "fragmentConfig":{
-                        "inputFieldId":"ObjectField_r_accountToReport_accountEntryId"
-                      },
-                      "fragmentFields":[],
-                      "indexed":true
-                    },
-                    "type":"Fragment"
-                  },
-                  {
-                    "definition":{
-                      "indexed":true,
-                      "layout":{
-                        "align":"Start",
-                        "contentDisplay":"FlexRow"
-                      }
-                    },
-                    "pageElements":[
-                      {
-                        "definition":{
-                          "fragment":{
-                            "key":"INPUTS-submit-button"
-                          },
-                          "fragmentConfig":{
-                            "buttonType":"primary",
-                            "buttonSize":"nm"
-                          },
-                          "fragmentFields":[
-                            {
-                              "id":"submit-button-text",
-                              "value":{
-                                "fragmentLink":{}
-                              }
-                            }
-                          ],
-                          "fragmentStyle":{
-                            "marginTop":"3"
-                          },
-                          "indexed":true
-                        },
-                        "type":"Fragment"
-                      },
-                      {
-                        "definition":{
-                          "fragment":{
-                            "key":"BASIC_COMPONENT-button"
-                          },
-                          "fragmentConfig":{
-                            "buttonType":"secondary",
-                            "type":"link",
-                            "buttonSize":"nm"
-                          },
-                          "fragmentFields":[
-                            {
-                              "id":"link",
-                              "value":{
-                                "fragmentLink":{
-                                  "value":{
-                                    "href":{
-                                      "mapping":{
-                                        "itemReference":{
-                                          "className":"com.liferay.portal.kernel.model.Layout",
-                                          "fields":[
-                                            {
-                                              "fieldName":"friendlyURL",
-                                              "fieldValue":"/home"
-                                            },
-                                            {
-                                              "fieldName":"privatePage",
-                                              "fieldValue":"false"
-                                            },
-                                            {
-                                              "fieldName":"siteKey",
-                                              "fieldValue":"[$GROUP_KEY$]"
-                                            }
-                                          ]
-                                        }
-                                      }
-                                    }
-                                  }
-                                },
-                                "text":{
-                                  "value_i18n":{
-                                    "en_US":"Back"
-                                  }
-                                }
-                              }
-                            }
-                          ],
-                          "fragmentStyle":{
-                            "marginLeft":"2",
-                            "marginTop":"3"
-                          },
-                          "indexed":true
-                        },
-                        "type":"Fragment"
-                      }
+        "pageElements": [
+            {
+                "definition": {
+                    "cssClasses": [
+                        "shadow"
                     ],
-                    "type":"Section"
-                  }
+                    "fragmentStyle": {
+                        "height": "60px",
+                        "marginBottom": "4",
+                        "maxWidth": "1440px",
+                        "width": "100%"
+                    },
+                    "indexed": true,
+                    "layout": {
+                        "align": "Center",
+                        "contentDisplay": "FlexColumn",
+                        "justify": "Center",
+                        "marginBottom": 2
+                    }
+                },
+                "pageElements": [
+                    {
+                        "definition": {
+                            "fragmentStyle": {
+                                "height": "40px",
+                                "width": "85%"
+                            },
+                            "indexed": true,
+                            "layout": {
+                                "align": "Center",
+                                "contentDisplay": "FlexRow"
+                            }
+                        },
+                        "pageElements": [
+                            {
+                                "definition": {
+                                    "fragment": {
+                                        "key": "BASIC_COMPONENT-image"
+                                    },
+                                    "fragmentConfig": {
+                                        "imageSize": "w-100"
+                                    },
+                                    "fragmentFields": [
+                                        {
+                                            "id": "image-square",
+                                            "value": {
+                                                "fragmentImage": {
+                                                    "description": {
+                                                        "value_i18n": {
+                                                            "en_US": ""
+                                                        }
+                                                    },
+                                                    "url": {
+                                                        "value_i18n": {
+                                                            "en_US": "/documents/d/[$GROUP_KEY$]/logo-svg?imagePreview=1"
+                                                        }
+                                                    }
+                                                },
+                                                "fragmentLink": {}
+                                            }
+                                        }
+                                    ],
+                                    "indexed": true
+                                },
+                                "type": "Fragment"
+                            },
+                            {
+                                "definition": {
+                                    "cssClasses": [
+                                        "font-weight-semi-bold"
+                                    ],
+                                    "fragment": {
+                                        "key": "dialect-dialect-text",
+                                        "siteKey": "[$GROUP_KEY$]"
+                                    },
+                                    "fragmentConfig": {
+                                        "textType": "h4"
+                                    },
+                                    "fragmentFields": [
+                                        {
+                                            "id": "element-text",
+                                            "value": {
+                                                "fragmentLink": {},
+                                                "text": {
+                                                    "value_i18n": {
+                                                        "en_US": "Agileray"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "fragmentStyle": {
+                                        "marginLeft": "3",
+                                        "textColor": "colorBrandPrimaryDarken5"
+                                    },
+                                    "indexed": true
+                                },
+                                "type": "Fragment"
+                            }
+                        ],
+                        "type": "Section"
+                    }
                 ],
-                "type":"Form"
-              }
-            ],
-            "type":"Section"
-          }
+                "type": "Section"
+            },
+            {
+                "definition": {
+                    "indexed": true,
+                    "layout": {
+                        "align": "Center",
+                        "contentDisplay": "FlexColumn",
+                        "justify": "Center"
+                    }
+                },
+                "pageElements": [
+                    {
+                        "definition": {
+                            "indexed": true,
+                            "layout": {}
+                        },
+                        "pageElements": [
+                            {
+                                "definition": {
+                                    "fragment": {
+                                        "key": "BASIC_COMPONENT-heading"
+                                    },
+                                    "fragmentConfig": {
+                                        "headingLevel": "h4"
+                                    },
+                                    "fragmentFields": [
+                                        {
+                                            "id": "element-text",
+                                            "value": {
+                                                "fragmentLink": {},
+                                                "text": {
+                                                    "value_i18n": {
+                                                        "en_US": "New Agile Report"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "fragmentStyle": {
+                                        "marginBottom": "4"
+                                    },
+                                    "indexed": true
+                                },
+                                "type": "Fragment"
+                            }
+                        ],
+                        "type": "Section"
+                    },
+                    {
+                        "definition": {
+                            "fragmentStyle": {
+                                "width": "800px"
+                            },
+                            "indexed": true,
+                            "layout": {}
+                        },
+                        "pageElements": [
+                            {
+                                "definition": {
+                                    "formConfig": {
+                                        "formReference": {
+                                            "className": "com.liferay.object.model.ObjectDefinition#[$OBJECT_DEFINITION_ID:AgileReport$]",
+                                            "classType": 0
+                                        }
+                                    },
+                                    "fragmentStyle": {
+                                        "marginLeft": "2",
+                                        "marginRight": "2"
+                                    },
+                                    "indexed": true,
+                                    "layout": {}
+                                },
+                                "pageElements": [
+                                    {
+                                        "definition": {
+                                            "fragment": {
+                                                "key": "INPUTS-text-input"
+                                            },
+                                            "fragmentConfig": {
+                                                "showCharactersCount": false,
+                                                "inputLabel": {
+                                                    "en_US": ""
+                                                },
+                                                "inputShowLabel": true,
+                                                "placeholder": "",
+                                                "inputFieldId": "ObjectField_jiraAPIToken"
+                                            },
+                                            "fragmentFields": [],
+                                            "fragmentStyle": {
+                                                "fontSize": "0.875rem",
+                                                "marginTop": "1"
+                                            },
+                                            "indexed": true
+                                        },
+                                        "type": "Fragment"
+                                    },
+                                    {
+                                        "definition": {
+                                            "fragment": {
+                                                "key": "INPUTS-numeric-input"
+                                            },
+                                            "fragmentConfig": {
+                                                "placeholder": "",
+                                                "inputFieldId": "ObjectField_jiraFilterId"
+                                            },
+                                            "fragmentFields": [],
+                                            "fragmentStyle": {
+                                                "marginTop": "1"
+                                            },
+                                            "indexed": true
+                                        },
+                                        "type": "Fragment"
+                                    },
+                                    {
+                                        "definition": {
+                                            "fragment": {
+                                                "key": "INPUTS-text-input"
+                                            },
+                                            "fragmentConfig": {
+                                                "showCharactersCount": false,
+                                                "placeholder": "",
+                                                "inputFieldId": "ObjectField_jiraInstanceURL"
+                                            },
+                                            "fragmentFields": [],
+                                            "fragmentStyle": {
+                                                "marginTop": "1"
+                                            },
+                                            "indexed": true
+                                        },
+                                        "type": "Fragment"
+                                    },
+                                    {
+                                        "definition": {
+                                            "fragment": {
+                                                "key": "INPUTS-text-input"
+                                            },
+                                            "fragmentConfig": {
+                                                "showCharactersCount": false,
+                                                "placeholder": "",
+                                                "inputFieldId": "ObjectField_jiraUser"
+                                            },
+                                            "fragmentFields": [],
+                                            "indexed": true
+                                        },
+                                        "type": "Fragment"
+                                    },
+                                    {
+                                        "definition": {
+                                            "fragment": {
+                                                "key": "INPUTS-select-from-list"
+                                            },
+                                            "fragmentConfig": {
+                                                "inputRequired": true,
+                                                "inputLabel": {
+                                                    "en_US": "Team"
+                                                },
+                                                "inputFieldId": "ObjectField_r_accountToReport_accountEntryId"
+                                            },
+                                            "fragmentFields": [],
+                                            "indexed": true
+                                        },
+                                        "type": "Fragment"
+                                    },
+                                    {
+                                        "definition": {
+                                            "indexed": true,
+                                            "layout": {
+                                                "align": "Start",
+                                                "contentDisplay": "FlexRow"
+                                            }
+                                        },
+                                        "pageElements": [
+                                            {
+                                                "definition": {
+                                                    "fragment": {
+                                                        "key": "INPUTS-submit-button"
+                                                    },
+                                                    "fragmentConfig": {
+                                                        "buttonType": "primary",
+                                                        "buttonSize": "nm"
+                                                    },
+                                                    "fragmentFields": [
+                                                        {
+                                                            "id": "submit-button-text",
+                                                            "value": {
+                                                                "fragmentLink": {}
+                                                            }
+                                                        }
+                                                    ],
+                                                    "fragmentStyle": {
+                                                        "marginTop": "3"
+                                                    },
+                                                    "indexed": true
+                                                },
+                                                "type": "Fragment"
+                                            },
+                                            {
+                                                "definition": {
+                                                    "fragment": {
+                                                        "key": "BASIC_COMPONENT-button"
+                                                    },
+                                                    "fragmentConfig": {
+                                                        "buttonType": "secondary",
+                                                        "type": "link",
+                                                        "buttonSize": "nm"
+                                                    },
+                                                    "fragmentFields": [
+                                                        {
+                                                            "id": "link",
+                                                            "value": {
+                                                                "fragmentLink": {
+                                                                    "value": {
+                                                                        "href": {
+                                                                            "mapping": {
+                                                                                "itemReference": {
+                                                                                    "className": "com.liferay.portal.kernel.model.Layout",
+                                                                                    "fields": [
+                                                                                        {
+                                                                                            "fieldName": "friendlyURL",
+                                                                                            "fieldValue": "/home"
+                                                                                        },
+                                                                                        {
+                                                                                            "fieldName": "privatePage",
+                                                                                            "fieldValue": "false"
+                                                                                        },
+                                                                                        {
+                                                                                            "fieldName": "siteKey",
+                                                                                            "fieldValue": "[$GROUP_KEY$]"
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "text": {
+                                                                    "value_i18n": {
+                                                                        "en_US": "Back"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ],
+                                                    "fragmentStyle": {
+                                                        "marginLeft": "2",
+                                                        "marginTop": "3"
+                                                    },
+                                                    "indexed": true
+                                                },
+                                                "type": "Fragment"
+                                            }
+                                        ],
+                                        "type": "Section"
+                                    }
+                                ],
+                                "type": "Form"
+                            }
+                        ],
+                        "type": "Section"
+                    }
+                ],
+                "type": "Section"
+            }
         ],
-        "type":"Section"
-      }
+        "type": "Section"
+    }
     ],
     "type": "Root"
   },

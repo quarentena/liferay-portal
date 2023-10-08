@@ -1,5 +1,7 @@
 assemble:
     - from: build/static
+      into: static    
+    - from: src/css
       into: static
 liferay-agileray-ce-react:    
     friendlyURLMapping: liferay-agileray-ce-react
@@ -9,5 +11,9 @@ liferay-agileray-ce-react:
     portletCategoryName: category.client-extensions
     type: customElement    
     urls:
-        - js/main.*.js
+        - js/main.*.js        
     useESM: true
+liferay-agileray-global-css:    
+    url: custom.css
+    name: Liferay Agileray Global CSS
+    type: globalCSS

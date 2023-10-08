@@ -2,8 +2,7 @@
     "private": true,
     "workspaces": {
         "packages": [
-            "client-extensions/liferay-agileray-ce-react",
-            "client-extensions/liferay-agileray-css"
+            "client-extensions/liferay-agileray-ce-react"
         ]
     }
 }

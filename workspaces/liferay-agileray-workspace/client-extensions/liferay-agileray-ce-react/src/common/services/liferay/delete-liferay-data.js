@@ -1,0 +1,42 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+import {baseFetch, basePut } from './api.js';
+import {Liferay} from './liferay.js';
+
+export async function deleteReportState(reportName,status){
+    let oAuth2Client;
+
+    try {
+        oAuth2Client = Liferay.OAuth2Client.FromUserAgentApplication(
+            'liferay-agileray-oauth-user-agent'
+        );
+    }
+    catch (error) {
+        console.error(error);
+    }
+
+    if (Liferay.ThemeDisplay.isSignedIn()) {                    
+        const reportId = Liferay.ThemeDisplay.getLayoutURL().substring(Liferay.ThemeDisplay.getLayoutURL().lastIndexOf('/') + 1)
+
+
+        const requestReportState = {
+            agileReportState: reportName
+          }
+        
+        return await baseFetch('o/c/agilereportstates/',{method:'GET'}, requestReportState)
+            .then((response) => response.json())
+            .then((response) => {
+            return baseFetch('o/c/agilereportstates/' + response?.id,{method:'DELETE'})
+                .then((response) => response.json())
+                .then((response) => {                    
+                    console.log(response);
+                    return response;
+                }).catch((error) => console.log(error))
+            }).catch((error) => console.log(error));
+    }
+}
+
+export default '';

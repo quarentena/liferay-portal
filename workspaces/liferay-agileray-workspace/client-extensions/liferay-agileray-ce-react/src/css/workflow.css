@@ -1,0 +1,107 @@
+.agileray {
+    & .workflowsettings{
+        display:flex;
+        flex-direction: row;
+    }
+    
+    & .workflowassembler{
+        display:flex;
+        flex-direction: row;
+        height: auto;        
+    }
+    
+    & .workflownotification{
+        position:absolute;
+        opacity: 0.8;
+    }
+    
+    & .workflowlist{
+        display:flex;
+        flex-direction: column;
+        list-style-type: none;
+        height: 100%;
+        align-items: center;
+    }
+    
+    & .workflowlistcontent{                            
+        overflow:hidden;
+        overflow-y: auto;        
+    }
+    
+    
+    & .workflowlistheader{
+        width: 170px;
+        height: 60px;
+        padding:10px;
+        margin: 3px;    
+        margin-top: 5px;
+        display: block;
+        text-align: center;
+        align-items: center;
+        justify-items: center;
+        justify-content: center;
+        background-color: var(--color-brand-primary-lighten-4);
+        border-radius: var(--border-radius); 
+    }
+        
+    & .workflowlistheader.clickable{    
+        cursor: pointer;
+    }
+    
+    & .workflowlistheader.clickable:hover{    
+        background-color: var(--color-brand-primary-lighten-1);
+    }
+    
+    & .workflowlistheaderdiv a{
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+    }
+    
+    & .workflowlistheaderdiv a:hover{
+        background-color: var(--color-brand-primary-lighten-1)
+    }
+
+    & .workflowlistcontent{
+        height: 100vh;
+        width: 170px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    & .workflowlistcontent.dragging{
+        border: 1px dashed;
+        background-color:  var(--color-brand-primary-lighten-4);
+    }
+    
+    & .workflowcard{
+        background-color: var(--color-brand-primary-lighten-1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 150px;
+        height: 45px;
+        margin: 5px;
+        cursor: move; 
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
+        text-align: center;
+        color:white;
+        border-radius: var(--border-radius) 
+    }
+
+    & .workflowcard:active{
+        cursor: grabbing;
+        cursor: -moz-grabbing;
+        cursor: -webkit-grabbing;
+        box-shadow: var(--box-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175));
+    }
+
+    & .workflowcardtitle{
+        font-size: var(--text-paragraph-sm-font-size);    
+        line-height: var(--text-paragraph-sm-line-height);
+    }
+    
+}

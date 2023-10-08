@@ -1,7 +1,0 @@
-assemble:
-    - from: assets
-      into: static
-liferay-agileray-global-css:    
-    url: _custom.css
-    name: Liferay Agileray Global CSS
-    type: globalCSS

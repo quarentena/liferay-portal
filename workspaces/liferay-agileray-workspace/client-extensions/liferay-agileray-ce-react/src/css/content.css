@@ -1,0 +1,7 @@
+.agileray{
+    & .content{
+        background-color: var(--color-brand-primary-lighten-6);
+        width: 100%;
+        height: 100%;        
+    }
+}

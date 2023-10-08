@@ -1,7 +1,7 @@
 assemble:
     - fromTask: bootJar
 liferay-agileray-oauth-user-agent:
-    .serviceAddress: 172.18.0.4:58081
+    .serviceAddress: 172.18.0.3:58081
     .serviceScheme: http
     name: Liferay Agileray OAuth Application User Agent
     allowedObjectDefinitionNames:

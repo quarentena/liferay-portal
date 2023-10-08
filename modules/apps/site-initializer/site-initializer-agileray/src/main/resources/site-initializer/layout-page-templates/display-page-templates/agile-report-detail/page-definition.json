@@ -1,92 +1,148 @@
 {
   "pageElement" : {
-    "pageElements" : [ {
-      "definition" : {
-        "indexed" : true,
-        "layout" : {
-          "align" : "Center",
-          "contentDisplay" : "FlexColumn",
-          "justify" : "Center"
-        }
-      },
-      "pageElements" : [ {
-        "definition" : {
-          "fragmentStyle" : {
-            "marginTop" : "5",
-            "width" : "1000px"
+    "pageElements" : [ 
+    {
+      "definition": {
+          "fragmentStyle": {
+              "width": "100%"
           },
-          "indexed" : true,
-          "layout" : {
-            "marginTop" : 4
+          "indexed": true,
+          "layout": {
+              "align": "Center",
+              "contentDisplay": "FlexColumn",
+              "justify": "Center"
           }
-        },
-        "pageElements" : [ {
-          "definition" : {
-            "fragment" : {
-              "key" : "BASIC_COMPONENT-button"
-            },
-            "fragmentConfig" : {
-              "buttonType" : "secondary",
-              "type" : "link",
-              "buttonSize" : "nm"
-            },
-            "fragmentFields" : [ {
-              "id" : "link",
-              "value" : {
-                "fragmentLink" : {
-                  "value" : {
-                    "href" : {
-                      "mapping" : {
-                        "itemReference" : {
-                          "className" : "com.liferay.portal.kernel.model.Layout",
-                          "fields" : [ {
-                            "fieldName" : "friendlyURL",
-                            "fieldValue" : "/home"
-                          }, {
-                            "fieldName" : "privatePage",
-                            "fieldValue" : "false"
-                          }, {
-                            "fieldName" : "siteKey",
-                            "fieldValue" : "[$GROUP_KEY$]"
-                          } ]
-                        }
-                      }
-                    }
+      },
+      "pageElements": [
+          {
+              "definition": {
+                  "cssClasses": [
+                      "shadow"
+                  ],
+                  "fragmentStyle": {
+                      "height": "60px",
+                      "marginBottom": "1",
+                      "maxWidth": "1440px",
+                      "width": "100%"
+                  },
+                  "indexed": true,
+                  "layout": {
+                      "align": "Center",
+                      "contentDisplay": "FlexColumn",
+                      "justify": "Center"
                   }
-                },
-                "text" : {
-                  "value_i18n" : {
-                    "en_US" : "&lt; Back"
+              },
+              "pageElements": [
+                  {
+                      "definition": {
+                          "fragmentStyle": {
+                              "height": "40px",
+                              "width": "85%"
+                          },
+                          "indexed": true,
+                          "layout": {
+                              "align": "Center",
+                              "contentDisplay": "FlexRow"
+                          }
+                      },
+                      "pageElements": [
+                          {
+                              "definition": {
+                                  "fragment": {
+                                      "key": "BASIC_COMPONENT-image"
+                                  },
+                                  "fragmentConfig": {
+                                      "imageSize": "w-0"
+                                  },
+                                  "fragmentFields": [
+                                      {
+                                          "id": "image-square",
+                                          "value": {
+                                              "fragmentImage": {
+                                                  "description": {
+                                                      "value_i18n": {
+                                                          "en_US": ""
+                                                      }
+                                                  },
+                                                  "url": {
+                                                      "value_i18n": {
+                                                          "en_US": "/documents/d/[$GROUP_KEY$]/logo-svg?imagePreview=1"
+                                                      }
+                                                  }
+                                              },
+                                              "fragmentLink": {}
+                                          }
+                                      }
+                                  ],
+                                  "indexed": true
+                              },
+                              "type": "Fragment"
+                          },
+                          {
+                              "definition": {
+                                  "cssClasses": [
+                                      "font-weight-semi-bold"
+                                  ],
+                                  "fragment": {
+                                      "key": "dialect-dialect-text",
+                                      "siteKey": "[$GROUP_KEY$]"
+                                  },
+                                  "fragmentConfig": {
+                                      "textType": "h4"
+                                  },
+                                  "fragmentFields": [
+                                      {
+                                          "id": "element-text",
+                                          "value": {
+                                              "fragmentLink": {},
+                                              "text": {
+                                                  "value_i18n": {
+                                                      "en_US": "Agileray"
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  ],
+                                  "fragmentStyle": {
+                                      "marginLeft": "3",
+                                      "textColor": "colorBrandPrimaryDarken5"
+                                  },
+                                  "indexed": true
+                              },
+                              "type": "Fragment"
+                          }
+                      ],
+                      "type": "Section"
                   }
-                }
-              }
-            } ],
-            "indexed" : true
+              ],
+              "type": "Section"
           },
-          "type" : "Fragment"
-        } ],
-        "type" : "Section"
-      }, {
-        "definition" : {
-          "fragmentStyle" : {
-            "width" : "1000px"
-          },
-          "indexed" : true,
-          "layout" : { }
-        },
-        "pageElements" : [ {
-          "definition" : {
-            "widgetInstance" : {
-              "widgetConfig" : { },
-              "widgetName" : "com_liferay_client_extension_web_internal_portlet_ClientExtensionEntryPortlet_20096_LXC_liferay_agileray_ce_react"
-            }
-          },
-          "type" : "Widget"
-        } ],
-        "type" : "Section"
-      } ],
-      "type" : "Section"
-    } ],
+          {
+              "definition": {
+                  "fragmentStyle": {
+                      "maxWidth": "1440px",
+                      "width": "100%"
+                  },
+                  "indexed": true,
+                  "layout": {}
+              },
+              "pageElements": [
+                  {
+                      "definition": {
+                          "widgetInstance": {
+                              "widgetConfig": {},
+                              "widgetName": "com_liferay_client_extension_web_internal_portlet_ClientExtensionEntryPortlet_20095_LXC_liferay_agileray_ce_react"
+                          }
+                      },
+                      "type": "Widget"
+                  }
+              ],
+              "type": "Section"
+          }
+      ],
+      "type": "Section"
+  }
+    ],
     "type" : "Root"
   },
   "settings" : {

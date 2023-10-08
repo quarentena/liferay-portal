@@ -3,39 +3,51 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React from 'react';
+import './css/custom.css';
 import {createRoot} from 'react-dom/client';
-
-import AgileReportStateAssembler from './common/components/AgileReportStateAssembler.jsx';
+import Navbar from './pages/navbar/index.js';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import {Liferay} from './common/services/liferay/liferay.js';
-import { MantineProvider, createTheme } from '@mantine/core';
+import WorkflowSettings from './pages/settings/workflow.jsx';
+import BacklogSettings from './pages/settings/backlog.js';
 
-const theme = createTheme({
-  /** Put your mantine theme override here */
-});
-
-const App = () => {	
-	if (Liferay.ThemeDisplay.isSignedIn()){
-		return (			
-			<MantineProvider theme={theme}>
-      			<AgileReportStateAssembler />
-    		</MantineProvider>											
-		);
-	}else{
-		return (<h1>Not at liferay</h1>);
-	}	
+function backHome(){		
+	window.location.href = '/web/agile01'	
 }
 
-class WebComponent extends HTMLElement {
-	connectedCallback() {
-		createRoot(this).render(
-			<App />
-		);
+const Report = () => {				
+	if ((window.location.href.includes('#') == false) && (!document.URL.includes('edit'))){		
+		window.location.href += '/#/report';
+	}
+	
+	return (						
+		<div className='agileray'>
+			<Router basename='/report'>
+				<Navbar	 />				
+				<div className='content'>
+					<Routes>						
+						<Route path='/' />
+						<Route path='Back' Component={backHome}/>
+						<Route path='/settings/workflow' element={<WorkflowSettings />} />
+						<Route path='/settings/backlog' element={<BacklogSettings />}/>						
+					</Routes>
+				</div>
+			</Router>			
+		</div>
+	);
+}
+
+class WebComponent extends HTMLElement {		
+	connectedCallback() {												
+		createRoot(this).render(			
+			<Report />
+		)		
 	}
 }
 
+
 const ELEMENT_ID = 'liferay-agileray-ce-react';
 
-if (!customElements.get(ELEMENT_ID)) {
+if (!customElements.get(ELEMENT_ID)) {	
 	customElements.define(ELEMENT_ID, WebComponent);
 }

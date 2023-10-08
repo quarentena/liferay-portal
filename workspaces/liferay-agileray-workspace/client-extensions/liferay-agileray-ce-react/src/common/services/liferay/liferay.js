@@ -24,7 +24,12 @@ export const Liferay = window.Liferay || {
 		getCompanyGroupId: () => 0,
 		getScopeGroupId: () => 0,
 		getSiteGroupId: () => 0,
-		getPortletDisplay: () => 0,	
+		getPortletDisplay: () => 0,
+		getLayoutRelativeURL: () => '',	
+		getURLHome: () => '',
+		getLayoutURL: () => '',
+		getPathContext: () => '',
+		getPlid: () => '',
 		isSignedIn: () => {
 			return false;
 		},			

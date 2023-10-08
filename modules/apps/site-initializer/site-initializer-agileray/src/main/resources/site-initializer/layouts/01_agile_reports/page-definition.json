@@ -1,697 +1,1069 @@
 {
   "pageElement": {
     "pageElements": [
-      {
-        "definition": {
-          "indexed": true,
-          "layout": {
-            "align": "Center",
-            "contentDisplay": "FlexColumn"
-          }
-        },
-        "pageElements": [
-          {
+        {
             "definition": {
-              "indexed": true,
-              "layout": {
-                "contentDisplay": "FlexRow",
-                "justify": "Center"
-              }
-            },
-            "pageElements": [
-              {
-                "definition": {
-                  "fragmentStyle": {
-                    "backgroundFragmentImage": {
-                      "title": {
-                        "value": "home_banner.jpg"
-                      },
-                      "url": {
-                        "value": "/documents/d/[$GROUP_KEY$]/home_banner-jpg?imagePreview=1"
-                      }
-                    },
-                    "height": "300px",
-                    "marginBottom": "4",
-                    "marginTop": "7",
-                    "width": "1440px"
-                  },
-                  "indexed": true,
-                  "layout": {
+                "fragmentStyle": {
+                    "height": "100%",
+                    "minWidth": "720px"
+                },
+                "indexed": true,
+                "layout": {
                     "align": "Center",
-                    "contentDisplay": "FlexColumn",
-                    "marginBottom": 2,
-                    "marginTop": 8
-                  }
-                },
-                "pageElements": [
-                  {
-                    "definition": {
-                      "indexed": true,
-                      "layout": {}
-                    },
-                    "pageElements": [
-                      {
-                        "definition": {
-                          "fragment": {
-                            "key": "dialect-dialect-text",
-                            "siteKey": "[$GROUP_KEY$]"
-                          },
-                          "fragmentConfig": {
-                            "textType": "display-1"
-                          },
-                          "fragmentFields": [
-                            {
-                              "id": "element-text",
-                              "value": {
-                                "fragmentLink": {},
-                                "text": {
-                                  "value_i18n": {
-                                    "en_US": "Agileray"
-                                  }
-                                }
-                              }
-                            }
-                          ],
-                          "fragmentStyle": {
-                            "fontFamily": "fontFamilyMonospace",
-                            "textColor": "colorNeutral2"
-                          },
-                          "indexed": true
-                        },
-                        "type": "Fragment"
-                      }
-                    ],
-                    "type": "Section"
-                  },
-                  {
-                    "definition": {
-                      "indexed": true,
-                      "layout": {}
-                    },
-                    "pageElements": [
-                      {
-                        "definition": {
-                          "fragment": {
-                            "key": "com.liferay.fragment.renderer.collection.filter.internal.CollectionFilterFragmentRenderer"
-                          },
-                          "fragmentConfig": {
-                            "filterKey": "keywords",
-                            "targetCollections": [
-                              "e479f995-8aaa- 3473-8628-4e942833e24a"
-                            ]
-                          },
-                          "fragmentFields": [],
-                          "fragmentStyle": {
-                            "marginTop": "140px",
-                            "width": "1000px"
-                          },
-                          "indexed": true
-                        },
-                        "type": "Fragment"
-                      }
-                    ],
-                    "type": "Section"
-                  }
-                ],
-                "type": "Section"
-              }
-            ],
-            "type": "Section"
-          },
-          {
-            "definition": {
-              "fragmentStyle": {
-                "marginBottom": "4",
-                "width": "1000px"
-              },
-              "indexed": true,
-              "layout": {
-                "marginBottom": 2
-              }
+                    "contentDisplay": "FlexColumn"
+                }
             },
             "pageElements": [
-              {
-                "definition": {
-                  "fragment": {
-                    "key": "dialect-dialect-nav",
-                    "siteKey": "[$GROUP_KEY$]"
-                  },
-                  "fragmentConfig": {
-                    "orientation": "nav-horizontal",
-                    "navType": "nav-primary",
-                    "inverted": false
-                  },
-                  "fragmentFields": [],
-                  "indexed": true,
-                  "widgetInstances": [
-                    {
-                      "widgetConfig": {},
-                      "widgetName": "com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet"
-                    }
-                  ]
-                },
-                "type": "Fragment"
-              }
-            ],
-            "type": "Section"
-          },
-          {
-            "definition": {
-              "fragmentStyle": {
-                "width": "1000px"
-              },
-              "indexed": true,
-              "layout": {
-                "contentDisplay": "FlexRow",
-                "justify": "Center"
-              }
-            },
-            "pageElements": [
-              {
-                "definition": {
-                  "fragmentStyle": {
-                    "width": "1000px"
-                  },
-                  "indexed": true,
-                  "layout": {
-                    "contentDisplay": "FlexColumn",
-                    "justify": "Center"
-                  }
-                },
-                "pageElements": [
-                  {
+                {
                     "definition": {
-                      "fragmentStyle": {
-                        "width": "1000px"
-                      },
-                      "indexed": true,
-                      "layout": {
-                        "align": "Start",
-                        "contentDisplay": "FlexRow"
-                      }
+                        "cssClasses": [
+                            "shadow"
+                        ],
+                        "fragmentStyle": {
+                            "height": "60px",
+                            "marginBottom": "4",
+                            "maxWidth": "1440px",
+                            "minWidth": "720px",
+                            "width": "100%"
+                        },
+                        "indexed": true,
+                        "layout": {
+                            "align": "Center",
+                            "contentDisplay": "FlexColumn",
+                            "justify": "Center",
+                            "marginBottom": 2
+                        }
                     },
                     "pageElements": [
-                      {
-                        "definition": {
-                          "fragmentStyle": {
-                            "height": "30px",
-                            "width": "150px"
-                          },
-                          "indexed": true,
-                          "layout": {
-                            "align": "Start",
-                            "contentDisplay": "FlexColumn",
-                            "justify": "Center"
-                          }
-                        },
-                        "pageElements": [
-                          {
-                            "definition": {
-                              "fragment": {
-                                "key": "BASIC_COMPONENT-heading"
-                              },
-                              "fragmentConfig": {
-                                "headingLevel": "h5"
-                              },
-                              "fragmentFields": [
-                                {
-                                  "id": "element-text",
-                                  "value": {
-                                    "fragmentLink": {},
-                                    "text": {
-                                      "value_i18n": {
-                                        "en_US": "Key"
-                                      }
-                                    }
-                                  }
-                                }
-                              ],
-                              "indexed": true
-                            },
-                            "type": "Fragment"
-                          }
-                        ],
-                        "type": "Section"
-                      },
-                      {
-                        "definition": {
-                          "fragmentStyle": {
-                            "height": "30px",
-                            "width": "150px"
-                          },
-                          "indexed": true,
-                          "layout": {
-                            "contentDisplay": "FlexColumn",
-                            "justify": "Center"
-                          }
-                        },
-                        "pageElements": [
-                          {
-                            "definition": {
-                              "fragment": {
-                                "key": "BASIC_COMPONENT-heading"
-                              },
-                              "fragmentConfig": {
-                                "headingLevel": "h5"
-                              },
-                              "fragmentFields": [
-                                {
-                                  "id": "element-text",
-                                  "value": {
-                                    "fragmentLink": {},
-                                    "text": {
-                                      "value_i18n": {
-                                        "en_US": "Jira Filter"
-                                      }
-                                    }
-                                  }
-                                }
-                              ],
-                              "indexed": true
-                            },
-                            "type": "Fragment"
-                          }
-                        ],
-                        "type": "Section"
-                      },
-                      {
-                        "definition": {
-                          "fragmentStyle": {
-                            "height": "30px",
-                            "width": "700px"
-                          },
-                          "indexed": true,
-                          "layout": {
-                            "contentDisplay": "FlexColumn",
-                            "justify": "Center"
-                          }
-                        },
-                        "pageElements": [
-                          {
-                            "definition": {
-                              "fragment": {
-                                "key": "BASIC_COMPONENT-heading"
-                              },
-                              "fragmentConfig": {
-                                "headingLevel": "h5"
-                              },
-                              "fragmentFields": [
-                                {
-                                  "id": "element-text",
-                                  "value": {
-                                    "fragmentLink": {},
-                                    "text": {
-                                      "value_i18n": {
-                                        "en_US": "Jira URL"
-                                      }
-                                    }
-                                  }
-                                }
-                              ],
-                              "indexed": true
-                            },
-                            "type": "Fragment"
-                          }
-                        ],
-                        "type": "Section"
-                      }
-                    ],
-                    "type": "Section"
-                  },
-                  {
-                    "definition": {
-                      "fragment": {
-                        "key": "BASIC_COMPONENT-separator"
-                      },
-                      "fragmentConfig": {
-                        "separatorColor": "",
-                        "bottomSpacing": "3"
-                      },
-                      "fragmentFields": [],
-                      "indexed": true
-                    },
-                    "type": "Fragment"
-                  },
-                  {
-                    "definition": {
-                      "collectionConfig": {
-                        "collectionReference": {
-                          "className": "com.liferay.object.web.internal.info.collection.provider.ObjectEntrySingleFormVariationInfoCollectionProvider_[$COMPANY_ID$]_C_AgileReport"
-                        },
-                        "collectionType": "CollectionProvider"
-                      },
-                      "collectionViewports": [
                         {
-                          "collectionViewportDefinition": {
-                            "numberOfColumns": 1
-                          },
-                          "id": "landscapeMobile"
-                        },
-                        {
-                          "collectionViewportDefinition": {},
-                          "id": "portraitMobile"
-                        },
-                        {
-                          "collectionViewportDefinition": {},
-                          "id": "tablet"
-                        }
-                      ],
-                      "displayAllItems": false,
-                      "displayAllPages": true,
-                      "emptyCollectionConfig": {
-                        "displayMessage": false,
-                        "message_i18n": {
-                          "en_US": "No Results Found"
-                        }
-                      },
-                      "layout": {
-                        "justify": "Center"
-                      },
-                      "listItemStyle": "",
-                      "listStyle": "",
-                      "numberOfColumns": 1,
-                      "numberOfItems": 5,
-                      "numberOfItemsPerPage": 20,
-                      "numberOfPages": 5,
-                      "paginationType": "Numeric",
-                      "showAllItems": false,
-                      "templateKey": ""
-                    },
-                    "pageElements": [
-                      {
-                        "definition": {
-                          "collectionItemConfig": {}
-                        },
-                        "pageElements": [
-                          {
                             "definition": {
-                              "fragmentStyle": {
-                                "borderColor": "brandColor3",
-                                "height": "40px",
-                                "shadow": "",
-                                "width": "1000px"
-                              },
-                              "indexed": true,
-                              "layout": {
-                                "borderColor": "brandColor3",
-                                "contentDisplay": "FlexRow",
-                                "justify": "Center"
-                              }
+                                "fragmentStyle": {
+                                    "height": "40px",
+                                    "width": "85%"
+                                },
+                                "indexed": true,
+                                "layout": {
+                                    "align": "Center",
+                                    "contentDisplay": "FlexRow"
+                                }
                             },
                             "pageElements": [
-                              {
-                                "definition": {
-                                  "fragmentStyle": {
-                                    "height": "100%",
-                                    "width": "150px"
-                                  },
-                                  "indexed": true,
-                                  "layout": {
-                                    "align": "Start",
-                                    "contentDisplay": "FlexColumn",
-                                    "justify": "Center"
-                                  }
-                                },
-                                "pageElements": [
-                                  {
+                                {
                                     "definition": {
-                                      "fragment": {
-                                        "key": "dialect-dialect-text",
-                                        "siteKey": "[$GROUP_KEY$]"
-                                      },
-                                      "fragmentConfig": {
-                                        "textType": "text-link-md"
-                                      },
-                                      "fragmentFields": [
-                                        {
-                                          "id": "element-text",
-                                          "value": {
-                                            "fragmentLink": {
-                                              "value": {
-                                                "href": {
-                                                  "mapping": {
-                                                    "fieldKey": "ObjectEntry_displayPageURL",
-                                                    "itemReference": {
-                                                      "contextSource": "CollectionItem"
+                                        "fragment": {
+                                            "key": "BASIC_COMPONENT-image"
+                                        },
+                                        "fragmentConfig": {
+                                            "imageSize": "w-0"
+                                        },
+                                        "fragmentFields": [
+                                            {
+                                                "id": "image-square",
+                                                "value": {
+                                                    "fragmentImage": {
+                                                        "description": {
+                                                            "value_i18n": {
+                                                                "en_US": ""
+                                                            }
+                                                        },
+                                                        "url": {
+                                                            "value_i18n": {
+                                                                "en_US": "/documents/d/[$GROUP_KEY$]/logo-svg?imagePreview=1"
+                                                            }
+                                                        }
+                                                    },
+                                                    "fragmentLink": {}
+                                                }
+                                            }
+                                        ],
+                                        "indexed": true
+                                    },
+                                    "type": "Fragment"
+                                },
+                                {
+                                    "definition": {
+                                        "cssClasses": [
+                                            "font-weight-semi-bold"
+                                        ],
+                                        "fragment": {
+                                            "key": "dialect-dialect-text",
+                                            "siteKey": "[$GROUP_KEY$]"
+                                        },
+                                        "fragmentConfig": {
+                                            "textType": "h4"
+                                        },
+                                        "fragmentFields": [
+                                            {
+                                                "id": "element-text",
+                                                "value": {
+                                                    "fragmentLink": {},
+                                                    "text": {
+                                                        "value_i18n": {
+                                                            "en_US": "Agileray"
+                                                        }
                                                     }
-                                                  }
                                                 }
-                                              }
-                                            },
-                                            "text": {
-                                              "mapping": {
-                                                "fieldKey": "ObjectEntry_objectEntryId",
-                                                "itemReference": {
-                                                  "contextSource": "CollectionItem"
-                                                }
-                                              }
                                             }
-                                          }
-                                        }
-                                      ],
-                                      "indexed": true
+                                        ],
+                                        "fragmentStyle": {
+                                            "marginLeft": "3",
+                                            "textColor": "colorBrandPrimaryDarken5"
+                                        },
+                                        "indexed": true
                                     },
                                     "type": "Fragment"
-                                  }
-                                ],
-                                "type": "Section"
-                              },
-                              {
-                                "definition": {
-                                  "fragmentStyle": {
-                                    "height": "100%",
-                                    "width": "150px"
-                                  },
-                                  "indexed": true,
-                                  "layout": {
-                                    "contentDisplay": "FlexColumn",
-                                    "justify": "Center"
-                                  }
                                 },
-                                "pageElements": [
-                                  {
+                                {
                                     "definition": {
-                                      "fragment": {
-                                        "key": "dialect-dialect-text",
-                                        "siteKey": "[$GROUP_KEY$]"
-                                      },
-                                      "fragmentConfig": {
-                                        "textType": "text-paragraph"
-                                      },
-                                      "fragmentFields": [
-                                        {
-                                          "id": "element-text",
-                                          "value": {
-                                            "fragmentLink": {},
-                                            "text": {
-                                              "mapping": {
-                                                "fieldKey": "ObjectField_jiraFilterId",
-                                                "itemReference": {
-                                                  "contextSource": "CollectionItem"
-                                                }
-                                              }
-                                            }
-                                          }
+                                        "fragmentStyle": {
+                                            "width": "100%"
+                                        },
+                                        "indexed": true,
+                                        "layout": {
+                                            "align": "End",
+                                            "contentDisplay": "FlexColumn",
+                                            "justify": "Center"
                                         }
-                                      ],
-                                      "indexed": true
                                     },
-                                    "type": "Fragment"
-                                  }
-                                ],
-                                "type": "Section"
-                              },
-                              {
-                                "definition": {
-                                  "fragmentStyle": {
-                                    "height": "100%",
-                                    "width": "500px"
-                                  },
-                                  "indexed": true,
-                                  "layout": {
-                                    "contentDisplay": "FlexColumn",
-                                    "justify": "Center"
-                                  }
-                                },
-                                "pageElements": [
-                                  {
-                                    "definition": {
-                                      "fragment": {
-                                        "key": "dialect-dialect-text",
-                                        "siteKey": "[$GROUP_KEY$]"
-                                      },
-                                      "fragmentConfig": {
-                                        "textType": "text-paragraph"
-                                      },
-                                      "fragmentFields": [
+                                    "pageElements": [
                                         {
-                                          "id": "element-text",
-                                          "value": {
-                                            "fragmentLink": {},
-                                            "text": {
-                                              "mapping": {
-                                                "fieldKey": "ObjectField_jiraInstanceURL",
-                                                "itemReference": {
-                                                  "contextSource": "CollectionItem"
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      ],
-                                      "indexed": true
-                                    },
-                                    "type": "Fragment"
-                                  }
-                                ],
-                                "type": "Section"
-                              },
-                              {
-                                "definition": {
-                                  "fragmentStyle": {
-                                    "height": "100%",
-                                    "width": "100px"
-                                  },
-                                  "indexed": true,
-                                  "layout": {
-                                    "align": "Center",
-                                    "contentDisplay": "FlexColumn",
-                                    "justify": "Center"
-                                  }
-                                },
-                                "pageElements": [
-                                  {
-                                    "definition": {
-                                      "fragment": {
-                                        "key": "BASIC_COMPONENT-button"
-                                      },
-                                      "fragmentConfig": {
-                                        "buttonType": "primary",
-                                        "type": "action",
-                                        "buttonSize": "sm"
-                                      },
-                                      "fragmentFields": [
-                                        {
-                                          "id": "action",
-                                          "value": {
-                                            "action": {
-                                              "mapping": {
-                                                "fieldKey": "ObjectAction_createRequest",
-                                                "itemReference": {
-                                                  "contextSource": "CollectionItem"
-                                                }
-                                              }
-                                            },
-                                            "onError": {
-                                              "type": "Notification",
-                                              "value": {
-                                                "reload": false,
-                                                "text": {
-                                                  "value_i18n": {
-                                                    "en_US": "Ahhhh..."
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "onSuccess": {
-                                              "type": "Notification",
-                                              "value": {
-                                                "reload": false,
-                                                "text": {
-                                                  "value_i18n": {
-                                                    "en_US": "Wooho!"
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "text": {
-                                              "value_i18n": {
-                                                "en_US": "Update"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      ],
-                                      "indexed": true
-                                    },
-                                    "type": "Fragment"
-                                  }
-                                ],
-                                "type": "Section"
-                              },
-                              {
-                                "definition": {
-                                  "fragmentStyle": {
-                                    "height": "100%",
-                                    "width": "100px"
-                                  },
-                                  "indexed": true,
-                                  "layout": {
-                                    "align": "Center",
-                                    "contentDisplay": "FlexColumn",
-                                    "justify": "Center"
-                                  }
-                                },
-                                "pageElements": [
-                                  {
-                                    "definition": {
-                                      "fragment": {
-                                        "key": "BASIC_COMPONENT-button"
-                                      },
-                                      "fragmentConfig": {
-                                        "buttonType": "primary",
-                                        "type": "link",
-                                        "buttonSize": "sm"
-                                      },
-                                      "fragmentFields": [
-                                        {
-                                          "id": "link",
-                                          "value": {
-                                            "fragmentLink": {
-                                              "value": {
-                                                "href": {
-                                                  "mapping": {
-                                                    "fieldKey": "ObjectEntry_displayPageURL",
-                                                    "itemReference": {
-                                                      "contextSource": "CollectionItem"
+                                            "definition": {
+                                                "fragment": {
+                                                    "key": "dialect-dialect-nav",
+                                                    "siteKey": "[$GROUP_KEY$]"
+                                                },
+                                                "fragmentConfig": {
+                                                    "orientation": "nav-horizontal",
+                                                    "navType": "nav-primary",
+                                                    "inverted": false
+                                                },
+                                                "fragmentFields": [],
+                                                "fragmentStyle": {
+                                                    "height": "40px"
+                                                },
+                                                "indexed": true,
+                                                "widgetInstances": [
+                                                    {
+                                                        "widgetConfig": {},
+                                                        "widgetName": "com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet"
                                                     }
-                                                  }
-                                                }
-                                              }
+                                                ]
                                             },
-                                            "text": {
-                                              "value_i18n": {
-                                                "en_US": "Display"
-                                              }
-                                            }
-                                          }
+                                            "type": "Fragment"
                                         }
-                                      ],
-                                      "indexed": true
-                                    },
-                                    "type": "Fragment"
-                                  }
-                                ],
-                                "type": "Section"
-                              }
+                                    ],
+                                    "type": "Section"
+                                }
                             ],
                             "type": "Section"
-                          }
-                        ],
-                        "type": "CollectionItem"
-                      }
+                        }
                     ],
-                    "type": "Collection"
-                  }
-                ],
-                "type": "Section"
-              }
+                    "type": "Section"
+                },
+                {
+                    "definition": {
+                        "fragmentStyle": {
+                            "height": "100%",
+                            "maxWidth": "1440px",
+                            "minWidth": "720px",
+                            "width": "100%"
+                        },
+                        "indexed": true,
+                        "layout": {
+                            "contentDisplay": "FlexRow",
+                            "justify": "Center"
+                        }
+                    },
+                    "pageElements": [
+                        {
+                            "definition": {
+                                "fragmentStyle": {
+                                    "minWidth": "720px",
+                                    "width": "85%"
+                                },
+                                "indexed": true,
+                                "layout": {
+                                    "contentDisplay": "FlexColumn",
+                                    "justify": "Center"
+                                }
+                            },
+                            "pageElements": [
+                                {
+                                    "definition": {
+                                        "fragmentStyle": {
+                                            "width": "100%"
+                                        },
+                                        "indexed": true,
+                                        "layout": {
+                                            "align": "Start",
+                                            "contentDisplay": "FlexRow"
+                                        }
+                                    },
+                                    "pageElements": [
+                                        {
+                                            "definition": {
+                                                "fragmentStyle": {
+                                                    "maxWidth": "1440px",
+                                                    "width": "100%"
+                                                },
+                                                "gutters": true,
+                                                "indexed": true,
+                                                "modulesPerRow": 5,
+                                                "numberOfColumns": 5,
+                                                "reverseOrder": false,
+                                                "rowViewports": [
+                                                    {
+                                                        "id": "landscapeMobile",
+                                                        "rowViewportDefinition": {
+                                                            "modulesPerRow": 1
+                                                        }
+                                                    },
+                                                    {
+                                                        "id": "portraitMobile",
+                                                        "rowViewportDefinition": {}
+                                                    },
+                                                    {
+                                                        "id": "tablet",
+                                                        "rowViewportDefinition": {}
+                                                    }
+                                                ],
+                                                "verticalAlignment": "top"
+                                            },
+                                            "pageElements": [
+                                                {
+                                                    "definition": {
+                                                        "columnViewports": [
+                                                            {
+                                                                "columnViewportDefinition": {
+                                                                    "size": 12
+                                                                },
+                                                                "id": "landscapeMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "portraitMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "tablet"
+                                                            }
+                                                        ],
+                                                        "size": 1
+                                                    },
+                                                    "pageElements": [
+                                                        {
+                                                            "definition": {
+                                                                "fragment": {
+                                                                    "key": "BASIC_COMPONENT-heading"
+                                                                },
+                                                                "fragmentConfig": {
+                                                                    "headingLevel": "h5"
+                                                                },
+                                                                "fragmentFields": [
+                                                                    {
+                                                                        "id": "element-text",
+                                                                        "value": {
+                                                                            "fragmentLink": {},
+                                                                            "text": {
+                                                                                "value_i18n": {
+                                                                                    "en_US": "Key"
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                "indexed": true
+                                                            },
+                                                            "type": "Fragment"
+                                                        }
+                                                    ],
+                                                    "type": "Column"
+                                                },
+                                                {
+                                                    "definition": {
+                                                        "columnViewports": [
+                                                            {
+                                                                "columnViewportDefinition": {
+                                                                    "size": 12
+                                                                },
+                                                                "id": "landscapeMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "portraitMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "tablet"
+                                                            }
+                                                        ],
+                                                        "size": 1
+                                                    },
+                                                    "pageElements": [
+                                                        {
+                                                            "definition": {
+                                                                "fragment": {
+                                                                    "key": "BASIC_COMPONENT-heading"
+                                                                },
+                                                                "fragmentConfig": {
+                                                                    "headingLevel": "h5"
+                                                                },
+                                                                "fragmentFields": [
+                                                                    {
+                                                                        "id": "element-text",
+                                                                        "value": {
+                                                                            "fragmentLink": {},
+                                                                            "text": {
+                                                                                "value_i18n": {
+                                                                                    "en_US": "Jira Filter"
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                "indexed": true
+                                                            },
+                                                            "type": "Fragment"
+                                                        }
+                                                    ],
+                                                    "type": "Column"
+                                                },
+                                                {
+                                                    "definition": {
+                                                        "columnViewports": [
+                                                            {
+                                                                "columnViewportDefinition": {
+                                                                    "size": 12
+                                                                },
+                                                                "id": "landscapeMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "portraitMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "tablet"
+                                                            }
+                                                        ],
+                                                        "size": 4
+                                                    },
+                                                    "pageElements": [
+                                                        {
+                                                            "definition": {
+                                                                "fragment": {
+                                                                    "key": "BASIC_COMPONENT-heading"
+                                                                },
+                                                                "fragmentConfig": {
+                                                                    "headingLevel": "h5"
+                                                                },
+                                                                "fragmentFields": [
+                                                                    {
+                                                                        "id": "element-text",
+                                                                        "value": {
+                                                                            "fragmentLink": {},
+                                                                            "text": {
+                                                                                "value_i18n": {
+                                                                                    "en_US": "Jira URL"
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                "fragmentStyle": {
+                                                                    "width": "45%"
+                                                                },
+                                                                "indexed": true
+                                                            },
+                                                            "type": "Fragment"
+                                                        }
+                                                    ],
+                                                    "type": "Column"
+                                                },
+                                                {
+                                                    "definition": {
+                                                        "columnViewports": [
+                                                            {
+                                                                "columnViewportDefinition": {
+                                                                    "size": 12
+                                                                },
+                                                                "id": "landscapeMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "portraitMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "tablet"
+                                                            }
+                                                        ],
+                                                        "size": 4
+                                                    },
+                                                    "pageElements": [
+                                                        {
+                                                            "definition": {
+                                                                "fragment": {
+                                                                    "key": "BASIC_COMPONENT-heading"
+                                                                },
+                                                                "fragmentConfig": {
+                                                                    "headingLevel": "h5"
+                                                                },
+                                                                "fragmentFields": [
+                                                                    {
+                                                                        "id": "element-text",
+                                                                        "value": {
+                                                                            "fragmentLink": {},
+                                                                            "text": {
+                                                                                "value_i18n": {
+                                                                                    "en_US": "Last Update"
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                "fragmentStyle": {
+                                                                    "width": "45%"
+                                                                },
+                                                                "indexed": true
+                                                            },
+                                                            "type": "Fragment"
+                                                        }
+                                                    ],
+                                                    "type": "Column"
+                                                },
+                                                {
+                                                    "definition": {
+                                                        "columnViewports": [
+                                                            {
+                                                                "columnViewportDefinition": {
+                                                                    "size": 12
+                                                                },
+                                                                "id": "landscapeMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "portraitMobile"
+                                                            },
+                                                            {
+                                                                "columnViewportDefinition": {},
+                                                                "id": "tablet"
+                                                            }
+                                                        ],
+                                                        "size": 2
+                                                    },
+                                                    "type": "Column"
+                                                }
+                                            ],
+                                            "type": "Row"
+                                        }
+                                    ],
+                                    "type": "Section"
+                                },
+                                {
+                                    "definition": {
+                                        "fragment": {
+                                            "key": "BASIC_COMPONENT-separator"
+                                        },
+                                        "fragmentConfig": {
+                                            "separatorColor": "",
+                                            "bottomSpacing": "3"
+                                        },
+                                        "fragmentFields": [],
+                                        "indexed": true
+                                    },
+                                    "type": "Fragment"
+                                },
+                                {
+                                    "definition": {
+                                        "collectionConfig": {
+                                            "collectionReference": {
+                                                "className": "com.liferay.object.web.internal.info.collection.provider.ObjectEntrySingleFormVariationInfoCollectionProvider_[$COMPANY_ID$]_C_AgileReport"
+                                            },
+                                            "collectionType": "CollectionProvider"
+                                        },
+                                        "collectionViewports": [
+                                            {
+                                                "collectionViewportDefinition": {
+                                                    "numberOfColumns": 1
+                                                },
+                                                "id": "landscapeMobile"
+                                            },
+                                            {
+                                                "collectionViewportDefinition": {},
+                                                "id": "portraitMobile"
+                                            },
+                                            {
+                                                "collectionViewportDefinition": {},
+                                                "id": "tablet"
+                                            }
+                                        ],
+                                        "displayAllItems": false,
+                                        "displayAllPages": true,
+                                        "emptyCollectionConfig": {
+                                            "displayMessage": true,
+                                            "message_i18n": {
+                                                "en_US": "No Results Found"
+                                            }
+                                        },
+                                        "layout": {
+                                            "justify": "Center"
+                                        },
+                                        "listItemStyle": "",
+                                        "listStyle": "",
+                                        "numberOfColumns": 1,
+                                        "numberOfItems": 5,
+                                        "numberOfItemsPerPage": 20,
+                                        "numberOfPages": 5,
+                                        "paginationType": "Simple",
+                                        "showAllItems": false,
+                                        "templateKey": ""
+                                    },
+                                    "pageElements": [
+                                        {
+                                            "definition": {
+                                                "collectionItemConfig": {}
+                                            },
+                                            "pageElements": [
+                                                {
+                                                    "definition": {
+                                                        "fragmentStyle": {
+                                                            "marginBottom": "2"
+                                                        },
+                                                        "gutters": true,
+                                                        "indexed": true,
+                                                        "modulesPerRow": 5,
+                                                        "numberOfColumns": 5,
+                                                        "reverseOrder": false,
+                                                        "rowViewports": [
+                                                            {
+                                                                "id": "landscapeMobile",
+                                                                "rowViewportDefinition": {
+                                                                    "modulesPerRow": 1
+                                                                }
+                                                            },
+                                                            {
+                                                                "id": "portraitMobile",
+                                                                "rowViewportDefinition": {}
+                                                            },
+                                                            {
+                                                                "id": "tablet",
+                                                                "rowViewportDefinition": {}
+                                                            }
+                                                        ],
+                                                        "verticalAlignment": "middle"
+                                                    },
+                                                    "pageElements": [
+                                                        {
+                                                            "definition": {
+                                                                "columnViewports": [
+                                                                    {
+                                                                        "columnViewportDefinition": {
+                                                                            "size": 12
+                                                                        },
+                                                                        "id": "landscapeMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "portraitMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "tablet"
+                                                                    }
+                                                                ],
+                                                                "size": 1
+                                                            },
+                                                            "pageElements": [
+                                                                {
+                                                                    "definition": {
+                                                                        "fragment": {
+                                                                            "key": "dialect-dialect-text",
+                                                                            "siteKey": "[$GROUP_KEY$]"
+                                                                        },
+                                                                        "fragmentConfig": {
+                                                                            "textType": "text-paragraph"
+                                                                        },
+                                                                        "fragmentFields": [
+                                                                            {
+                                                                                "id": "element-text",
+                                                                                "value": {
+                                                                                    "fragmentLink": {
+                                                                                        "value": {
+                                                                                            "href": {
+                                                                                                "mapping": {
+                                                                                                    "fieldKey": "ObjectEntry_displayPageURL",
+                                                                                                    "itemReference": {
+                                                                                                        "contextSource": "CollectionItem"
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    },
+                                                                                    "text": {
+                                                                                        "mapping": {
+                                                                                            "fieldKey": "ObjectEntry_objectEntryId",
+                                                                                            "itemReference": {
+                                                                                                "contextSource": "CollectionItem"
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        ],
+                                                                        "fragmentStyle": {
+                                                                            "width": "100%"
+                                                                        },
+                                                                        "indexed": true
+                                                                    },
+                                                                    "type": "Fragment"
+                                                                }
+                                                            ],
+                                                            "type": "Column"
+                                                        },
+                                                        {
+                                                            "definition": {
+                                                                "columnViewports": [
+                                                                    {
+                                                                        "columnViewportDefinition": {
+                                                                            "size": 12
+                                                                        },
+                                                                        "id": "landscapeMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "portraitMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "tablet"
+                                                                    }
+                                                                ],
+                                                                "size": 1
+                                                            },
+                                                            "pageElements": [
+                                                                {
+                                                                    "definition": {
+                                                                        "fragment": {
+                                                                            "key": "dialect-dialect-text",
+                                                                            "siteKey": "[$GROUP_KEY$]"
+                                                                        },
+                                                                        "fragmentConfig": {
+                                                                            "textType": "text-paragraph"
+                                                                        },
+                                                                        "fragmentFields": [
+                                                                            {
+                                                                                "id": "element-text",
+                                                                                "value": {
+                                                                                    "fragmentLink": {},
+                                                                                    "text": {
+                                                                                        "mapping": {
+                                                                                            "fieldKey": "ObjectField_jiraFilterId",
+                                                                                            "itemReference": {
+                                                                                                "contextSource": "CollectionItem"
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        ],
+                                                                        "fragmentStyle": {
+                                                                            "width": "100%"
+                                                                        },
+                                                                        "indexed": true
+                                                                    },
+                                                                    "type": "Fragment"
+                                                                }
+                                                            ],
+                                                            "type": "Column"
+                                                        },
+                                                        {
+                                                            "definition": {
+                                                                "columnViewports": [
+                                                                    {
+                                                                        "columnViewportDefinition": {
+                                                                            "size": 12
+                                                                        },
+                                                                        "id": "landscapeMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "portraitMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "tablet"
+                                                                    }
+                                                                ],
+                                                                "size": 4
+                                                            },
+                                                            "pageElements": [
+                                                                {
+                                                                    "definition": {
+                                                                        "fragment": {
+                                                                            "key": "dialect-dialect-text",
+                                                                            "siteKey": "[$GROUP_KEY$]"
+                                                                        },
+                                                                        "fragmentConfig": {
+                                                                            "textType": "text-paragraph"
+                                                                        },
+                                                                        "fragmentFields": [
+                                                                            {
+                                                                                "id": "element-text",
+                                                                                "value": {
+                                                                                    "fragmentLink": {},
+                                                                                    "text": {
+                                                                                        "mapping": {
+                                                                                            "fieldKey": "ObjectField_jiraInstanceURL",
+                                                                                            "itemReference": {
+                                                                                                "contextSource": "CollectionItem"
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        ],
+                                                                        "fragmentStyle": {
+                                                                            "width": "100%"
+                                                                        },
+                                                                        "indexed": true
+                                                                    },
+                                                                    "type": "Fragment"
+                                                                }
+                                                            ],
+                                                            "type": "Column"
+                                                        },
+                                                        {
+                                                            "definition": {
+                                                                "columnViewports": [
+                                                                    {
+                                                                        "columnViewportDefinition": {
+                                                                            "size": 12
+                                                                        },
+                                                                        "id": "landscapeMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "portraitMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "tablet"
+                                                                    }
+                                                                ],
+                                                                "size": 4
+                                                            },
+                                                            "pageElements": [
+                                                                {
+                                                                    "definition": {
+                                                                        "gutters": true,
+                                                                        "indexed": true,
+                                                                        "modulesPerRow": 2,
+                                                                        "numberOfColumns": 2,
+                                                                        "reverseOrder": false,
+                                                                        "rowViewports": [
+                                                                            {
+                                                                                "id": "landscapeMobile",
+                                                                                "rowViewportDefinition": {
+                                                                                    "modulesPerRow": 1
+                                                                                }
+                                                                            },
+                                                                            {
+                                                                                "id": "portraitMobile",
+                                                                                "rowViewportDefinition": {}
+                                                                            },
+                                                                            {
+                                                                                "id": "tablet",
+                                                                                "rowViewportDefinition": {}
+                                                                            }
+                                                                        ],
+                                                                        "verticalAlignment": "middle"
+                                                                    },
+                                                                    "pageElements": [
+                                                                        {
+                                                                            "definition": {
+                                                                                "columnViewports": [
+                                                                                    {
+                                                                                        "columnViewportDefinition": {
+                                                                                            "size": 12
+                                                                                        },
+                                                                                        "id": "landscapeMobile"
+                                                                                    },
+                                                                                    {
+                                                                                        "columnViewportDefinition": {},
+                                                                                        "id": "portraitMobile"
+                                                                                    },
+                                                                                    {
+                                                                                        "columnViewportDefinition": {},
+                                                                                        "id": "tablet"
+                                                                                    }
+                                                                                ],
+                                                                                "size": 4
+                                                                            },
+                                                                            "pageElements": [
+                                                                                {
+                                                                                    "definition": {
+                                                                                        "cssClasses": [
+                                                                                            "listbutton"
+                                                                                        ],
+                                                                                        "fragment": {
+                                                                                            "key": "BASIC_COMPONENT-button"
+                                                                                        },
+                                                                                        "fragmentConfig": {
+                                                                                            "buttonType": "primary",
+                                                                                            "type": "action",
+                                                                                            "buttonSize": "sm"
+                                                                                        },
+                                                                                        "fragmentFields": [
+                                                                                            {
+                                                                                                "id": "action",
+                                                                                                "value": {
+                                                                                                    "action": {
+                                                                                                        "mapping": {
+                                                                                                            "fieldKey": "ObjectAction_createRequest",
+                                                                                                            "itemReference": {
+                                                                                                                "contextSource": "CollectionItem"
+                                                                                                            }
+                                                                                                        }
+                                                                                                    },
+                                                                                                    "onError": {
+                                                                                                        "type": "Notification",
+                                                                                                        "value": {
+                                                                                                            "reload": false,
+                                                                                                            "text": {
+                                                                                                                "value_i18n": {
+                                                                                                                    "en_US": "Error on updating report!"
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    },
+                                                                                                    "onSuccess": {
+                                                                                                        "type": "Notification",
+                                                                                                        "value": {
+                                                                                                            "reload": false,
+                                                                                                            "text": {
+                                                                                                                "value_i18n": {
+                                                                                                                    "en_US": "Update requested!"
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    },
+                                                                                                    "text": {
+                                                                                                        "value_i18n": {
+                                                                                                            "en_US": "Update"
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        ],
+                                                                                        "fragmentStyle": {
+                                                                                            "marginRight": "2"
+                                                                                        },
+                                                                                        "indexed": true
+                                                                                    },
+                                                                                    "type": "Fragment"
+                                                                                }
+                                                                            ],
+                                                                            "type": "Column"
+                                                                        },
+                                                                        {
+                                                                            "definition": {
+                                                                                "columnViewports": [
+                                                                                    {
+                                                                                        "columnViewportDefinition": {
+                                                                                            "size": 12
+                                                                                        },
+                                                                                        "id": "landscapeMobile"
+                                                                                    },
+                                                                                    {
+                                                                                        "columnViewportDefinition": {},
+                                                                                        "id": "portraitMobile"
+                                                                                    },
+                                                                                    {
+                                                                                        "columnViewportDefinition": {},
+                                                                                        "id": "tablet"
+                                                                                    }
+                                                                                ],
+                                                                                "size": 8
+                                                                            },
+                                                                            "pageElements": [
+                                                                                {
+                                                                                    "definition": {
+                                                                                        "collectionConfig": {
+                                                                                            "collectionReference": {
+                                                                                                "className": "com.liferay.object.internal.info.collection.provider.OneToManyObjectRelationshipRelatedInfoCollectionProvider_[$COMPANY_ID$]_C_AgileReport_agileReportToJiraIntegrationRequest"
+                                                                                            },
+                                                                                            "collectionType": "CollectionProvider"
+                                                                                        },
+                                                                                        "collectionViewports": [
+                                                                                            {
+                                                                                                "collectionViewportDefinition": {
+                                                                                                    "numberOfColumns": 1
+                                                                                                },
+                                                                                                "id": "landscapeMobile"
+                                                                                            },
+                                                                                            {
+                                                                                                "collectionViewportDefinition": {},
+                                                                                                "id": "portraitMobile"
+                                                                                            },
+                                                                                            {
+                                                                                                "collectionViewportDefinition": {},
+                                                                                                "id": "tablet"
+                                                                                            }
+                                                                                        ],
+                                                                                        "displayAllItems": false,
+                                                                                        "displayAllPages": true,
+                                                                                        "emptyCollectionConfig": {
+                                                                                            "message_i18n": {
+                                                                                                "en_US": "Report never updated."
+                                                                                            }
+                                                                                        },
+                                                                                        "listItemStyle": "",
+                                                                                        "listStyle": "",
+                                                                                        "numberOfColumns": 1,
+                                                                                        "numberOfItems": 1,
+                                                                                        "numberOfItemsPerPage": 20,
+                                                                                        "numberOfPages": 5,
+                                                                                        "paginationType": "None",
+                                                                                        "showAllItems": false,
+                                                                                        "templateKey": ""
+                                                                                    },
+                                                                                    "pageElements": [
+                                                                                        {
+                                                                                            "definition": {
+                                                                                                "collectionItemConfig": {}
+                                                                                            },
+                                                                                            "pageElements": [
+                                                                                                {
+                                                                                                    "definition": {
+                                                                                                        "fragment": {
+                                                                                                            "key": "dialect-dialect-text",
+                                                                                                            "siteKey": "[$GROUP_KEY$]"
+                                                                                                        },
+                                                                                                        "fragmentConfig": {
+                                                                                                            "textType": "text-paragraph"
+                                                                                                        },
+                                                                                                        "fragmentFields": [
+                                                                                                            {
+                                                                                                                "id": "element-text",
+                                                                                                                "value": {
+                                                                                                                    "fragmentLink": {},
+                                                                                                                    "text": {
+                                                                                                                        "mapping": {
+                                                                                                                            "fieldKey": "ObjectEntry_modifiedDate",
+                                                                                                                            "itemReference": {
+                                                                                                                                "contextSource": "CollectionItem"
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        ],
+                                                                                                        "indexed": true
+                                                                                                    },
+                                                                                                    "type": "Fragment"
+                                                                                                }
+                                                                                            ],
+                                                                                            "type": "CollectionItem"
+                                                                                        }
+                                                                                    ],
+                                                                                    "type": "Collection"
+                                                                                }
+                                                                            ],
+                                                                            "type": "Column"
+                                                                        }
+                                                                    ],
+                                                                    "type": "Row"
+                                                                }
+                                                            ],
+                                                            "type": "Column"
+                                                        },
+                                                        {
+                                                            "definition": {
+                                                                "columnViewports": [
+                                                                    {
+                                                                        "columnViewportDefinition": {
+                                                                            "size": 12
+                                                                        },
+                                                                        "id": "landscapeMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "portraitMobile"
+                                                                    },
+                                                                    {
+                                                                        "columnViewportDefinition": {},
+                                                                        "id": "tablet"
+                                                                    }
+                                                                ],
+                                                                "size": 2
+                                                            },
+                                                            "pageElements": [
+                                                                {
+                                                                    "definition": {
+                                                                        "cssClasses": [
+                                                                            "listbutton"
+                                                                        ],
+                                                                        "fragment": {
+                                                                            "key": "BASIC_COMPONENT-button"
+                                                                        },
+                                                                        "fragmentConfig": {
+                                                                            "buttonType": "primary",
+                                                                            "type": "link",
+                                                                            "buttonSize": "sm"
+                                                                        },
+                                                                        "fragmentFields": [
+                                                                            {
+                                                                                "id": "link",
+                                                                                "value": {
+                                                                                    "fragmentLink": {
+                                                                                        "value": {
+                                                                                            "href": {
+                                                                                                "mapping": {
+                                                                                                    "fieldKey": "ObjectEntry_displayPageURL",
+                                                                                                    "itemReference": {
+                                                                                                        "contextSource": "CollectionItem"
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    },
+                                                                                    "text": {
+                                                                                        "value_i18n": {
+                                                                                            "en_US": "Access Report"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        ],
+                                                                        "fragmentStyle": {
+                                                                            "marginRight": "2"
+                                                                        },
+                                                                        "indexed": true
+                                                                    },
+                                                                    "type": "Fragment"
+                                                                }
+                                                            ],
+                                                            "type": "Column"
+                                                        }
+                                                    ],
+                                                    "type": "Row"
+                                                }
+                                            ],
+                                            "type": "CollectionItem"
+                                        }
+                                    ],
+                                    "type": "Collection"
+                                }
+                            ],
+                            "type": "Section"
+                        }
+                    ],
+                    "type": "Section"
+                }
             ],
             "type": "Section"
-          }
-        ],
-        "type": "Section"
-      }
+        }    
     ],
     "type": "Root"
   },

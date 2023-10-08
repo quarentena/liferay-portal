@@ -1,0 +1,26 @@
+@import './navigation.css';
+@import './content.css';
+@import './settings.css';
+
+.agileray{
+    display: inline-flex;
+    flex-direction: row;
+    align-items: stretch;    
+    height: 100vh;
+    min-height: 600px;
+    max-height: 100%;
+    width: 100vw;   
+    min-width: 1080px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    & *{
+        margin:0;
+        padding:0;
+        outline:0;    
+        box-sizing: border-box;        
+        font-family: var(--font-family-sans-serif);
+    }
+}
+
+

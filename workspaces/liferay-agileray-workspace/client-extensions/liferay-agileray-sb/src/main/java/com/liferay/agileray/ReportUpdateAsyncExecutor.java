@@ -41,6 +41,8 @@ public class ReportUpdateAsyncExecutor{
         try {
             Thread.sleep(2000);
 
+            JSONObject responseRunning = putUpdateReportStatus(jwt.getTokenValue(),"running","Running");
+         
             JSONObject agileReport = this.getJiraAuthInfo(jwt.getTokenValue(), this.agileReportId);
 
             JSONArray issues = getJiraIssues(agileReport.getString("jiraUser"
@@ -48,17 +50,33 @@ public class ReportUpdateAsyncExecutor{
                                            ),agileReport.getString("jiraInstanceURL"
                                            ),agileReport.getInt("jiraFilterId"));
 
-            JSONObject responseBody = postJiraIssues(jwt.getTokenValue(),issues);
+            JSONObject responseJira = postJiraIssues(jwt.getTokenValue(),issues);
+            
+            JSONObject responseDone = putUpdateReportStatus(jwt.getTokenValue(),"done","Done");                        
+
         } catch (InterruptedException e) {
             System.out.println(e.toString());
         }
     }
+
     public JSONObject getJiraAuthInfo (String jwtToken, String agileReportId){
         return _getFromLRObjects(
                 jwtToken,
                 uriBuilder -> uriBuilder.path(
                         "o/c/agilereports/" + agileReportId
                 ).build());
+    }
+
+
+    public JSONObject putUpdateReportStatus(String jwtToken,String stateKey,String stateName){        
+        JSONObject requestPayload = new JSONObject();
+        JSONObject requestState = new JSONObject();
+
+        requestState.put("key",stateKey);
+        requestState.put("Name",stateName);
+        requestPayload.put("requestState", requestState);
+        
+        return _putInLRObjects(jwtToken,requestPayload.toString(),"/o/c/jiraintegrationrequests/by-external-reference-code/" + this.integrationRequestERC);
     }
 
     public JSONArray getJiraIssues (String jiraUser, String jiraAPIToken, String jiraInstanceURL, int jiraFilterId){
@@ -142,7 +160,6 @@ public class ReportUpdateAsyncExecutor{
 
             batchRequest.put(issue);
         }
-        
 
         return _postInLRObjects(jwtToken,batchRequest.toString(),"/o/c/jiraissues/batch");
     }
@@ -170,6 +187,7 @@ public class ReportUpdateAsyncExecutor{
                                     String.class
                             ).block());
     }
+
     private JSONObject _getFromLRObjects(String token, Function<UriBuilder, URI> uriFunction) {
         return new JSONObject(
                 WebClient.create(_lxcDXPServerProtocol + "://" + _lxcDXPMainDomain
@@ -191,6 +209,29 @@ public class ReportUpdateAsyncExecutor{
                 WebClient.create(
                     _lxcDXPServerProtocol + "://" + _lxcDXPMainDomain
                 ).post(
+                ).uri(
+                        uriBuilder -> uriBuilder.path(
+                                path
+                        ).build()
+                ).accept(
+                        MediaType.APPLICATION_JSON
+                ).contentType(
+                        MediaType.APPLICATION_JSON
+                ).header(
+                        "Authorization","Bearer " + token
+                ).bodyValue(
+                        bodyValue
+                ).retrieve(
+                ).bodyToMono(
+                        String.class
+                ).block());
+    }
+
+    private JSONObject _putInLRObjects(String token, String bodyValue, String path) {
+        return new JSONObject(
+                WebClient.create(
+                    _lxcDXPServerProtocol + "://" + _lxcDXPMainDomain
+                ).put(
                 ).uri(
                         uriBuilder -> uriBuilder.path(
                                 path
